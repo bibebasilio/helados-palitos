@@ -19,6 +19,8 @@ app.use(express.static(__dirname));
 
 const PRODUCTS_PATH = path.join(__dirname, 'data', 'products.json');
 const PEDIDOS_PATH = path.join(__dirname, 'data', 'pedidosrecibidos.json');
+let pedidos = []; // Cargamos los pedidos en memoria al iniciar el servidor
+
 
 // Configuración Impresora (Ajusta según tu dispositivo)
 const VENDOR_ID = 0x1FC9;
@@ -163,7 +165,54 @@ app.post('/api/pedidos/marcar-impreso/:id', (req, res) => {
 ///////////////////
 // --- RUTAS PARA EL AGENTE DE IMPRESIÓN LOCAL ---
 
-// 1. Endpoint para que tu PC descargue los pedidos que aún no se imprimieron
+app.get('/api/pedidos/pendientes', (req, res) => {
+    // Leemos el archivo físico para tener la última versión de los pedidos
+    fs.readFile(PEDIDOS_PATH, 'utf8', (err, data) => {
+        if (err) {
+            console.error("Error leyendo pedidos:", err);
+            return res.status(500).json({ error: "No se pudo leer la base de datos" });
+        }
+
+        try {
+            const todosLosPedidos = JSON.parse(data || "[]");
+            // Filtramos: si impreso es false O si la propiedad ni siquiera existe todavía
+            const pendientes = todosLosPedidos.filter(p => p.impreso === false || p.impreso === undefined);
+            
+            console.log(`📋 Agente local consultando: ${pendientes.length} pendientes.`);
+            res.json(pendientes);
+        } catch (e) {
+            res.status(500).json({ error: "Error al procesar JSON" });
+        }
+    });
+});
+
+//------------------- app.post para marcar como impreso, actualizando el JSON físico
+
+app.post('/api/pedidos/marcar-impreso/:id', (req, res) => {
+    const { id } = req.params;
+
+    fs.readFile(PEDIDOS_PATH, 'utf8', (err, data) => {
+        if (err) return res.status(500).send("Error de lectura");
+
+        let listaPedidos = JSON.parse(data || "[]");
+        const index = listaPedidos.findIndex(p => String(p.id) === String(id));
+
+        if (index !== -1) {
+            listaPedidos[index].impreso = true; // Marcamos como impreso
+            
+            fs.writeFile(PEDIDOS_PATH, JSON.stringify(listaPedidos, null, 2), (err) => {
+                if (err) return res.status(500).send("Error al guardar");
+                console.log(`✅ Pedido #${id} marcado como impreso en el JSON.`);
+                res.status(200).send("Estado actualizado");
+            });
+        } else {
+            res.status(404).send("Pedido no encontrado");
+        }
+    });
+});
+//---------------------------------------------------------------------------
+
+/*1. Endpoint para que tu PC descargue los pedidos que aún no se imprimieron
 app.get('/api/pedidos/pendientes', (req, res) => {
 try {
 // Suponiendo que 'pedidos' es tu array global de objetos
@@ -192,7 +241,7 @@ res.status(200).send("Estado actualizado");
 console.log(`No se encontró el pedido #${id} para marcar como impreso.`);
 res.status(404).send("Pedido no encontrado");
 }
-});
+});*/
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
