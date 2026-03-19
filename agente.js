@@ -13,7 +13,7 @@ escpos.USB = require('escpos-usb');
 // --- CONFIGURACIÓN ---
 // IMPORTANTE: Esta URL NO puede ser la de GitHub Pages. 
 // Debe ser la de tu servidor backend real (ej: https://tu-app.onrender.com)
-const URL_SERVIDOR = "https://TU-BACKEND-REAL.com"; 
+const URL_SERVIDOR = "https://helados-palitos.onrender.com"
 
 // Aquí ponemos los datos de tu impresora que mencionaste anteriormente
 const vendorId = 0x1FC9; 
@@ -69,7 +69,7 @@ async function revisarPedidos() {
         console.log("Consultando servidor por nuevos pedidos...");
         
         // El servidor debe responder con un Array de pedidos pendientes
-        const response = await axios.get(`${URL_SERVIDOR}/api/pedidos/pendientes`);
+        const response = await axios.get(`${"https://helados-palitos.onrender.com"}/api/pedidos/pendientes`);
         const pedidosNuevos = response.data;
 
         if (Array.isArray(pedidosNuevos) && pedidosNuevos.length > 0) {
@@ -80,7 +80,7 @@ async function revisarPedidos() {
                 await imprimirTicket(pedido);
                 
                 // Avisamos al servidor para que cambie el estado a 'impreso: true'
-                await axios.post(`${URL_SERVIDOR}/api/pedidos/marcar-impreso/${pedido.id}`);
+                await axios.post(`${"https://helados-palitos.onrender.com"}/api/pedidos/marcar-impreso/${pedido.id}`);
             }
         } else {
             console.log("No hay pedidos pendientes.");
@@ -97,4 +97,4 @@ async function revisarPedidos() {
 // Ejecutar cada 20 segundos para no saturar
 setInterval(revisarPedidos, 20000);
 console.log(">>> Agente de impresión activo <<<");
-console.log(`Conectado a: ${URL_SERVIDOR}`);
+console.log(`Conectado a: ${"https://helados-palitos.onrender.com"}`);
