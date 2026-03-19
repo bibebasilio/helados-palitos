@@ -1,24 +1,25 @@
 {
-  "name": "basinvo",
+  "name": "helados-palitos",
   "version": "1.0.0",
-  "description": "Este proyecto consiste en contruir un pagina web para la venta de helados.\r La pagina esta estructurada con html semantico y utiliza las etiquetas 'heaader','main','body' y 'footer', para organizar el contenido.\r El contenido posee los tipos de helados, los importes de cada tipo, donde el cliente podra seleccionarlos y posteriormente elegir los gustos disponibles.\r Luego de, su eleccion, aparecera en pantalla, el importe a abonar, seleccionando la forma de abonar dicho importe, emitiendole el recibo de pago correspondiente, siendo esta operacion presencial.\r SI el cliente no esta presente, podra seleccionar tambien, retirarlo por el local o por envio, previo pago del mismo por algun medio electronico. \r La pagina web ademas llevara el control de stock de la mercaderia en el local por gustos de cada tipo.",
-  "main": "index.js",
+  "main": "server.js",
   "dependencies": {
     "chokidar": "^5.0.0",
     "cors": "^2.8.5",
-    "escpos": "^3.0.0-alpha.6",
-    "escpos-usb": "^3.0.0-alpha.4",
     "express": "^5.2.1",
-    "module": "escpos-usb",
     "nodemon": "^2.0.22",
-     "axios": "^1.13.6"
-   
+    "axios": "^1.13.6"
+  },
+  "optionalDependencies": {
+    "escpos": "^3.0.0-alpha.6",
+    "escpos-usb": "^3.0.0-alpha.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "keywords": [],
   "author": "Basilio Biberidis",
   "license": "ISC"
 }
+
+
+
