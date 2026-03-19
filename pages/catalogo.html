@@ -1,0 +1,132 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Catálogo - Admin</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; color: #333; }
+        .nav-bar { background: #333; padding: 10px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px; }
+        .nav-bar a { color: white; text-decoration: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; }
+        .nav-bar a:hover { background: #555; }
+        .nav-bar a.active { background: #007bff; }
+
+        .section { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .stat-card { background: #fff5f5; padding: 15px; border-radius: 8px; border-left: 5px solid #dc3545; }
+        
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #007bff; color: white; }
+        .stock-bajo { background-color: #ffebeb !important; }
+        
+        input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 90%; }
+        .btn-save { background: #28a745; color: white; padding: 12px 25px; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar no-print">
+        <a href="histpedidos.html">📋 Pedidos e Historial</a>
+        <a href="catalogo.html" class="active">📦 Gestión de Catálogo</a>
+    </nav>
+
+    <h1>📦 Control de Inventario</h1>
+
+    <div class="section">
+        <div class="stat-card">
+            <h3>⚠️ Alerta de Stock</h3>
+            <p id="count-reponer">0 productos por debajo del mínimo</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+            <h2>Inventario Actual</h2>
+            <button onclick="document.getElementById('form-nuevo').style.display='block'" style="background:#007bff; color:white; border:none; padding:10px; border-radius:4px; cursor:pointer;">+ Nuevo Producto</button>
+        </div>
+
+        <div id="form-nuevo" style="display:none; margin-bottom:20px; padding:20px; border:2px dashed #007bff; border-radius:8px;">
+                <h3>Alta de Producto</h3>
+          <!---   <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+
+                <input type="text" id="new-title" placeholder="Formato">
+
+                <input type="text" id="new-category" placeholder="Sabor">
+
+                <input type="text" id="new-clase" placeholder="Clase">
+
+                <input type="number" step="0.01" id="new-price" placeholder="Precio">
+
+                <input type="number" id="new-stock" placeholder="Stock">
+
+                <input type="text" id="new-image" placeholder="Ruta Imagen">  --> 
+            <input type="text" id="new-title" placeholder="Nombre/Formato" style="width:200px">
+            <input type="text" id="new-category" placeholder="Sabor"> 
+            <input type="text" id="new-clase" placeholder="Clase">
+            <input type="number" id="new-price" placeholder="Precio" style="width:100px">
+            <input type="number" id="new-stock" placeholder="Stock" style="width:100px">
+            <input type="text" id="new-image" placeholder="Ruta Imagen">
+            <button class="btn-save" onclick="crearProducto()">Guardar Nuevo</button>
+        </div>
+
+        <table id="tabla-productos">
+            <thead><tr><th>Imagen</th><th>Nombre</th><th>Sabor</th><th>Clase</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr></thead>
+            <tbody></tbody>
+        </table>
+        <br>
+        <button class="btn-save" onclick="guardarCambios()">💾 Guardar todos los cambios</button>
+    </div>
+
+    <script>
+        let productosLocales = [];
+
+        async function cargarDatos() {
+            try {
+                const res = await fetch('http://localhost:3000/api/admin/productos');
+                productosLocales = await res.json();
+                const tbody = document.querySelector('#tabla-productos tbody');
+                tbody.innerHTML = productosLocales.map(p => `
+                    <tr class="${p.stock < 5 ? 'stock-bajo' : ''}" data-id="${p.id}">
+                        <td><input type="text" class="edit-image" value="${p.image}"></td>
+                        <td><input type="text" class="edit-title" value="${p.title}"></td>
+                        <td><input type="text" class="edit-category" value="${p.category}"></td>
+                        <td><input type="text" class="edit-clase" value="${p.clase}"></td>
+                        <td><input type="number" step="0.01" class="edit-price" value="${p.price}"></td>
+                        <td><input type="number" class="edit-stock" value="${p.stock}" style="width:60px"></td>
+                        <td><button onclick="eliminarProducto('${p.id}')" style="background:#dc3545; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer;">Eliminar</button></td>
+                    </tr>
+                `).join('');
+                document.getElementById('count-reponer').innerText = `${productosLocales.filter(p => p.stock < 5).length} productos con stock bajo`;
+            } catch (e) { console.error(e); }
+        }
+
+        async function guardarCambios() {
+            const filas = document.querySelectorAll('tbody tr');
+            const data = Array.from(filas).map(f => {
+                const id = f.dataset.id;
+                const p = productosLocales.find(p => String(p.id) === String(id));
+                return { ...p, 
+                    title: f.querySelector('.edit-title').value, 
+                    price: parseFloat(f.querySelector('.edit-price').value),
+                    stock: parseInt(f.querySelector('.edit-stock').value), 
+                    image: f.querySelector('.edit-image').value 
+                };
+            });
+            const res = await fetch('http://localhost:3000/api/update-products', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+            if(res.ok) { alert("Inventario sincronizado."); cargarDatos(); }
+        }
+
+        async function crearProducto() {
+            const nuevo = { id: Date.now(), title: document.getElementById('new-title').value, price: parseFloat(document.getElementById('new-price').value), stock: parseInt(document.getElementById('new-stock').value), image: "../img/default.png", ventas: 0 };
+            await fetch('http://localhost:3000/api/admin/productos/nuevo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(nuevo) });
+            document.getElementById('form-nuevo').style.display='none'; cargarDatos();
+        }
+
+        async function eliminarProducto(id) {
+            if (confirm("¿Seguro que quieres eliminar este producto?")) {
+                await fetch(`http://localhost:3000/api/admin/productos/${id}`, { method: 'DELETE' });
+                cargarDatos();
+            }
+        }
+
+        cargarDatos();
+    </script>
+</body>
+</html>

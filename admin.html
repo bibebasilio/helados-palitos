@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Heladería</title>
+    <style>
+        :root {
+            --primary: #2196F3;
+            --success: #4CAF50;
+            --danger: #f44336;
+            --bg: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            /* Dos columnas: Stock y Pedidos */
+            gap: 20px;
+        }
+
+        h2 {
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+            color: #333;
+        }
+
+        /* Contenedores Principales */
+        .seccion {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Tabla de Stock */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .btn-guardar {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        /* Pedidos */
+        #lista-pedidos {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .pedido-card {
+            /* Estilos dinámicos vienen del admin.js */
+            transition: transform 0.2s;
+        }
+
+        .pedido-card:hover {
+            transform: scale(1.01);
+        }
+
+        @media (max-width: 900px) {
+            body {
+                grid-template-columns: 1fr;
+            }
+
+            .seccion {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="seccion">
+        <h2>🍦 Control de Stock</h2>
+        <table id="tabla-productos">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button class="btn-guardar" onclick="guardarCambiosInventario()">💾 GUARDAR CAMBIOS STOCK</button>
+    </div>
+
+    <div class="seccion">
+        <h2>📋 Pedidos Recibidos</h2>
+        <div id="lista-pedidos">
+            <p>Cargando pedidos...</p>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>
