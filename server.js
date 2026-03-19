@@ -107,6 +107,7 @@ const imprimirTicket = (pedido) => {
 };
 
 ///////////////////////////////////
+
 // Ruta para que la PC local consulte pedidos nuevos
 /*app.get('/api/pendientes-impresion', (req, res) => {
     // Aquí buscas en tu JSON o DB los pedidos con estado "pendiente"
@@ -122,7 +123,8 @@ app.post('/api/marcar-impreso/:id', (req, res) => {
 
 /*app.get('/api/pedidos/pendientes', (req, res) => {
 // Aquí filtras tu JSON o base de datos por los que tengan impreso: false
-const pendientes = pedidos.filter(p => !p.impreso);
+    const pendientes = pedidos.filter(p => !p.impreso);
+    
 res.json(pendientes);
 });
 
@@ -133,6 +135,31 @@ const { id } = req.params;
 marcarPedidoComoImpreso(id);
 res.sendStatus(200);
 });*/
+///////////////////////////////
+
+// --- RUTAS PARA EL AGENTE.js  DE IMPRESIÓN web---
+
+// 1. El Agente llama aquí para ver qué hay nuevo
+app.get('/api/pedidos/pendientes', (req, res) => {
+    const pendientes = pedidos.filter(p => p.impreso === false);
+    console.log(`📋 Agente consultando: ${pendientes.length} pedidos pendientes.`);
+    res.json(pendientes);
+});
+
+// 2. El Agente llama aquí después de imprimir para avisar que ya terminó
+app.post('/api/pedidos/marcar-impreso/:id', (req, res) => {
+    const { id } = req.params;
+    const pedido = pedidos.find(p => p.id == id);
+    
+    if (pedido) {
+        pedido.impreso = true;
+        console.log(`✅ Pedido #${id} marcado como IMPRESO.`);
+        res.status(200).send("Estado actualizado");
+    } else {
+        res.status(404).send("Pedido no encontrado");
+    }
+});
+
 ///////////////////
 // --- RUTAS PARA EL AGENTE DE IMPRESIÓN LOCAL ---
 
