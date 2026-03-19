@@ -140,7 +140,7 @@ res.sendStatus(200);
 // --- RUTAS PARA EL AGENTE.js  DE IMPRESIÓN web---
 
 // 1. El Agente llama aquí para ver qué hay nuevo
-app.get('/api/pedidos/pendientes', (req, res) => {
+/*app.get('/api/pedidos/pendientes', (req, res) => {
     const pendientes = pedidos.filter(p => p.impreso === false);
     console.log(`📋 Agente consultando: ${pendientes.length} pedidos pendientes.`);
     res.json(pendientes);
@@ -158,7 +158,7 @@ app.post('/api/pedidos/marcar-impreso/:id', (req, res) => {
     } else {
         res.status(404).send("Pedido no encontrado");
     }
-});
+});*/
 
 ///////////////////
 // --- RUTAS PARA EL AGENTE DE IMPRESIÓN LOCAL ---
