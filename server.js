@@ -1,184 +1,32 @@
+//🛠️ Archivo server.js Corregido
+//JavaScript
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
-const escpos = require('escpos');
-escpos.USB = require('escpos-usb');
-
-// === PARCHE DE EMERGENCIA PARA NODE v22+ ===
-const usb = require('usb');
-if (usb && usb.on === undefined) {
-    usb.on = function() { return this; };
-    console.log("🛠️ Parche usb.on aplicado");
-}
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
+// Rutas de archivos (se adaptan si es local o Render)
 const PRODUCTS_PATH = path.join(__dirname, 'data', 'products.json');
 const PEDIDOS_PATH = path.join(__dirname, 'data', 'pedidosrecibidos.json');
-let pedidos = []; // Cargamos los pedidos en memoria al iniciar el servidor
 
+// --- RUTAS PARA EL AGENTE DE IMPRESIÓN ---
 
-// Configuración Impresora (Ajusta según tu dispositivo)
-const VENDOR_ID = 0x1FC9;
-const PRODUCT_ID = 0x2016;
-////////////////// imprimr ticket con nro pedido
-const imprimirTicket = (pedido) => {
-    try {
-        const device = new escpos.USB(VENDOR_ID, PRODUCT_ID);
-        if (device.device && typeof device.device.on !== 'function') {
-            device.device.on = function() { return this; };
-        }
-
-        const printer = new escpos.Printer(device);
-
-        device.open((err) => {
-            if (err) {
-                console.error('❌ Error de conexión con impresora:', err.message);
-                return;
-            }
-
-            printer
-                .font('B').align('ct').style('b').size(1, 1)
-                .text('NUEVO PEDIDO')
-                .text(`ORDEN: #${pedido.idPedido || 'N/A'}`) 
-                .text('--------------------------------')
-                .font('A').align('ct').style('b').size(0, 0)
-                
-                .align('lt').style('normal')
-                .text(`Cliente: ${pedido.cliente || 'Mostrador'}`)
-                .text(`Fecha: ${new Date().toLocaleString()}`)
-                .font('B').align('ct').style('b').size(1, 1)
-                .text('--------------------------------')
-                .font('A').align('lt').style('b').size(0, 0)
-
-            // 1. Listado de Productos
-            if (pedido.items) {
-                pedido.items.forEach(item => {
-                    const nombreProd = `${item.title} ${item.category || ''}`.substring(0, 22);
-                    const precioUnitario = Number(item.price) || 0;
-                    const subtotalItem = (item.cantidad * precioUnitario).toFixed(2);
-                    printer.text(`${item.cantidad}x ${nombreProd} $${subtotalItem}`);
-                });
-            }
-
-            // 2. Desglose de Totales (Antes del Total Final)
-            printer
-                .font('B').align('ct').style('b')
-                .text('---------------------------------------------')
-                .font('A').align('rt').style('normal'); // Alineado a la derecha para montos
-
-            // Subtotal (Suma de productos sin descuentos)
-            // Si no viene calculado del front, lo podemos omitir o enviarlo como pedido.subtotal
-            if (pedido.subtotal) {
-                printer.text(`Subtotal: $${pedido.subtotal}`);
-            }
-
-            // Descuento Cupón (Solo si existe)
-            if (pedido.descCupon && parseFloat(pedido.descCupon) > 0) {
-                printer.text(`Descuento Cupon: -$${pedido.descCupon}`);
-            }
-
-            // Descuento Efectivo (Solo si existe)
-            if (pedido.descEfectivo && parseFloat(pedido.descEfectivo) > 0) {
-                printer.text(`Desc. Efectivo: -$${pedido.descEfectivo}`);
-            }
-
-            // Costo de Envío
-            if (pedido.costoEnvio) {
-                printer.text(`Envio: $${pedido.costoEnvio}`);
-            }
-
-            // 3. Total Final
-            printer
-                .font('B').align('ct').style('b').size(1, 1)
-                .text('---------------------------------------------')
-                .text(`TOTAL: ${pedido.total}`)
-                .feed(3)
-                .cut()
-                .close();
-            
-            console.log(`✅ Ticket impreso con desglose para Pedido #${pedido.idPedido}`);
-        });
-    } catch (e) {
-        console.error("❌ Fallo en impresión:", e.message);
-    }
-};
-
-///////////////////////////////////
-
-// Ruta para que la PC local consulte pedidos nuevos
-/*app.get('/api/pendientes-impresion', (req, res) => {
-    // Aquí buscas en tu JSON o DB los pedidos con estado "pendiente"
-    const pedidos = obtenerPedidosPendientes(); 
-    res.json(pedidos);
-});
-
-// Ruta para marcar como impreso y que no se repita
-app.post('/api/marcar-impreso/:id', (req, res) => {
-    actualizarEstadoPedido(req.params.id, 'impreso');
-    res.sendStatus(200);
-});*/
-
-/*app.get('/api/pedidos/pendientes', (req, res) => {
-// Aquí filtras tu JSON o base de datos por los que tengan impreso: false
-    const pendientes = pedidos.filter(p => !p.impreso);
-    
-res.json(pendientes);
-});
-
-// 2. Endpoint para marcar como procesado
-app.post('/api/pedidos/marcar-impreso/:id', (req, res) => {
-const { id } = req.params;
-// Buscas el pedido por ID y cambias su estado a impreso: true
-marcarPedidoComoImpreso(id);
-res.sendStatus(200);
-});*/
-///////////////////////////////
-
-// --- RUTAS PARA EL AGENTE.js  DE IMPRESIÓN web---
-
-// 1. El Agente llama aquí para ver qué hay nuevo
-/*app.get('/api/pedidos/pendientes', (req, res) => {
-    const pendientes = pedidos.filter(p => p.impreso === false);
-    console.log(`📋 Agente consultando: ${pendientes.length} pedidos pendientes.`);
-    res.json(pendientes);
-});
-
-// 2. El Agente llama aquí después de imprimir para avisar que ya terminó
-app.post('/api/pedidos/marcar-impreso/:id', (req, res) => {
-    const { id } = req.params;
-    const pedido = pedidos.find(p => p.id == id);
-    
-    if (pedido) {
-        pedido.impreso = true;
-        console.log(`✅ Pedido #${id} marcado como IMPRESO.`);
-        res.status(200).send("Estado actualizado");
-    } else {
-        res.status(404).send("Pedido no encontrado");
-    }
-});*/
-
-///////////////////
-// --- RUTAS PARA EL AGENTE DE IMPRESIÓN LOCAL ---
-
+// 1. El Agente (local) llama aquí para ver qué hay nuevo (en Render o Local)
 app.get('/api/pedidos/pendientes', (req, res) => {
-    // Leemos el archivo físico para tener la última versión de los pedidos
     fs.readFile(PEDIDOS_PATH, 'utf8', (err, data) => {
-        if (err) {
-            console.error("Error leyendo pedidos:", err);
-            return res.status(500).json({ error: "No se pudo leer la base de datos" });
-        }
+        if (err) return res.status(500).json({ error: "No se pudo leer la base de datos" });
 
         try {
             const todosLosPedidos = JSON.parse(data || "[]");
-            // Filtramos: si impreso es false O si la propiedad ni siquiera existe todavía
+            // Filtramos: solo lo que NO esté impreso
             const pendientes = todosLosPedidos.filter(p => p.impreso === false || p.impreso === undefined);
             
-            console.log(`📋 Agente local consultando: ${pendientes.length} pendientes.`);
+            console.log(`📋 Consulta de pendientes: ${pendientes.length} encontrados.`);
             res.json(pendientes);
         } catch (e) {
             res.status(500).json({ error: "Error al procesar JSON" });
@@ -186,142 +34,91 @@ app.get('/api/pedidos/pendientes', (req, res) => {
     });
 });
 
-//------------------- app.post para marcar como impreso, actualizando el JSON físico
-
+// 2. El Agente llama aquí para avisar que ya imprimió
 app.post('/api/pedidos/marcar-impreso/:id', (req, res) => {
     const { id } = req.params;
 
     fs.readFile(PEDIDOS_PATH, 'utf8', (err, data) => {
         if (err) return res.status(500).send("Error de lectura");
 
-        let listaPedidos = JSON.parse(data || "[]");
-        const index = listaPedidos.findIndex(p => String(p.id) === String(id));
+        try {
+            let listaPedidos = JSON.parse(data || "[]");
+            // Buscamos por idPedido o por id (según cómo venga del frente)
+            const index = listaPedidos.findIndex(p => String(p.idPedido || p.id) === String(id));
 
-        if (index !== -1) {
-            listaPedidos[index].impreso = true; // Marcamos como impreso
-            
-            fs.writeFile(PEDIDOS_PATH, JSON.stringify(listaPedidos, null, 2), (err) => {
-                if (err) return res.status(500).send("Error al guardar");
-                console.log(`✅ Pedido #${id} marcado como impreso en el JSON.`);
-                res.status(200).send("Estado actualizado");
-            });
-        } else {
-            res.status(404).send("Pedido no encontrado");
+            if (index !== -1) {
+                listaPedidos[index].impreso = true; 
+                
+                fs.writeFile(PEDIDOS_PATH, JSON.stringify(listaPedidos, null, 2), (err) => {
+                    if (err) return res.status(500).send("Error al guardar");
+                    console.log(`✅ Pedido #${id} marcado como IMPRESO.`);
+                    res.status(200).send("Estado actualizado");
+                });
+            } else {
+                res.status(404).send("Pedido no encontrado");
+            }
+        } catch (e) {
+            res.status(500).send("Error procesando JSON");
         }
     });
 });
-//---------------------------------------------------------------------------
 
-/*1. Endpoint para que tu PC descargue los pedidos que aún no se imprimieron
-app.get('/api/pedidos/pendientes', (req, res) => {
-try {
-// Suponiendo que 'pedidos' es tu array global de objetos
-// Filtramos solo los que tienen la propiedad 'impreso' en false o no la tienen
-const pendientes = pedidos.filter(p => p.impreso === false || p.impreso === undefined);
+// --- RUTA DE CONFIRMACIÓN DE PEDIDO (Desde Web o PC) ---
 
-console.log(`Agente local consultando: ${pendientes.length} pedidos pendientes.`);
-res.json(pendientes);
-} catch (error) {
-res.status(500).json({ error: "Error al obtener pedidos" });
-}
-});
-
-// 2. Endpoint para que tu PC avise que ya imprimió el ticket
-app.post('/api/pedidos/marcar-impreso/:id', (req, res) => {
-const { id } = req.params;
-
-// Buscamos el pedido en tu array/base de datos
-const pedidoIndex = pedidos.findIndex(p => String(p.id) === String(id));
-
-if (pedidoIndex !== -1) {
-pedidos[pedidoIndex].impreso = true; // Marcamos como impreso
-console.log(`Pedido #${id} marcado como impreso correctamente.`);
-res.status(200).send("Estado actualizado");
-} else {
-console.log(`No se encontró el pedido #${id} para marcar como impreso.`);
-res.status(404).send("Pedido no encontrado");
-}
-});*/
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-// Ejemplo de cuando entra un pedido nuevo
-app.post('/api/crear-pedido', (req, res) => {
-    const nuevoPedido = {
-        id: Date.now(), // ID único
-        cliente: req.body.cliente,
-        productos: req.body.carrito,
-        total: req.body.total,
-        impreso: false // CRUCIAL: Esto indica que falta imprimir
-    };
-    pedidos.push(nuevoPedido); // Guardar en pedidos.json o DB...
-    res.json({ success: true, id: nuevoPedido.id });
-});
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 app.post('/api/confirmar-pedido', (req, res) => {
     const nuevoPedido = req.body;
 
+    // 1. Actualizar Stock
     fs.readFile(PRODUCTS_PATH, 'utf8', (err, dataProd) => {
         if (err) return res.status(500).json({ success: false, mensaje: "Error DB Productos" });
         
-        let productosDB = JSON.parse(dataProd);
-
-        // Descontar Stock
-        nuevoPedido.items.forEach(itemCarrito => {
-            const productoEnDB = productosDB.find(p => String(p.id) === String(itemCarrito.id));
-            if (productoEnDB) {
-                productoEnDB.stock = Number(productoEnDB.stock) - Number(itemCarrito.cantidad);
-                productoEnDB.ventas = (Number(productoEnDB.ventas) || 0) + Number(itemCarrito.cantidad);
-            }
-        }); ///  esto qudo igual
-
-// Guardar Stock Actualizado
-fs.writeFile(PRODUCTS_PATH, JSON.stringify(productosDB, null, 2), (err) => {
-    if (err) {
-        return res.status(500).json({ success: false, mensaje: "Error actualizando stock" });
-    }
-    ///////////////////////////////////////////////////////////
-    // Localiza esta sección dentro de app.post('/api/confirmar-pedido')
-    fs.readFile(PEDIDOS_PATH, 'utf8', (err, dataPed) => {
-        let pedidos = [];
-        if (!err && dataPed) {
-            try {
-                pedidos = JSON.parse(dataPed);
-            } catch (e) {
-                console.error("Error parsing pedidos:", e.message);
-                pedidos = [];
-            }
+        let productosDB = JSON.parse(dataProd || "[]");
+        if (nuevoPedido.items) {
+            nuevoPedido.items.forEach(itemCarrito => {
+                const productoEnDB = productosDB.find(p => String(p.id) === String(itemCarrito.id));
+                if (productoEnDB) {
+                    productoEnDB.stock = Number(productoEnDB.stock) - Number(itemCarrito.cantidad);
+                    productoEnDB.ventas = (Number(productoEnDB.ventas) || 0) + Number(itemCarrito.cantidad);
+                }
+            });
         }
-        
-        // --- CAMBIO AQUÍ: Usamos el idPedido que viene del frontend -como ID DE LA BASE DE DATOS--
-        const pedidoAGuardar = {
-            id: nuevoPedido.idPedido || Date.now(), // Si no viene, usa Date.now por seguridad
-            fecha: new Date().toISOString(),
-            ...nuevoPedido
-        };
-        //// push
-        pedidos.push(pedidoAGuardar);
+// Guardamos los cambios en productos.json 
+        fs.writeFile(PRODUCTS_PATH, JSON.stringify(productosDB, null, 2), (err) => {
+            if (err) return res.status(500).json({ success: false, mensaje: "Error Stock" });
 
-        fs.writeFile(PEDIDOS_PATH, JSON.stringify(pedidos, null, 2), (err) => {
-            if (err) {
-                return res.status(500).json({ success: false, mensaje: "Error guardando pedido" });
-            }
+            // 2. Guardar el Pedido para el Agente
+            fs.readFile(PEDIDOS_PATH, 'utf8', (err, dataPed) => {
+                let pedidos = JSON.parse(dataPed || "[]");
+                
+                const pedidoAGuardar = {
+                    ...nuevoPedido,
+                    id: nuevoPedido.idPedido || Date.now(),
+                    fecha: new Date().toISOString(),
+                    impreso: false // <--- CRUCIAL para que el Agente lo vea
+                };
 
-            // Pasamos el pedido completo (que ya tiene el idPedido) a la impresora
-            imprimirTicket(nuevoPedido);
-            res.status(200).json({ success: true, mensaje: "Pedido completado con éxito" });
+                pedidos.push(pedidoAGuardar);
+
+                fs.writeFile(PEDIDOS_PATH, JSON.stringify(pedidos, null, 2), (err) => {
+                    if (err) return res.status(500).json({ success: false });
+                    
+                    console.log(`🆕 Nuevo pedido recibido: #${pedidoAGuardar.id}. Esperando impresión...`);
+                    res.status(200).json({ success: true, id: pedidoAGuardar.id });
+                });
+            });
         });
     });
 });
-});
+
+// --- OTROS ENDPOINTS (Admin, Asociados, etc) ---
+
+/*app.get('/api/admin/pedidos', (req, res) => {
+    fs.readFile(PEDIDOS_PATH, 'utf8', (err, data) => {
+        if (err) return res.status(500).json({ error: "Error" });
+        res.json(JSON.parse(data || "[]"));
     });
-
-
-
+});*/
+///////////////////////////////////////////
 // --- API: ADMIN ---
 /*Para que el frontend pueda guardar estos datos, necesitas una ruta genérica en tu servidor. Reemplaza la ruta de pagar que hicimos antes por esta versión más potente:
 
@@ -588,8 +385,13 @@ app.put('/api/admin/asociados/:dni', (req, res) => {
 });*/
 //////////////////////////////////////////////
 
-const PORT = process.env.PORT || 3000;
 
+
+
+/////////////////////////////////////
+// (Agregá aquí tus otras rutas de asociados y productos que ya tenías)
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`🚀 Servidor activo en puerto ${PORT}`);
 });
