@@ -241,7 +241,7 @@ async function enviarPedidoWhatsApp() {
     const numero = "5491138461130"; 
     const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
 
-    fetch('http://helados-palitos.onrender.com/api/confirmar-pedido', {
+    fetch('https://helados-palitos.onrender.com/api/confirmar-pedido', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
