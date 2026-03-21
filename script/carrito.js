@@ -240,7 +240,7 @@ async function enviarPedidoWhatsApp() {
     const numero = "5491138461130"; 
     const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
 
-    fetch('http://localhost:3000/api/confirmar-pedido', {
+    fetch('http://helados-palitos.onrender.com/api/confirmar-pedido', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -251,9 +251,11 @@ async function enviarPedidoWhatsApp() {
             subtotal, descCupon, descEfectivo, costoEnvio,
             total: finalTotalText, 
             pago: "pendiente", enviado: "pendiente", entregado: "pendiente", cancelado: "No", 
-            impreso: "false"
+            impreso: false
         })
-    }).catch(err => console.log("Servidor offline..."));
+        }).then(res => console.log("Pedido enviado a la nube con éxito"))
+  .catch(err => console.log("Error enviando a Render:", err));
+   // }).catch(err => console.log("Servidor offline..."));
 
     localStorage.removeItem('carritoDeCompras');
     window.open(url, '_blank');
