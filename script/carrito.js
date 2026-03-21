@@ -207,7 +207,7 @@ function obtenerSiguienteNumeroPedido() {
 }
 
 async function enviarPedidoWhatsApp() {
-    alert(" Boton de finalizar compra presionado. Validando datos y preparando pedido..."); 
+    alert(" Boton de finalizar compra presionado. Validando datos y preparando pedido...");
     const faltantes = validarFormulario();
     if (faltantes.length > 0) {
         return alert("No puedes finalizar el pedido. Falta completar: " + faltantes.join(", "));
@@ -216,7 +216,7 @@ async function enviarPedidoWhatsApp() {
     const nombre = document.getElementById('nombre')?.value.trim();
     const direccion = document.getElementById('direccion')?.value.trim();
     const telefono = document.getElementById('telefono')?.value.trim();
-    const comentario = document.getElementById('comentario')?.value.trim() || "Sin comentarios"; 
+    const comentario = document.getElementById('comentario')?.value.trim() || "Sin comentarios";
     const finalTotalText = document.getElementById('final-total')?.innerText || "$0";
     
     const subtotal = document.getElementById('total')?.innerText || "0";
@@ -230,18 +230,47 @@ async function enviarPedidoWhatsApp() {
     let productosTexto = carrito.map(p => `• ${p.title} ${p.category} (x${p.cantidad})`).join('\n');
     
     const texto = `* --- NUEVO PEDIDO #00${nroPedido} --- *\n\n` +
-                  `*Cliente:* ${nombre}\n` +
-                  `*Dirección:* ${direccion}\n` +
-                  `*Teléfono:* ${telefono}\n` +  
-                  `*Comentario:* ${comentario}\n` +
-                  `*Pago:* ${metodoPagoCheck.value.toUpperCase()}\n\n` +
-                  `*Productos:*\n${productosTexto}\n\n` +
-                  `*TOTAL:* ${finalTotalText}`; 
+        `*Cliente:* ${nombre}\n` +
+        `*Dirección:* ${direccion}\n` +
+        `*Teléfono:* ${telefono}\n` +
+        `*Comentario:* ${comentario}\n` +
+        `*Pago:* ${metodoPagoCheck.value.toUpperCase()}\n\n` +
+        `*Productos:*\n${productosTexto}\n\n` +
+        `*TOTAL:* ${finalTotalText}`;
 
-    const numero = "5491138461130"; 
+    const numero = "5491138461130";
     const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
-
+    ///////////////////////////////
+    // Cambiamos http por https y agregamos el cartel de éxito
     fetch('https://helados-palitos.onrender.com/api/confirmar-pedido', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            idPedido: nroPedido,
+            items: carrito,
+            cliente: nombre,
+            direccion: direccion,
+            subtotal, descCupon, descEfectivo, costoEnvio,
+            total: finalTotalText,
+            pago: "pendiente", enviado: "pendiente", entregado: "pendiente", cancelado: "No",
+            impreso: false // Importante: Sin comillas
+        })
+    })
+        .then(res => {
+            if (res.ok) {
+                alert("¡Gracias por su compra! El pedido ha sido enviado.");
+                console.log("Pedido enviado a la nube con éxito");
+            } else {
+                console.error("Error en el servidor de Render");
+            }
+        })
+        .catch(err => alert("Error enviando a Render: " + err.message));
+
+    localStorage.removeItem('carritoDeCompras');
+    window.open(url, '_blank');
+}
+/////////////////////////////   
+  /*  fetch('https://helados-palitos.onrender.com/api/confirmar-pedido', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -254,10 +283,13 @@ async function enviarPedidoWhatsApp() {
             pago: "pendiente", enviado: "pendiente", entregado: "pendiente", cancelado: "No", 
             impreso: false
         })
-        }).then(res => console.log("Pedido enviado a la nube con éxito"))
+    })
+        
+        
+        .then(res => console.log("Pedido enviado a la nube con éxito"))
   .catch(err => console.log("Error enviando a Render:", err));
    // }).catch(err => console.log("Servidor offline..."));
 
     localStorage.removeItem('carritoDeCompras');
     window.open(url, '_blank');
-}
+}*/
