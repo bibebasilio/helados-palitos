@@ -200,7 +200,7 @@ function recalcularTodo() {
 }
 
 function obtenerSiguienteNumeroPedido() {
-    let ultimoNumero = localStorage.getItem('ultimoNumeroPedido') || 1000;
+    let ultimoNumero = localStorage.getItem('ultimoNumeroPedido') || 1074;
     let nuevoNumero = parseInt(ultimoNumero) + 1;
     localStorage.setItem('ultimoNumeroPedido', nuevoNumero);
     return nuevoNumero;
