@@ -207,6 +207,7 @@ function obtenerSiguienteNumeroPedido() {
 }
 
 async function enviarPedidoWhatsApp() {
+    alert(" Boton de finalizar compra presionado. Validando datos y preparando pedido..."); 
     const faltantes = validarFormulario();
     if (faltantes.length > 0) {
         return alert("No puedes finalizar el pedido. Falta completar: " + faltantes.join(", "));
