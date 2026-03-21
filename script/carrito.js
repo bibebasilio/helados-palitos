@@ -258,8 +258,8 @@ async function enviarPedidoWhatsApp() {
     })
         .then(res => {
             if (res.ok) {
-                alert("¡Gracias por su compra! El pedido ha sido enviado.");
-                console.log("Pedido enviado a la nube con éxito");
+                alert("¡Pedido #"+nroPedido+" confirmado! Gracias por su compra.");
+                console.log("Pedido #"+nroPedido+"enviado a la nube con éxito");
             } else {
                 console.error("Error en el servidor de Render");
             }
