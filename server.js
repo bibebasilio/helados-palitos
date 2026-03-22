@@ -1,71 +1,107 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
+const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const PEDIDOS_PATH = path.join(__dirname, 'data', 'pedidosrecibidos.json');
-const PRODUCTS_PATH = path.join(__dirname, 'data', 'products.json');
+// --- 1. CONEXIÓN A MONGODB ---
+mongoose.connect(process.env.MONGO_URI)
+.then(() => console.log("✅ Conectado a MongoDB Atlas"))
+.catch(err => console.error("❌ Error Mongo:", err));
 
-// --- API PARA EL AGENTE ---
-app.get('/api/pedidos/pendientes', (req, res) => {
-fs.readFile(PEDIDOS_PATH, 'utf8', (err, data) => {
-if (err) return res.json([]);
-const pedidos = JSON.parse(data || "[]");
-// Enviamos todo lo que diga impreso: false o "false"
-const pendientes = pedidos.filter(p => p.impreso === false || p.impreso === "false");
+// --- 2. MODELO DE DATOS (Integrado aquí para evitar errores de ruta) ---
+const pedidoSchema = new mongoose.Schema({
+idPedido: { type: Number, unique: true },
+fecha: { type: Date, default: Date.now },
+cliente: String,
+direccion: String,
+items: Array,
+subtotal: String,
+total: String,
+pago: { type: String, default: 'pendiente' },
+impreso: { type: Boolean, default: false }
+});
+
+const Pedido = mongoose.model('Pedido', pedidoSchema);
+
+
+//////////////////////////////////
+// --- 3. RUTAS CORREGIDAS ---
+
+app.post('/api/confirmar-pedido', async (req, res) => {
+    try {
+        // 1. Buscamos el último ID real en MongoDB
+        const ultimo = await Pedido.findOne().sort({ idPedido: -1 });
+        const nuevoID = ultimo ? ultimo.idPedido + 1 : 1077;
+
+        // 2. Extraemos los datos del cuerpo, PERO ignoramos el idPedido que mande el celu
+        const { idPedido, ...datosSinID } = req.body; 
+
+        const nuevoPedido = new Pedido({
+            ...datosSinID,   // Usamos los productos, nombre, etc.
+            idPedido: nuevoID, // Forzamos el ID correlativo real
+            impreso: false
+        });
+
+        await nuevoPedido.save();
+        console.log(`🆕 Pedido #${nuevoID} guardado en Mongo.`);
+        
+        // 3. Respondemos al celular con el ID REAL
+        res.status(200).json({ success: true, id: nuevoID });
+    } catch (error) {
+        console.error("❌ Error al guardar pedido:", error);
+        res.status(500).json({ success: false });
+    }
+});
+
+
+/////////////////////////////////////////////////////////
+/*// --- 3. RUTAS ---
+
+// Recibir pedido del celular
+app.post('/api/confirmar-pedido', async (req, res) => {
+try {
+const ultimo = await Pedido.findOne().sort({ idPedido: -1 });
+const nuevoID = ultimo ? ultimo.idPedido + 1 : 1077;
+
+const nuevoPedido = new Pedido({
+...req.body,
+idPedido: nuevoID,
+impreso: false
+});
+
+await nuevoPedido.save();
+console.log(`🆕 Pedido #${nuevoID} guardado en Mongo.`);
+res.status(200).json({ success: true, id: nuevoID });
+} catch (error) {
+console.error("Error:", error);
+res.status(500).json({ success: false });
+}
+});*/
+
+// Pedidos para el agente (impresora)
+app.get('/api/pedidos/pendientes', async (req, res) => {
+try {
+const pendientes = await Pedido.find({ impreso: false });
 res.json(pendientes);
-});
-});
-
-app.post('/api/pedidos/marcar-impreso/:id', (req, res) => {
-const { id } = req.params;
-fs.readFile(PEDIDOS_PATH, 'utf8', (err, data) => {
-if (err) return res.status(500).send("Error");
-let lista = JSON.parse(data || "[]");
-const idx = lista.findIndex(p => String(p.idPedido || p.id) === String(id));
-if (idx !== -1) {
-lista[idx].impreso = true;
-fs.writeFile(PEDIDOS_PATH, JSON.stringify(lista, null, 2), () => {
-res.send("OK");
-});
-} else {
-res.status(404).send("No encontrado");
+} catch (error) {
+res.json([]);
 }
 });
-});
 
-// --- RECEPCIÓN DE PEDIDOS (Desde el Celular) ---
-app.post('/api/confirmar-pedido', (req, res) => {
-const nuevoPedido = req.body;
-
-fs.readFile(PEDIDOS_PATH, 'utf8', (err, data) => {
-let pedidos = JSON.parse(data || "[]");
-
-// AUTO-INCREMENTO: Buscamos el número más alto y sumamos 1
-const ultimoNro = pedidos.length > 0
-? Math.max(...pedidos.map(p => parseInt(p.idPedido) || 1074))
-: 1074;
-
-const pedidoFinal = {
-...nuevoPedido,
-idPedido: ultimoNro + 1,
-id: ultimoNro + 1,
-fecha: new Date().toISOString(),
-impreso: false
-};
-
-pedidos.push(pedidoFinal);
-fs.writeFile(PEDIDOS_PATH, JSON.stringify(pedidos, null, 2), (err) => {
-if (err) return res.status(500).json({ success: false });
-console.log(`🆕 Pedido #${pedidoFinal.idPedido} guardado.`);
-res.status(200).json({ success: true, id: pedidoFinal.idPedido });
-});
-});
+// Marcar como impreso
+app.post('/api/pedidos/marcar-impreso/:id', async (req, res) => {
+try {
+const { id } = req.params;
+await Pedido.findOneAndUpdate({ idPedido: parseInt(id) }, { impreso: true });
+res.send("OK");
+} catch (error) {
+res.status(500).send("Error");
+}
 });
 
 const PORT = process.env.PORT || 3000;
