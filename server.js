@@ -27,10 +27,47 @@ impreso: { type: Boolean, default: false }
 });
 
 const Pedido = mongoose.model('Pedido', pedidoSchema);
+////-------------------------------------------------
+app.post('/api/confirmar-pedido', async (req, res) => {
+    try {
+        // 1. Buscamos el pedido con el ID más alto, sin importar si está impreso o no
+        const ultimoPedido = await Pedido.findOne().sort({ idPedido: -1 });
+        
+        // 2. Si no hay pedidos, empezamos en 1077. Si hay, sumamos 1 SIEMPRE.
+        let nuevoID = 1077;
+        if (ultimoPedido && ultimoPedido.idPedido) {
+            nuevoID = ultimoPedido.idPedido + 1;
+        }
 
+        // 3. Limpiamos datos residuales del celular
+        const { idPedido, ...datosLimpios } = req.body;
+
+        const nuevoPedido = new Pedido({
+            ...datosLimpios,
+            idPedido: nuevoID,
+            fecha: new Date(), // Guardamos la hora exacta
+            impreso: false
+        });
+
+        // 4. Guardamos en MongoDB (esto funciona aunque la PC esté apagada)
+        const guardado = await nuevoPedido.save();
+
+        console.log(`✅ Pedido #${nuevoID} registrado globalmente.`);
+
+        // 5. Le devolvemos al celular el nuevo número para el WhatsApp
+        res.status(200).json({ 
+            success: true, 
+            id: guardado.idPedido 
+        });
+
+    } catch (error) {
+        console.error("❌ Error al generar pedido:", error);
+        res.status(500).json({ success: false, mensaje: "Error de red" });
+    }
+});
 
 //////////////////////////////////
-app.post('/api/confirmar-pedido', async (req, res) => {
+/*app.post('/api/confirmar-pedido', async (req, res) => {
     try {
         // 1. Buscamos el último ID real en MongoDB para que sea la ÚNICA fuente de verdad
         const ultimoPedido = await Pedido.findOne().sort({ idPedido: -1 });
@@ -59,7 +96,7 @@ app.post('/api/confirmar-pedido', async (req, res) => {
         console.error("❌ Error en el servidor:", error);
         res.status(500).json({ success: false });
     }
-});
+});*/
 
 
 
