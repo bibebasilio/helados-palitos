@@ -30,11 +30,45 @@ const Pedido = mongoose.model('Pedido', pedidoSchema);
 
 
 //////////////////////////////////
-// --- 3. RUTAS CORREGIDAS ---
-
 app.post('/api/confirmar-pedido', async (req, res) => {
     try {
-        // 1. Buscamos el último ID real en MongoDB
+        // 1. Buscamos el último ID real en MongoDB para que sea la ÚNICA fuente de verdad
+        const ultimoPedido = await Pedido.findOne().sort({ idPedido: -1 });
+        const nuevoID = ultimoPedido ? ultimoPedido.idPedido + 1 : 1077;
+
+        // 2. Limpiamos cualquier ID que mande el celular para que no "contamine"
+        const { idPedido, ...restoDelPedido } = req.body;
+
+        const nuevoPedido = new Pedido({
+            ...restoDelPedido,
+            idPedido: nuevoID, // Forzamos el ID calculado por el servidor
+            impreso: false
+        });
+
+        // 3. Guardamos y esperamos a que termine
+        const pedidoGuardado = await nuevoPedido.save();
+        
+        console.log(`✅ Pedido #${pedidoGuardado.idPedido} guardado con éxito.`);
+
+        // 4. LE RESPONDEMOS AL CELULAR EL ID QUE ACABAMOS DE GUARDAR
+        res.status(200).json({ 
+            success: true, 
+            id: pedidoGuardado.idPedido // Enviamos el ID real de la base de datos
+        });
+    } catch (error) {
+        console.error("❌ Error en el servidor:", error);
+        res.status(500).json({ success: false });
+    }
+});
+
+
+
+/////////////////////////////////////
+// --- 3. RUTAS CORREGIDAS ---
+
+/*app.post('/api/confirmar-pedido', async (req, res) => {
+    try {
+        // 1. Buscamos el último ID real en MongoDB para que se la Unica Fuente
         const ultimo = await Pedido.findOne().sort({ idPedido: -1 });
         const nuevoID = ultimo ? ultimo.idPedido + 1 : 1077;
 
@@ -56,7 +90,7 @@ app.post('/api/confirmar-pedido', async (req, res) => {
         console.error("❌ Error al guardar pedido:", error);
         res.status(500).json({ success: false });
     }
-});
+});*/
 
 
 /////////////////////////////////////////////////////////
