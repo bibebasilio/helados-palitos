@@ -252,53 +252,66 @@ async function enviarPedidoWhatsApp() {
   let productosTexto = carrito
     .map((p) => `• ${p.title} ${p.category} (x${p.cantidad})`)
     .join("\n");
+  ////////////////////////
+  const resultado = await response.json();
 
-  const texto =
-    `* --- NUEVO PEDIDO #00${nroPedido} --- *\n\n` +
-    `*Cliente:* ${nombre}\n` +
-    `*Dirección:* ${direccion}\n` +
-    `*Teléfono:* ${telefono}\n` +
-    `*Comentario:* ${comentario}\n` +
-    `*Pago:* ${metodoPagoCheck.value.toUpperCase()}\n\n` +
-    `*Productos:*\n${productosTexto}\n\n` +
-    `*TOTAL:* ${finalTotalText}`;
+  if (resultado.success) {
+    // IMPORTANTE: nroReal DEBE venir de la respuesta del servidor (resultado.id)
+    const nroReal = resultado.id;
+    
+    // El texto de WhatsApp tiene que usar nroReal
+    // const textoWA = `*--- NUEVO PEDIDO #${nroReal} ---*\n...`; 
+    // ... rest of the code
+    /// cambie abajo nroPedido por nroReal para que el número que se imprima y se envie a whatsapp sea el mismo que el de la base de datos 
 
-  const numero = "5491138461130";
-  const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
-  ///////////////////////////////
-  // Cambiamos http por https y agregamos el cartel de éxito
-  fetch("https://helados-palitos.onrender.com/api/confirmar-pedido", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      idPedido: nroPedido,
-      items: carrito,
-      cliente: nombre,
-      direccion: direccion,
-      subtotal,
-      descCupon,
-      descEfectivo,
-      costoEnvio,
-      total: finalTotalText,
-      pago: "pendiente",
-      enviado: "pendiente",
-      entregado: "pendiente",
-      cancelado: "No",
-      impreso: false, // Importante: Sin comillas
-    }),
-  })
-    .then((res) => {
-      if (res.ok) {
-        alert("¡Pedido #" + nroPedido + " confirmado! Gracias por su compra.");
-        console.log("Pedido #" + nroPedido + "enviado a la nube con éxito");
-      } else {
-        console.error("Error en el servidor de Render");
-      }
+    ///////////////////////// 
+    const texto =
+      `* --- NUEVO PEDIDO #00${nroReal} --- *\n\n` +
+      `*Cliente:* ${nombre}\n` +
+      `*Dirección:* ${direccion}\n` +
+      `*Teléfono:* ${telefono}\n` +
+      `*Comentario:* ${comentario}\n` +
+      `*Pago:* ${metodoPagoCheck.value.toUpperCase()}\n\n` +
+      `*Productos:*\n${productosTexto}\n\n` +
+      `*TOTAL:* ${finalTotalText}`;
+
+    const numero = "5491138461130";
+    const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+    ///////////////////////////////
+    // Cambiamos http por https y agregamos el cartel de éxito
+    fetch("https://helados-palitos.onrender.com/api/confirmar-pedido", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        idPedido: nroPedido,
+        items: carrito,
+        cliente: nombre,
+        direccion: direccion,
+        subtotal,
+        descCupon,
+        descEfectivo,
+        costoEnvio,
+        total: finalTotalText,
+        pago: "pendiente",
+        enviado: "pendiente",
+        entregado: "pendiente",
+        cancelado: "No",
+        impreso: false, // Importante: Sin comillas
+      }),
     })
-    .catch((err) => alert("Error enviando a Render: " + err.message));
+      .then((res) => {
+        if (res.ok) {
+          alert("¡Pedido #" + nroPedido + " confirmado! Gracias por su compra.");
+          console.log("Pedido #" + nroPedido + "enviado a la nube con éxito");
+        } else {
+          console.error("Error en el servidor de Render");
+        }
+      })
+      .catch((err) => alert("Error enviando a Render: " + err.message));
 
-  localStorage.removeItem("carritoDeCompras");
-  window.open(url, "_blank");
+    localStorage.removeItem("carritoDeCompras");
+    window.open(url, "_blank");
+  }
 }
 /////////////////////////////
 /*  fetch('https://helados-palitos.onrender.com/api/confirmar-pedido', {
