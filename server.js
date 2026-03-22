@@ -30,6 +30,37 @@ const Pedido = mongoose.model('Pedido', pedidoSchema);
 ////-------------------------------------------------
 app.post('/api/confirmar-pedido', async (req, res) => {
     try {
+        const ultimo = await Pedido.findOne().sort({ idPedido: -1 });
+        const nuevoID = ultimo ? ultimo.idPedido + 1 : 1077;
+
+        const { idPedido, ...datos } = req.body;
+
+        const nuevoPedido = new Pedido({
+            ...datos,
+            idPedido: nuevoID,
+            impreso: false
+        });
+
+        // CAMBIO CLAVE: Guardamos y usamos el resultado real de la base de datos
+        const pedidoGuardado = await nuevoPedido.save();
+        
+        console.log(`✅ Guardado real en Atlas: #${pedidoGuardado.idPedido}`);
+
+        // Le mandamos al celular el ID que REALMENTE se guardó
+        res.status(200).json({ 
+            success: true, 
+            id: pedidoGuardado.idPedido 
+        });
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ success: false });
+    }
+});
+
+
+//////////////////////////////////////////
+/*app.post('/api/confirmar-pedido', async (req, res) => {
+    try {
         // 1. Buscamos el pedido con el ID más alto, sin importar si está impreso o no
         const ultimoPedido = await Pedido.findOne().sort({ idPedido: -1 });
         
@@ -64,7 +95,7 @@ app.post('/api/confirmar-pedido', async (req, res) => {
         console.error("❌ Error al generar pedido:", error);
         res.status(500).json({ success: false, mensaje: "Error de red" });
     }
-});
+});*/
 
 //////////////////////////////////
 /*app.post('/api/confirmar-pedido', async (req, res) => {
