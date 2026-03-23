@@ -25,6 +25,8 @@ impreso: { type: Boolean, default: false }
 });
 
 const Pedido = mongoose.model('Pedido', pedidoSchema);
+
+
 //////////////////////////////////////////////////////////
 
 // 1. Crear un esquema para el contador
