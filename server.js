@@ -26,7 +26,7 @@ impreso: { type: Boolean, default: false }
 
 const Pedido = mongoose.model('Pedido', pedidoSchema);
 //////////////////////////////////////////////////////////
-JavaScript
+
 // 1. Crear un esquema para el contador
 const contadorSchema = new mongoose.Schema({
 id: String,
