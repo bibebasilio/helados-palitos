@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "main": "server.js",
   "dependencies": {
+    "axios": "^1.13.6",
     "chokidar": "^5.0.0",
-    "cors": "^2.8.5",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "mongodb": "^7.1.0",
+    "mongoose": "^9.3.1",
     "nodemon": "^2.0.22",
-    "axios": "^1.13.6"
+    "usb": "^2.17.0"
   },
   "optionalDependencies": {
     "escpos": "^3.0.0-alpha.6",
@@ -20,6 +24,3 @@
   "author": "Basilio Biberidis",
   "license": "ISC"
 }
-
-
-
