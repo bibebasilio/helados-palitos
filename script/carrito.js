@@ -72,9 +72,7 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     let subtotalCalculado = 0;
 
     if (carrito.length === 0) {
-    tabla.innerHTML = '<tr>
-        <td colspan="8" style="text-align: center; padding: 20px;">Tu carrito está vacío.</td>
-    </tr>';
+    tabla.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;">Tu carrito está vacío.</td></tr>';
     } else {
     carrito.forEach((producto) => {
     const sub = producto.price * producto.cantidad;
