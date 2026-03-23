@@ -8,12 +8,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-// --- 1. CONEXIÓN A MONGODB ---
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("✅ Conectado a MongoDB Atlas"))
 .catch(err => console.error("❌ Error Mongo:", err));
 
-// --- 2. MODELO DE DATOS (Integrado aquí para evitar errores de ruta) ---
 const pedidoSchema = new mongoose.Schema({
 idPedido: { type: Number, unique: true },
 fecha: { type: Date, default: Date.now },
@@ -27,216 +25,96 @@ impreso: { type: Boolean, default: false }
 });
 
 const Pedido = mongoose.model('Pedido', pedidoSchema);
-////-------------------------------------------------
-app.post('/api/confirmar-pedido', async (req, res) => {
-    try {
-        // 1. Buscamos el último ID directamente antes de guardar
-        const ultimo = await Pedido.findOne().sort({ idPedido: -1 });
-        const nuevoID = ultimo ? ultimo.idPedido + 1 : 1080;
-
-        // 2. Quitamos cualquier ID que venga del celular para que no confunda
-        const { idPedido, ...datosLimpios } = req.body;
-
-        const nuevoPedido = new Pedido({
-            ...datosLimpios,
-            idPedido: nuevoID,
-            impreso: false
-        });
-
-        // 3. GUARDAMOS Y CAPTURAMOS EL RESULTADO REAL
-        const pedidoFinal = await nuevoPedido.save();
-        
-        console.log(`✅ Pedido Real Guardado: #${pedidoFinal.idPedido}`);
-
-        // 4. IMPORTANTE: Respondemos con el ID que se guardó en el paso anterior
-        res.status(200).json({ 
-            success: true, 
-            id: pedidoFinal.idPedido 
-        });
-    } catch (error) {
-        console.error("Error:", error);
-        res.status(500).json({ success: false });
-    }
+//////////////////////////////////////////////////////////
+JavaScript
+// 1. Crear un esquema para el contador
+const contadorSchema = new mongoose.Schema({
+id: String,
+seq: Number
 });
+const Contador = mongoose.model('Contador', contadorSchema);
 
-/////////////////////////////////
-/*app.post('/api/confirmar-pedido', async (req, res) => {
-    try {
-        const ultimo = await Pedido.findOne().sort({ idPedido: -1 });
-        const nuevoID = ultimo ? ultimo.idPedido + 1 : 1077;
+// 2. Función para obtener el siguiente ID (Ponla antes de tus rutas)
+async function obtenerSiguienteID(nombreContador) {
+const contador = await Contador.findOneAndUpdate(
+{ id: nombreContador },
+{ $inc: { seq: 1 } },
+{ new: true, upsert: true } // Si no existe, lo crea
+);
+return contador.seq;
+}
 
-        const { idPedido, ...datos } = req.body;
-
-        const nuevoPedido = new Pedido({
-            ...datos,
-            idPedido: nuevoID,
-            impreso: false
-        });
-
-        // CAMBIO CLAVE: Guardamos y usamos el resultado real de la base de datos
-        const pedidoGuardado = await nuevoPedido.save();
-        
-        console.log(`✅ Guardado real en Atlas: #${pedidoGuardado.idPedido}`);
-
-        // Le mandamos al celular el ID que REALMENTE se guardó
-        res.status(200).json({ 
-            success: true, 
-            id: pedidoGuardado.idPedido 
-        });
-    } catch (error) {
-        console.error("Error:", error);
-        res.status(500).json({ success: false });
-    }
-});*/
-
-
-//////////////////////////////////////////
-/*app.post('/api/confirmar-pedido', async (req, res) => {
-    try {
-        // 1. Buscamos el pedido con el ID más alto, sin importar si está impreso o no
-        const ultimoPedido = await Pedido.findOne().sort({ idPedido: -1 });
-        
-        // 2. Si no hay pedidos, empezamos en 1077. Si hay, sumamos 1 SIEMPRE.
-        let nuevoID = 1077;
-        if (ultimoPedido && ultimoPedido.idPedido) {
-            nuevoID = ultimoPedido.idPedido + 1;
-        }
-
-        // 3. Limpiamos datos residuales del celular
-        const { idPedido, ...datosLimpios } = req.body;
-
-        const nuevoPedido = new Pedido({
-            ...datosLimpios,
-            idPedido: nuevoID,
-            fecha: new Date(), // Guardamos la hora exacta
-            impreso: false
-        });
-
-        // 4. Guardamos en MongoDB (esto funciona aunque la PC esté apagada)
-        const guardado = await nuevoPedido.save();
-
-        console.log(`✅ Pedido #${nuevoID} registrado globalmente.`);
-
-        // 5. Le devolvemos al celular el nuevo número para el WhatsApp
-        res.status(200).json({ 
-            success: true, 
-            id: guardado.idPedido 
-        });
-
-    } catch (error) {
-        console.error("❌ Error al generar pedido:", error);
-        res.status(500).json({ success: false, mensaje: "Error de red" });
-    }
-});*/
-
-//////////////////////////////////
-/*app.post('/api/confirmar-pedido', async (req, res) => {
-    try {
-        // 1. Buscamos el último ID real en MongoDB para que sea la ÚNICA fuente de verdad
-        const ultimoPedido = await Pedido.findOne().sort({ idPedido: -1 });
-        const nuevoID = ultimoPedido ? ultimoPedido.idPedido + 1 : 1077;
-
-        // 2. Limpiamos cualquier ID que mande el celular para que no "contamine"
-        const { idPedido, ...restoDelPedido } = req.body;
-
-        const nuevoPedido = new Pedido({
-            ...restoDelPedido,
-            idPedido: nuevoID, // Forzamos el ID calculado por el servidor
-            impreso: false
-        });
-
-        // 3. Guardamos y esperamos a que termine
-        const pedidoGuardado = await nuevoPedido.save();
-        
-        console.log(`✅ Pedido #${pedidoGuardado.idPedido} guardado con éxito.`);
-
-        // 4. LE RESPONDEMOS AL CELULAR EL ID QUE ACABAMOS DE GUARDAR
-        res.status(200).json({ 
-            success: true, 
-            id: pedidoGuardado.idPedido // Enviamos el ID real de la base de datos
-        });
-    } catch (error) {
-        console.error("❌ Error en el servidor:", error);
-        res.status(500).json({ success: false });
-    }
-});*/
-
-
-
-/////////////////////////////////////
-// --- 3. RUTAS CORREGIDAS ---
-
-/*app.post('/api/confirmar-pedido', async (req, res) => {
-    try {
-        // 1. Buscamos el último ID real en MongoDB para que se la Unica Fuente
-        const ultimo = await Pedido.findOne().sort({ idPedido: -1 });
-        const nuevoID = ultimo ? ultimo.idPedido + 1 : 1077;
-
-        // 2. Extraemos los datos del cuerpo, PERO ignoramos el idPedido que mande el celu
-        const { idPedido, ...datosSinID } = req.body; 
-
-        const nuevoPedido = new Pedido({
-            ...datosSinID,   // Usamos los productos, nombre, etc.
-            idPedido: nuevoID, // Forzamos el ID correlativo real
-            impreso: false
-        });
-
-        await nuevoPedido.save();
-        console.log(`🆕 Pedido #${nuevoID} guardado en Mongo.`);
-        
-        // 3. Respondemos al celular con el ID REAL
-        res.status(200).json({ success: true, id: nuevoID });
-    } catch (error) {
-        console.error("❌ Error al guardar pedido:", error);
-        res.status(500).json({ success: false });
-    }
-});*/
-
-
-/////////////////////////////////////////////////////////
-/*// --- 3. RUTAS ---
-
-// Recibir pedido del celular
+// 3. Tu ruta actualizada
 app.post('/api/confirmar-pedido', async (req, res) => {
 try {
-const ultimo = await Pedido.findOne().sort({ idPedido: -1 });
-const nuevoID = ultimo ? ultimo.idPedido + 1 : 1077;
+// Obtenemos el ID de forma segura y atómica
+const nuevoID = await obtenerSiguienteID('pedidoId');
 
+const { idPedido, ...datosLimpios } = req.body;
 const nuevoPedido = new Pedido({
-...req.body,
+...datosLimpios,
 idPedido: nuevoID,
 impreso: false
 });
 
-await nuevoPedido.save();
-console.log(`🆕 Pedido #${nuevoID} guardado en Mongo.`);
-res.status(200).json({ success: true, id: nuevoID });
+const pedidoFinal = await nuevoPedido.save();
+
+res.status(200).json({
+success: true,
+id: pedidoFinal.idPedido
+});
 } catch (error) {
 console.error("Error:", error);
 res.status(500).json({ success: false });
 }
-});*/
-
-// Pedidos para el agente (impresora)
-app.get('/api/pedidos/pendientes', async (req, res) => {
-try {
-const pendientes = await Pedido.find({ impreso: false });
-res.json(pendientes);
-} catch (error) {
-res.json([]);
-}
 });
 
-// Marcar como impreso
-app.post('/api/pedidos/marcar-impreso/:id', async (req, res) => {
+//////////////////////////////////////////////////////////////////////
+/*// --- RUTA CRÍTICA: CONFIRMAR PEDIDO ---
+app.post('/api/confirmar-pedido', async (req, res) => {
 try {
-const { id } = req.params;
-await Pedido.findOneAndUpdate({ idPedido: parseInt(id) }, { impreso: true });
-res.send("OK");
+// 1. Buscar el último ID en la base de datos
+const ultimo = await Pedido.findOne().sort({ idPedido: -1 });
+
+// Si no hay pedidos, empezamos en 1080 (o el que gustes)
+const nuevoID = ultimo ? ultimo.idPedido + 1 : 1080;
+
+// 2. Limpiar datos del body
+const { idPedido, ...datosLimpios } = req.body;
+
+const nuevoPedido = new Pedido({
+...datosLimpios,
+idPedido: nuevoID,
+impreso: false
+});
+
+// 3. Guardar y esperar confirmación de DB
+const pedidoFinal = await nuevoPedido.save();
+
+console.log(`✅ Pedido Guardado en DB: #${pedidoFinal.idPedido}`);
+
+// 4. Responder con el ID real guardado
+return res.status(200).json({
+success: true,
+id: pedidoFinal.idPedido
+});
+
 } catch (error) {
-res.status(500).send("Error");
+console.error("❌ Error:", error);
+res.status(500).json({ success: false, error: error.message });
 }
+});*/
+
+// Rutas para la impresora
+app.get('/api/pedidos/pendientes', async (req, res) => {
+const pendientes = await Pedido.find({ impreso: false });
+res.json(pendientes);
+});
+
+app.post('/api/pedidos/marcar-impreso/:id', async (req, res) => {
+await Pedido.findOneAndUpdate({ idPedido: parseInt(req.params.id) }, { impreso: true });
+res.send("OK");
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server en puerto ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server corriendo en puerto ${PORT}`));
