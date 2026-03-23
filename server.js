@@ -32,7 +32,7 @@ app.post('/api/confirmar-pedido', async (req, res) => {
     try {
         // 1. Buscamos el último ID directamente antes de guardar
         const ultimo = await Pedido.findOne().sort({ idPedido: -1 });
-        const nuevoID = ultimo ? ultimo.idPedido + 1 : 1077;
+        const nuevoID = ultimo ? ultimo.idPedido + 1 : 1080;
 
         // 2. Quitamos cualquier ID que venga del celular para que no confunda
         const { idPedido, ...datosLimpios } = req.body;
