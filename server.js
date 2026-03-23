@@ -30,6 +30,38 @@ const Pedido = mongoose.model('Pedido', pedidoSchema);
 ////-------------------------------------------------
 app.post('/api/confirmar-pedido', async (req, res) => {
     try {
+        // 1. Buscamos el último ID directamente antes de guardar
+        const ultimo = await Pedido.findOne().sort({ idPedido: -1 });
+        const nuevoID = ultimo ? ultimo.idPedido + 1 : 1077;
+
+        // 2. Quitamos cualquier ID que venga del celular para que no confunda
+        const { idPedido, ...datosLimpios } = req.body;
+
+        const nuevoPedido = new Pedido({
+            ...datosLimpios,
+            idPedido: nuevoID,
+            impreso: false
+        });
+
+        // 3. GUARDAMOS Y CAPTURAMOS EL RESULTADO REAL
+        const pedidoFinal = await nuevoPedido.save();
+        
+        console.log(`✅ Pedido Real Guardado: #${pedidoFinal.idPedido}`);
+
+        // 4. IMPORTANTE: Respondemos con el ID que se guardó en el paso anterior
+        res.status(200).json({ 
+            success: true, 
+            id: pedidoFinal.idPedido 
+        });
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ success: false });
+    }
+});
+
+/////////////////////////////////
+/*app.post('/api/confirmar-pedido', async (req, res) => {
+    try {
         const ultimo = await Pedido.findOne().sort({ idPedido: -1 });
         const nuevoID = ultimo ? ultimo.idPedido + 1 : 1077;
 
@@ -55,7 +87,7 @@ app.post('/api/confirmar-pedido', async (req, res) => {
         console.error("Error:", error);
         res.status(500).json({ success: false });
     }
-});
+});*/
 
 
 //////////////////////////////////////////
