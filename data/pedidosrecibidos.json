@@ -30,7 +30,8 @@
     "enviado": "pendiente",
     "entregado": "pendiente",
     "cancelado": "17/3/2026, 02:14:29",
-    "observaciones": "NO HABIA N"
+    "observaciones": "NO HABIA N",
+    "impreso": true
   },
   {
     "id": 1060,
@@ -65,7 +66,8 @@
     "cancelado": "No",
     "estadoEnvio": "En Camino",
     "estadoEntrega": "Entregado",
-    "estado": "Cancelado"
+    "estado": "Cancelado",
+    "impreso": true
   },
   {
     "id": 1061,
@@ -167,7 +169,8 @@
     "pago": "pendiente",
     "enviado": "pendiente",
     "entregado": "pendiente",
-    "cancelado": "No"
+    "cancelado": "No",
+    "impreso": true
   },
   {
     "id": 1062,
@@ -243,7 +246,8 @@
     "entregado": "17/3/2026, 02:13:48",
     "cancelado": "No",
     "estadoEnvio": "En Camino",
-    "receptor": "JULIO"
+    "receptor": "JULIO",
+    "impreso": true
   },
   {
     "id": 1063,
@@ -275,7 +279,8 @@
     "pago": "pendiente",
     "enviado": "pendiente",
     "entregado": "pendiente",
-    "cancelado": "No"
+    "cancelado": "No",
+    "impreso": true
   },
   {
     "id": 1064,
@@ -335,7 +340,8 @@
     "pago": "pendiente",
     "enviado": "pendiente",
     "entregado": "pendiente",
-    "cancelado": "No"
+    "cancelado": "No",
+    "impreso": true
   },
   {
     "id": 1065,
@@ -367,7 +373,8 @@
     "pago": "pendiente",
     "enviado": "pendiente",
     "entregado": "pendiente",
-    "cancelado": "No"
+    "cancelado": "No",
+    "impreso": true
   },
   {
     "id": 1067,
@@ -400,7 +407,7 @@
     "enviado": "pendiente",
     "entregado": "pendiente",
     "cancelado": "No",
-    "impreso": "false"
+    "impreso": true
   },
   {
     "id": 1069,
@@ -433,7 +440,7 @@
     "enviado": "pendiente",
     "entregado": "pendiente",
     "cancelado": "No",
-    "impreso": "false"
+    "impreso": true
   },
   {
     "id": 1071,
@@ -466,7 +473,7 @@
     "enviado": "pendiente",
     "entregado": "pendiente",
     "cancelado": "No",
-    "impreso": "false"
+    "impreso": true
   },
   {
     "id": 1072,
@@ -527,7 +534,7 @@
     "enviado": "pendiente",
     "entregado": "pendiente",
     "cancelado": "No",
-    "impreso": "false"
+    "impreso": true
   },
   {
     "id": 1073,
@@ -574,6 +581,6 @@
     "enviado": "pendiente",
     "entregado": "pendiente",
     "cancelado": "No",
-    "impreso": "false"
+    "impreso": true
   }
 ]
