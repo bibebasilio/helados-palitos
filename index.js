@@ -64,7 +64,20 @@ console.error("❌ Error en carrito:", error);
 res.status(500).json({ success: false });
 }
 });
+///////////////////////////
 
+// En index.js
+app.get('/api/admin/pedidos', async (req, res) => {
+try {
+const pedidos = await db.collection('pedidos').find().toArray();
+res.json(pedidos);
+} catch (err) {
+res.status(500).json({ error: "Error al obtener pedidos" });
+}
+});
+
+
+////////////////////////////
 // --- 5. API DE PRODUCTOS (GESTIÓN) ---
 app.get('/api/admin/productos', async (req, res) => {
 try {

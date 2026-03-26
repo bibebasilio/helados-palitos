@@ -160,7 +160,7 @@
 
       async function cargarPedidos() {
         try {
-          const res = await fetch("http://localhost:3000/api/admin/pedidos");
+          const res = await fetch("/api/admin/pedidos");
           todosLosPedidos = await res.json();
 
           if (
