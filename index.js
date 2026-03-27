@@ -32,17 +32,59 @@ app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pro
 app.get('/pedidos', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pedidos.html')));
 
 // Agrega esto en index.js para que "/" cargue el index.html de la raíz
-app.get('/', (req, res) => {
-res.sendFile(path.join(__dirname, 'index.html'));
-});
+//app.get('/', (req, res) => {
+//res.sendFile(path.join(__dirname, 'index.html'));
+//});
 // Por si acaso, esta también por si escribes /index.html
-app.get('/index.html', (req, res) => {
-res.sendFile(path.join(__dirname, 'index.html'));
-});
+//app.get('/index.html', (req, res) => {
+//res.sendFile(path.join(__dirname, 'index.html'));
+//});
 
 
 // --- 4. RUTA DEL CARRITO (Confirmar Pedido) ---
+//---------------
 app.post('/api/confirmar-pedido', async (req, res) => {
+try {
+const datos = req.body;
+
+// 1. Contamos cuántos pedidos hay para generar el siguiente número
+const cantidadPedidos = await db.collection('pedidos').countDocuments();
+const nroPedido = cantidadPedidos + 1; // Si hay 6, este será el 7
+
+// 2. Guardamos el pedido con su número simple
+const nuevoPedido = {
+...datos,
+nroPedido: nroPedido, // Guardamos el "7"
+fecha: new Date(),
+impreso: false
+};
+
+await db.collection('pedidos').insertOne(nuevoPedido);
+
+// 3. Creamos el ticket para la impresora con el número simple
+await db.collection('tickets_pendientes').insertOne({
+texto: `--------------------------\n` +
+`🍦 NUEVO PEDIDO #${nroPedido}\n` + // Aquí saldrá #7
+`--------------------------\n` +
+`Cliente: ${datos.cliente}\n` +
+`Pago: ${datos.pago || 'EFECTIVO'}\n` +
+`--------------------------\n` +
+`Total: $${datos.total}\n`,
+tipo: 'PEDIDO',
+impreso: false,
+fecha: new Date()
+});
+
+console.log(`✅ Pedido #${nroPedido} registrado correctamente.`);
+res.status(200).json({ success: true, nro: nroPedido });
+
+} catch (error) {
+console.error("❌ Error al procesar pedido:", error);
+res.status(500).json({ success: false });
+}
+});
+//---------------------
+/*app.post('/api/confirmar-pedido', async (req, res) => {
 try {
 const datos = req.body;
 const nuevoPedido = {
@@ -69,7 +111,7 @@ console.log("🛒 Pedido recibido y enviado a cola de impresión");
 console.error("❌ Error en carrito:", error);
 res.status(500).json({ success: false });
 }
-});
+});*/
 
 // --- 5. RUTAS DE PEDIDOS (Para pedidos.html) ---
 app.get('/api/admin/pedidos', async (req, res) => {
