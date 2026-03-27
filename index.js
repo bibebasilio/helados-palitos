@@ -64,8 +64,8 @@ console.error("❌ Error en carrito:", error);
 res.status(500).json({ success: false });
 }
 });
-///////////////////////////
-
+/////////////////////////// pedidos  /////////
+  
 // En index.js
 app.get('/api/admin/pedidos', async (req, res) => {
 try {
@@ -75,6 +75,34 @@ res.json(pedidos);
 res.status(500).json({ error: "Error al obtener pedidos" });
 }
 });
+
+
+// Actualizar estado de un pedido (Pagado, Cancelado, etc.)
+app.patch('/api/admin/pedidos/:id/estado', async (req, res) => {
+const { id } = req.params;
+const { campo, valor, observaciones } = req.body;
+
+try {
+// Dinámicamente actualizamos el campo que mande el HTML (pago o cancelado)
+const updateData = { [campo]: valor };
+if (observaciones) updateData.observaciones = observaciones;
+
+const pedidoActualizado = await Pedido.findOneAndUpdate(
+{ id: id }, // O _id: id si usas el ID de MongoDB
+updateData,
+{ new: true }
+);
+
+if (pedidoActualizado) {
+res.json({ success: true, pedido: pedidoActualizado });
+} else {
+res.status(404).json({ mensaje: "Pedido no encontrado" });
+}
+} catch (error) {
+res.status(500).json({ mensaje: "Error al actualizar" });
+}
+});
+
 
 
 ////////////////////////////

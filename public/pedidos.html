@@ -158,9 +158,12 @@
       let todosLosPedidos = [];
       let cantidadPedidosAnterior = 0;
 
-      async function cargarPedidos() {
+// 1 . CORRECCIÓN EN CARGAR PEDIDOS (Asegúrate de que la ruta sea la correcta)   async function cargarPedidos() {
         try {
+          // Usamos ruta relativa para que funcione tanto en local como en Render
           const res = await fetch("/api/admin/pedidos");
+          if (!res.ok) throw new Error("Error al obtener pedidos");
+          
           todosLosPedidos = await res.json();
 
           if (
@@ -173,6 +176,7 @@
           renderizarPedidos(todosLosPedidos);
         } catch (e) {
           console.error(e);
+          document.getElementById("lista-pedidos").innerHTML = "Error al cargar los pedidos.";
         }
       }
 
@@ -201,9 +205,13 @@
           .join("");
       }
 
+      // 2.correcccion en cambiar estado (eliminamos el localhost) 
       async function cambiarEstado(id, campo, valor, datosExtra = {}) {
+       try
+
+       //// CAMBIO CLAVE: Quitamos "http://localhost:3000" para que use la URL actual
         const res = await fetch(
-          `http://localhost:3000/api/admin/pedidos/${id}/estado`,
+          `/api/admin/pedidos/${id}/estado`,
           {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
@@ -211,7 +219,13 @@
           },
         );
         if (res.ok) cargarPedidos();
+      } else {
+        alert("Error al actualizar el pedido.");
       }
+      ] catch (e) {
+        console.error(e);
+        alert("Error al actualizar el pedido.");
+      } 
 
       function prepararCancelacion(id) {
         const o = prompt("Motivo de cancelación:");
