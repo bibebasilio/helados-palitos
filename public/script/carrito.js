@@ -63,7 +63,8 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     });
 
     function cargarProductosCarrito() {
-    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    // CAMBIO IMPORTANTE: Unificado a "carrito"
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     const tabla = document.querySelector("#tabla_carrito");
     if (!tabla) return;
 
@@ -101,20 +102,20 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     function eventosFila() {
     document.querySelectorAll(".remove-btn").forEach((boton) => {
     boton.onclick = () => {
-    let carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     carrito = carrito.filter((p) => String(p.id) !== String(boton.id));
-    localStorage.setItem("carritoDeCompras", JSON.stringify(carrito));
+    localStorage.setItem("carrito", JSON.stringify(carrito));
     cargarProductosCarrito();
     };
     });
 
     document.querySelectorAll(".cantidad-producto").forEach((input) => {
     input.onchange = (e) => {
-    let carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     const producto = carrito.find((p) => String(p.id) === String(e.target.id));
     if (producto) {
     producto.cantidad = parseInt(e.target.value);
-    localStorage.setItem("carritoDeCompras", JSON.stringify(carrito));
+    localStorage.setItem("carrito", JSON.stringify(carrito));
     actualizarTotales();
     }
     };
@@ -122,7 +123,7 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     }
 
     function actualizarTotales() {
-    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     let subtotal = 0;
     document.querySelectorAll("#tabla_carrito tr").forEach((fila) => {
     const input = fila.querySelector(".cantidad-producto");
@@ -179,7 +180,6 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     async function enviarPedidoWhatsApp() {
     const boton = document.getElementById("btn-finalizar");
 
-    // Si ya se está procesando, bloqueamos clics extra
     if (boton.disabled && boton.innerText === "PROCESANDO...") return;
 
     const faltantes = validarFormulario();
@@ -187,7 +187,6 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     return alert("Falta completar: " + faltantes.join(", "));
     }
 
-    // --- BLOQUEO ANTI-DUPLICADOS ---
     boton.disabled = true;
     boton.innerText = "PROCESANDO...";
     boton.style.opacity = "0.5";
@@ -202,10 +201,9 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     const descEfectivo = document.getElementById("des-efectivo")?.innerText.replace("-$", "") || "0";
     const costoEnvio = document.getElementById("shipping-cost")?.innerText.replace("$", "") || "0";
     const metodoPagoCheck = document.querySelector('input[name="metodo-pago"]:checked');
-    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
     try {
-    // Usamos ruta relativa para que funcione en Local y en Render automáticamente
     const response = await fetch("/api/confirmar-pedido", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -229,9 +227,7 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     const resultado = await response.json();
 
     if (resultado.success) {
-    // Formateamos el número de orden (Ej: 007)
     const nroParaWhatsApp = String(resultado.nro).padStart(3, '0');
-
     let productosTexto = carrito.map((p) => `• ${p.title} (x${p.cantidad})`).join("\n");
 
     const texto = `*--- NUEVO PEDIDO #${nroParaWhatsApp} ---*\n\n` +
@@ -247,7 +243,7 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
 
     alert("¡Pedido #" + nroParaWhatsApp + " confirmado!");
 
-    localStorage.removeItem("carritoDeCompras");
+    localStorage.removeItem("carrito");
     window.open(urlWA, "_blank");
     window.location.href = "index.html";
     } else {
@@ -255,7 +251,6 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     }
     } catch (err) {
     alert("Error: No se pudo conectar con el servidor Eustakio.");
-    // Si falla, rehabilitamos el botón para que pueda intentar de nuevo
     boton.disabled = false;
     boton.innerText = "FINALIZAR COMPRA";
     boton.style.opacity = "1";
