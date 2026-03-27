@@ -1,0 +1,88 @@
+[
+  {
+    "cliente": "nuevo1",
+    "direccion": "yuyuiyu",
+    "dni": "177777777",
+    "sexo": "Masculino",
+    "email": "nuevo1@example.com",
+    "telefono": "11222222111",
+    "fechanacimiento": "1990-01-01",
+    "preferenicia": "ninguna",
+    "comentario": "PASAR",
+    "fecha": "2026-02-19T23:07:12.026Z",
+    "cantidadpedidos": 0,
+    "preferencia": "Cremosos"
+  },
+  {
+    "cliente": "NNNNNNNNN",
+    "dni": "16583777",
+    "email": "bb@gmail.com",
+    "direccion": "yuyuiyu",
+    "sexo": "Masculino",
+    "telefono": "11222222111",
+    "fechanacimiento": "",
+    "preferencia": "asdasdas",
+    "fecha": "2026-02-19T18:43:15.161Z",
+    "cantidadpedidos": 0
+  },
+  {
+    "cliente": "NNNNNNN9999",
+    "dni": "16583799",
+    "email": "bb@gmail.com",
+    "direccion": "yuyuiyu",
+    "sexo": "Masculino",
+    "telefono": "11222222111",
+    "fechanacimiento": "",
+    "preferencia": "asdasdas",
+    "fecha": "2026-02-19T19:37:53.239Z",
+    "cantidadpedidos": 0
+  },
+  {
+    "cliente": "nuevo1",
+    "dni": "12345678",
+    "email": "nuevo1@example.com",
+    "direccion": "yuyuiyu",
+    "sexo": "Masculino",
+    "telefono": "11222222111",
+    "fechanacimiento": "1990-01-01",
+    "preferencia": "asdasdas",
+    "fecha": "2026-02-19T22:41:23.349Z",
+    "cantidadpedidos": 0
+  },
+  {
+    "cliente": "dadadasdasd",
+    "dni": "123443298",
+    "email": "DDD@GMAIL.COM",
+    "direccion": "DDDDDDDDDDDDDDDDDDDD",
+    "sexo": "Femenino",
+    "telefono": "q",
+    "fechanacimiento": "1967-09-09",
+    "preferencia": "Cremosos",
+    "fecha": "2026-02-19T23:06:12.931Z",
+    "cantidadpedidos": 0
+  },
+  {
+    "cliente": "pppppp",
+    "dni": "33224456",
+    "email": "sal@hotmail.com",
+    "direccion": "fdermn",
+    "sexo": "masculino",
+    "telefono": "1212334",
+    "fechanacimiento": "2026-01-29",
+    "preferencia": "Cremosos",
+    "fecha": "2026-02-25T01:37:55.329Z",
+    "cantidadpedidos": 0
+  },
+  {
+    "cliente": "JUANCITO",
+    "dni": "sadad",
+    "email": "www@jjjj",
+    "direccion": "werwer",
+    "sexo": "Masculino",
+    "telefono": "9842374",
+    "fechanacimiento": "2020-02-17",
+    "preferencia": "Cremosos",
+    "fecha": "2026-03-17T12:58:26.895Z",
+    "cantidadpedidos": 0
+  }
+]

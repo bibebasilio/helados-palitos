@@ -172,7 +172,7 @@
     async function cargarDatos() {
         console.log("🚀 Intentando cargar productos...");
         try {
-            const resProd = await fetch('/api/admin/productos');
+            const resProd = await fetch('/api/productos');
 
             // Si no es OK, imprimimos el código de estado
             if (!resProd.ok) {
@@ -186,7 +186,7 @@
             renderizarProductos(todosLosProductos);
 
             // Intentamos cargar pedidos
-            const resPed = await fetch('/api/admin/pedidos');
+            const resPed = await fetch('/api/pedidos');
             if (resPed.ok) {
                 const pedidos = await resPed.json();
                 actualizarDashboard(pedidos);
@@ -308,7 +308,7 @@
 
     async function eliminarProducto(id) {
         if (!confirm("¿Borrar este gusto?")) return;
-        const res = await fetch(`/api/admin/productos/${id}`, { method: 'DELETE' });
+        const res = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
         if (res.ok) { cargarDatos(); }
     }
 
