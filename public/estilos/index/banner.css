@@ -1,0 +1,115 @@
+.banner {
+    width: 100%;
+    height: 34vh;
+    background-image: url(../../img/banner/palitos.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    & h4 {
+        color: #f7f7f1;
+        font-size: 16px;
+        background-color: #088178;
+        padding: 2PX;
+    }
+
+    & h2 {
+        color: #fff;
+        font-size: 30px;
+        padding: 0px 0;
+        background-color: rgb(255, 0, 68);
+    }
+
+    & span {
+        color: #f6f0f0;
+    }
+
+    & button {
+        font-size:18px;
+        font-weight: 600;
+        padding: 15px 20px;
+        color: #000;
+        background-color: hsl(86, 80%, 68%);
+        border-radius: 4px;
+        cursor: pointer;
+        border: none;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    & button:hover {
+        background: #088178;
+        color: #fff;
+    }
+}
+
+/* Estilos Responsive para Banner */
+
+@media (max-width: 1200px) {
+    .banner {
+        padding: 0 60px;
+    }
+    
+    .banner h2 {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 992px) {
+    .banner {
+        height: 35vh;
+
+        & h2 {
+            font-size: 26px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .banner {
+        height: 30vh;
+        padding: 0 20px;
+
+        & h4 {
+            font-size: 14px;
+        }
+
+        & h2 {
+            font-size: 22px;
+        }
+
+        & button {
+            padding: 12px 20px;
+        }
+
+    }
+
+}
+
+@media (max-width: 576px) {
+    .banner {
+        height: 25vh;
+
+        & h4 {
+            font-size: 12px;
+        }
+
+        & h2 {
+            font-size: 18px;
+        }
+
+        & button {
+            padding: 10px 15px;
+            font-size: 12px;
+        }
+
+
+    }
+
+}

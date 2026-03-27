@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+
+    <link rel="stylesheet" href="../estilos/index/style.css">
+    <link rel="stylesheet" href="../estilos/carrito/carrito.css">
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <a href="../index.html">
+            <img src="../img/logo1.png" class="logo" alt="Logo Cara" width="40px" height="40px">
+        </a>
+        <div>
+            <ul id="navbar" class="navbar">
+                <li><a href="../index.html">Formatos</a></li>
+                <li><a href="tienda.html">Sabores</a></li>
+                <li><a href="../index.html">Ofertas</a></li>
+             <!--   <li><a href="#">Acerca de</a></li> -->
+                <li><a href="../pages/asociarse.html">Asociate</a></li> 
+             
+            <!--    <li><a href="contacto.html">Contacto</a></li> -->
+                <li>
+                    <a href="./carrito.html" class="active">
+                        <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <a href="#" id="close" class="close">
+                    <i class="far fa-times" aria-hidden="true"></i>
+                </a>
+            </ul>
+        </div>
+        <div class="mobile">
+            <a href="./carrito.html">
+                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+            </a>
+            <i id="bar" class="fas fa-outdent "></i>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main>
+        <!-- tabla productos -->
+        <section id="cart" class="section-p1">
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <td>ELIMINAR</td>
+                        <td>IMAGEN</td>
+                        <td>FORMATO</td>
+                        <td>Sabor</td>
+                       <td>STOCK</td>
+                        <td>PRECIO</td>
+                        <td>CANTIDAD</td>
+                        <td>SUBTOTAL</td>
+                    </tr>
+                </thead>
+                <tbody id="tabla_carrito">
+                    <tr>
+                        <td><button class="remove-btn"><i class="far fa-times-circle"></i></button></td>
+                        <td><img src="../img/productos/f6.jpg" alt="Cartoon Astronaut T-Shirts"></td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>Cartoon Astronaut T-Shirts</td>
+                        <td>$118.19</td>
+                        <td><input type="number" value="1" min="1"></td>
+                        <td>$118.19</td>
+                    
+                    </tr>
+                    <tr>
+                        <td><button class="remove-btn"><i class="far fa-times-circle"></i></button></td>
+                        <td><img src="../img/productos/f7.jpg" alt="Cartoon Astronaut T-Shirts"></td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>Cartoon Astronaut T-Shirts</td>
+                        <td>$118.19</td>
+                        <td><input type="number" value="1" min="1" max="99"></td>
+                        <td>$118.19</td>
+                    </tr>
+                    <tr>
+                        <td><button class="remove-btn"><i class="far fa-times-circle"></i></button></td>
+                        <td><img src="../img/productos/n6.jpg" alt="Cartoon Astronaut T-Shirts"></td>
+                        <td>Cartoon Astronaut T-Shirts</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>Cartoon Astronaut T-Shirts</td>
+                        <td><input type="number" value="1" min="1" max="99"></td>
+                        <td>$118.19</td>
+                   
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+                                    <!-- aplicar cupon / total del carrito -->
+
+<section id="cart-add" class="section-p1">
+    <div id="coupon">
+     <h3>Método de Pago</h3>
+                                            
+           <div class="payment-methods">
+                                                
+            <tr>                                    
+            <input type="radio" name="metodo-pago" value="efectivo" id="pago-efectivo"></input>
+            <label for="pago-efectivo">Efectivo (10% Desc.) Retira Local</label>
+            </tr>                                    
+            <tr>
+            <input type="radio" name="metodo-pago" value="transferencia" id="pago-transfer"></input>                                
+            <label for="pago-transfer">Transferencia (+ Envío)</label>
+          </tr>
+    </div>
+        <h3>Aplicar Cupón</h3>
+        <div>
+            <input type="text" id="coupon-input" placeholder="Ingresa tu cupón">
+            <button class="normal" onclick="recalcularTodo()">Aplicar</button>
+        </div>
+    </div>
+
+    <div id="subtotal">
+        <h3>Total del Carrito</h3>
+        <table>
+            <tr>
+                <td>Subtotal del Carrito</td>
+                <td id="total">$335</td>
+            </tr>
+            <tr>
+                <td>Descuento Cupón</td>
+                <td id="des-cupon">$0</td>
+            </tr>
+            <tr>
+                <td>Descuento Efectivo (10%) Retira Local</td>
+                <td id="des-efectivo">$0</td>
+            </tr>
+            <tr>
+                <td>Envío</td>
+                <td id="shipping-cost">$0</td>
+            </tr>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong id="final-total">$0</strong></td>
+            </tr>
+        </table>
+       <!-- <button class="normal">Proceder al pago</button>-->
+    </div>
+</section>
+
+<div id="seccion-pago" style="padding: 20px; border: 1px solid #ddd; border-radius: 8px; margin-top: 20px;">
+    <h3>Datos de Finalización</h3>
+    <input type="text" id="nombre" placeholder="Nombre" required style="display:block; margin-bottom:10px; width:100%; padding:10px;">
+    <input type="text" id="apellido" placeholder="Apellido" required style="display:block; margin-bottom:10px; width:100%; padding:10px;">
+    <input type="text" id="direccion" placeholder="Dirección" required style="display:block; margin-bottom:10px; width:100%; padding:10px;">
+    <input type="number" id="telefono" placeholder="Teléfono" required style="display:block; margin-bottom:10px; width:100%; padding:10px;">
+    <input type="text" id="comentario" placeholder="Comentario" required style="display:block; margin-bottom:10px; width:100%; padding:10px;">
+    
+
+    <button id="btn-finalizar" onclick="enviarPedidoWhatsApp()" style="background-color: #25d366; color: white; padding: 15px; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px;">
+        FINALIZAR COMPRA Y ENVIAR WHATSAPP
+    </button>
+</div>
+
+
+<!--                                    
+     <div id="seccion-pago" style="padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+    <h3>Datos de Finalización</h3>
+    <input type="text" id="nombre" placeholder="Nombre" required style="display:block; margin-bottom:10px; width:100%;">
+    <input type="text" id="apellido" placeholder="Apellido" required style="display:block; margin-bottom:10px; width:100%;">
+    <input type="text" id="direccion" placeholder="Dirección" required style="display:block; margin-bottom:10px; width:100%;">
+    <input type="text" id="telefono" placeholder="Teléfono" required style="display:block; margin-bottom:10px; width:100%;">
+    <input type="text" id="comentario" placeholder="Comentario" required style="display:block; margin-bottom:10px; width:100%;">
+    
+    <p><small>🔒 El pago se coordina de forma segura por WhatsApp.</small></p>
+    
+    <button id="btn-whatsapp" onclick="enviarPedidoWhatsApp()" style="background-color: #25d366; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+        Finalizar Pedido y Pagar por WhatsApp
+      </button>-->
+ 
+ <!-- <button id="btn-finalizar-compra" onclick="enviarPedidoWhatsApp()" class="tu-clase-de-estilo">
+    Confirmar Pedido por WhatsApp
+</button>-->
+
+
+ <!--<button id="btn-finalizar-compra" onclick="enviarPedidoWhatsApp()">Finalizar Compra</button>                                                           
+                                                           <button type="button" onclick="enviarPedidoWhatsApp()" class="btn-finalizar">
+    Finalizar pedido y pagar por WhatsApp
+      </button>      -->                                                
+
+     <!--   </input> <button onclick="enviarPedidoWhatsApp()" class="btn-finalizar">
+        Finalizar pedido y pagar por WhatsApp
+    </button> -->
+    </div> 
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="section-p1">
+        <div class="col">
+            <h4>Contacto</h4>
+            <p><strong>Dirección:</strong> Av. Rivadavia 7125, Ciudad Autónoma de Buenos Aires</p>
+            <p><strong>Teléfono:</strong> +54 911 3846 1130</p>
+            <p><strong>Horario:</strong> 9:00 - 17:00, Lunes a Viernes</p>
+            <div class="follow">
+                <h4>Seguinos</h4>
+                <div class="icon">
+                  <!--  <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i> -->
+                    <i class="fab fa-instagram"></i>
+                  <!--  <i class="fab fa-pinterest-p"></i>
+                    <i class="fab fa-youtube"></i> -->
+                </div>
+
+            </div>
+        </div>
+        <div class="col">
+            <h4>Mi Cuenta</h4>
+                        <a href="../index.html">Formatos</a>
+                        <a href="./pages/carrito.html">Ver Carrito</a>
+                        <!--  <a href="#">Mis Favoritos</a> -->
+                        <a href="../index.html">Ofertas</a>
+                        <a href="asociarse.html">Asociarse</a>
+
+           
+        </div>
+        <div class="col install">
+            <h4>Descargá la App</h4>
+            <p>Desde App Store o Google Play</p>
+            <div class="row">
+                <img src="../img/pay/app.jpg" alt="App Store">
+                <img src="../img/pay/play.jpg" alt="Google Play">
+            </div>
+            <p>Pasarelas de pago seguras</p>
+            <img src="../img/pay/pay.png" alt="Métodos de Pago">
+        </div>
+        <div class="copyright">
+            <p>© 2025, BibeBasilio | Talento Tech - Plantilla HTML CSS para Ecommerce</p>
+        </div>
+    </footer>
+
+  <!--  <script src="../script/script.js"></script> -->
+    <script src="../script/carrito.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+[
+  {
+    "cliente": "nuevo1",
+    "direccion": "yuyuiyu",
+    "dni": "12345678",
+    "email": "nuevo1@example.com",
+    "telefono": "11222222111",
+    "comentario": "PASAR",
+    "fecha": "2024-06-17T19:00:00.000Z",
+    "cantidadpedidos": 1
+}]

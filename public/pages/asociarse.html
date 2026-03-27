@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Admisión - Asociarse</title>
+    <style>
+        /* Mantenemos tu CSS igual */
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f9; }
+        form { max-width: 600px; margin: 0 auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #28a745; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+        button:hover { background-color: #218838; }
+        .volver-link { display: block; text-align: center; margin-top: 20px; text-decoration: none; color: #007BFF; }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Formulario de Admisión</h1>
+
+    <form id="formAsociarse">
+        <label for="nombre">Nombre Completo:</label>
+        <input type="text" id="nombre" required>
+
+        <label for="dni">DNI / Identificación:</label>
+        <input type="number" id="dni" required>
+
+        <label for="email">Correo Electrónico:</label>
+        <input type="email" id="email" required>
+
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" required>
+
+        <label for="fecha-nacimiento">Fecha de Nacimiento:</label>
+        <input type="date" id="fecha-nacimiento" required>
+
+        <label for="genero">Género:</label>
+        <select id="genero" required>
+            <option value="">Seleccione</option>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+            <option value="otro">Otro</option>
+        </select>
+
+        <label for="direccion">Dirección:</label>
+        <textarea id="direccion" rows="3" required></textarea>
+
+        <label for="programa">¿Qué tipos de sabores preferís?:</label>
+        <select id="programa" required>
+            <option value="">Seleccione</option>
+            <option value="Cremosos">Cremosos</option>
+            <option value="Sin Lactosa">Sin Lactosa</option>
+            <option value="Al Agua">Al Agua</option>
+            <option value="Al Agua con Fruta">Al Agua con Fruta</option>
+        </select>
+
+        <button type="submit">Finalizar Registro</button>
+        <a href="../index.html" class="volver-link">Volver al inicio</a> 
+    </form>
+
+    <script src="/script/asociados_adminZZ.js"></script>
+    <script>
+        document.getElementById('formAsociarse').addEventListener('submit', guardarAsociado);
+    </script>
+</body>
+</html>

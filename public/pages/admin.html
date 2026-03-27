@@ -1,0 +1,573 @@
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Panel de Control - Admin</title>
+
+    <style>
+
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; color: #333; }
+
+        .section { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+       
+
+        /* Dashboard de Stats */
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+
+        .stat-card { background: #e9ecef; padding: 15px; border-radius: 8px; border-left: 5px solid #007bff; }
+
+        .stat-card h3 { margin: 0; font-size: 0.9em; color: #666; }
+
+        .stat-card p { margin: 5px 0 0; font-size: 1.4em; font-weight: bold; color: #222; }
+
+
+
+        /* Filtros de Reportes */
+
+        .filters-container {
+
+            display: flex; gap: 10px; flex-wrap: wrap; background: #f8f9fa;
+
+            padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;
+
+        }
+
+        .filter-group { display: flex; flex-direction: column; gap: 5px; }
+
+        .filter-group label { font-size: 0.75em; font-weight: bold; text-transform: uppercase; color: #555; }
+
+        .btn-report { background: #17a2b8; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; align-self: flex-end; font-weight: bold; }
+
+        .btn-export { background: #28a745 !important; }
+
+
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; font-size: 0.9em; }
+
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+
+        th { background: #007bff; color: white; position: sticky; top: 0; }
+
+        tr:nth-child(even) { background-color: #f9f9f9; }
+
+       
+
+        .stock-bajo { background-color: #ffebeb !important; border-left: 4px solid #dc3545; }
+
+        .stock-label { color: #dc3545; font-weight: bold; font-size: 0.8em; }
+
+
+
+        input, select { padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
+
+        .btn-save { background: #28a745; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
+
+        .badge-ventas { background: #6f42c1; color: white; padding: 3px 8px; border-radius: 10px; font-weight: bold; }
+
+        .pedido-card { border-left: 5px solid #17a2b8; padding: 15px; margin: 10px 0; background: #f8fdff; border-radius: 4px; border-bottom: 1px solid #eee; }
+
+
+
+        @media print {
+
+            .no-print, button, input, select, .btn-save, #form-nuevo, .filters-container { display: none !important; }
+
+            body { background: white; padding: 0; }
+
+            .section { box-shadow: none; border: none; }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <audio id="audio-notificacion" src="alerta.mp3" preload="auto"></audio>
+
+   
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+
+        <h1>Panel de Administración 🚀</h1>
+
+        <button class="no-print" onclick="window.print()" style="padding: 10px; cursor: pointer; background: #333; color: white; border: none; border-radius: 4px;">🖨️ Imprimir Pantalla</button>
+
+    </div>
+
+
+
+    <div class="section">
+
+        <h2>📊 Reportes e Historial de Pedidos</h2>
+
+       
+
+        <div class="filters-container no-print">
+
+            <div class="filter-group">
+                <label>Pago</label>
+                <select id="filter-pago">
+                    <option value="todos">Todos</option>
+                    <option value="Pagado">Solo Pagados</option>
+                    <option value="Pendiente">Solo Pendientes</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Logística</label>
+                <select id="filter-envio">
+                    <option value="todos">Todos</option>
+                    <option value="enviados">Enviados</option>
+                    <option value="cancelados">Cancelados</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Desde</label>
+                <input type="date" id="filter-desde">
+            </div>
+            <div class="filter-group">
+                <label>Hasta</label>
+                <input type="date" id="filter-hasta">
+            </div>
+            <div class="filter-group">
+                <label>ID o Cliente</label>
+                <input type="text" id="filter-busqueda" placeholder="Ej: Juan o ID...">
+            </div>
+            <button class="btn-report" onclick="aplicarFiltros()">🔎 Filtrar</button>
+            <button class="btn-report" style="background:#6c757d" onclick="limpiarFiltros()">🔄 Reset</button>
+
+            <button class="btn-report btn-export" onclick="exportarCSV()">📥 Excel (.csv)</button>
+
+        </div>
+
+
+
+        <div id="resumen-reporte" style="margin-bottom:15px; font-size: 1.1em; font-weight:bold; color:#007bff;"></div>
+
+        <div id="lista-pedidos">Cargando pedidos...</div>
+
+    </div>
+
+
+
+    <div class="section">
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <h3>💰 Ventas de Hoy</h3>
+
+                <p id="ventas-hoy">$0.00</p>
+
+            </div>
+
+            <div class="stat-card" style="border-left-color: #6f42c1;">
+
+                <h3>🔥 Más Vendido</h3>
+
+                <p id="top-producto">-</p>
+
+            </div>
+
+            <div class="stat-card" style="border-left-color: #dc3545;">
+
+                <h3>⚠️ Por Reponer</h3>
+
+                <p id="count-reponer">0 productos</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="section no-print">
+
+        <h2>Gestión de Catálogo</h2>
+
+        <button onclick="document.getElementById('form-nuevo').style.display='block'" style="background:#007bff; color:white; border:none; padding:10px 15px; cursor:pointer; border-radius:4px;">
+
+            + Agregar Nuevo Producto
+
+        </button>          
+
+
+
+        <div id="form-nuevo" style="display:none; margin-top:15px; padding: 20px; border: 2px dashed #007bff; border-radius: 8px;">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+
+                <input type="text" id="new-title" placeholder="Formato">
+
+                <input type="text" id="new-category" placeholder="Sabor">
+
+                <input type="text" id="new-clase" placeholder="Clase">
+
+                <input type="number" step="0.01" id="new-price" placeholder="Precio">
+
+                <input type="number" id="new-stock" placeholder="Stock">
+
+                <input type="text" id="new-image" placeholder="Ruta Imagen">
+
+            </div>
+
+            <br>
+
+            <button class="btn-save" onclick="crearProducto()">Confirmar Alta</button>
+
+            <button onclick="document.getElementById('form-nuevo').style.display='none'" style="color:red; background:none; border:none; cursor:pointer; margin-left:15px;">Cancelar</button>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="section">
+
+        <h2>Inventario Actual</h2>
+
+        <table id="tabla-productos">
+
+            <thead>
+
+                <tr>
+                    
+                    <th>URL</th>
+
+                    <th>Formato</th>
+
+                    <th>Sabor</th>
+
+                    <th>Clase</th>
+
+                    <th>Precio</th>
+
+                    <th>Stock</th>
+
+                    <th>Ventas</th>
+
+                    <th class="no-print">Acciones</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody></tbody>
+
+        </table>
+
+        <br>
+
+        <button class="btn-save no-print" onclick="guardarCambios()">💾 Guardar Inventario</button>
+
+    </div>
+
+
+
+    <script>
+
+        let productosLocales = [];
+
+        let todosLosPedidos = [];
+
+        let pedidosFiltrados = []; // Para saber qué exportar
+
+        let cantidadPedidosAnterior = 0;
+
+
+
+        function renderizarPedidos(pedidos) {
+            const contenedor = document.getElementById('lista-pedidos');
+            contenedor.innerHTML = pedidos.slice().reverse().map(ped => `
+                <div class="pedido-card" style="border-left-color: ${ped.cancelado !== 'No' && ped.cancelado !== 'pendiente' ? '#dc3545' : (ped.pago === 'Pagado' ? '#28a745' : '#17a2b8')};">
+                    <strong>ID:</strong> ${ped.id} | <strong>Fecha:</strong> ${new Date(ped.fecha).toLocaleString()}<br>
+                    <strong>Cliente:</strong> ${ped.cliente} | <strong>Dirección:</strong> ${ped.direccion}<br>
+                    <strong>Teléfono:</strong> ${ped.telefono} | <strong>Comentario:</strong> ${ped.comentario || "Ninguno"}<br>
+                    <strong>Items:</strong> ${ped.items.map(i => `${i.title} (x${i.cantidad})`).join(', ')}<br>
+                    <strong>Total:</strong> <span style="font-weight:bold; color:green;">${ped.total}</span>
+                    
+                    <div style="background:#eee; padding:10px; margin:10px 0; border-radius:4px; font-size:0.85em;">
+                        <b>Pago:</b> ${ped.pago} | <b>Envío:</b> ${ped.enviado} | <b>Entrega:</b> ${ped.entregado}<br>
+                        ${ped.receptor ? `<b>Recibió:</b> ${ped.receptor}` : ''}
+                        ${ped.cancelado !== 'No' && ped.cancelado !== 'pendiente' ? `<br><b style="color:red">CANCELADO:</b> ${ped.cancelado} | Obs: ${ped.observaciones}` : ''}
+                    </div>
+
+                    <div class="no-print" style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                        <button class="btn-accion btn-pago" onclick="cambiarEstado('${ped.id}', 'pago', 'Pagado')">💸 Pagado</button>
+                        
+                        <button class="btn-accion btn-envio" onclick="cambiarEstado('${ped.id}', 'enviado', '${new Date().toLocaleString()}')">🚚 Enviado</button>
+                        
+                        <div style="display:flex; gap:2px;">
+                            <input type="text" id="rec-${ped.id}" placeholder="Receptor" style="width:100px">
+                            <button class="btn-accion btn-entrega" onclick="prepararEntrega('${ped.id}')">🎁 Entregado</button>
+                        </div>
+
+                        <div style="display:flex; gap:2px;">
+                            <input type="text" id="obs-${ped.id}" placeholder="Motivo" style="width:100px">
+                            <button class="btn-accion btn-cancelar" onclick="prepararCancelacion('${ped.id}')">✖ Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function cambiarEstado(id, campo, valor, datosExtra = {}) {
+            try {
+                const res = await fetch(`http://localhost:3000/api/admin/pedidos/${id}/estado`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ campo, valor, ...datosExtra })
+                });
+                if (res.ok) cargarDatos();
+            } catch (e) { console.error(e); }
+        }
+
+        function prepararEntrega(id) {
+            const r = document.getElementById(`rec-${id}`).value;
+            if (!r) return alert("Ingresa quién recibe");
+            cambiarEstado(id, 'entregado', new Date().toLocaleString(), { receptor: r });
+        }
+
+        function prepararCancelacion(id) {
+            const o = document.getElementById(`obs-${id}`).value;
+            if (!o) return alert("Ingresa el motivo");
+            cambiarEstado(id, 'cancelado', new Date().toLocaleString(), { observaciones: o });
+        }
+
+        async function cargarDatos() {
+
+            try {
+
+                const resProd = await fetch('http://localhost:3000/api/admin/productos');
+
+                productosLocales = await resProd.json();
+
+                renderizarProductos(productosLocales);
+
+
+
+                const resPed = await fetch('http://localhost:3000/api/admin/pedidos');
+
+                todosLosPedidos = await resPed.json();
+
+               
+
+                let countReponer = productosLocales.filter(p => p.stock < 5).length;
+
+                actualizarDashboard(todosLosPedidos, countReponer);
+
+
+
+                if (todosLosPedidos.length > cantidadPedidosAnterior && cantidadPedidosAnterior !== 0) {
+
+                    document.getElementById('audio-notificacion').play();
+
+                }
+
+                cantidadPedidosAnterior = todosLosPedidos.length;
+
+
+
+                // Inicialmente mostramos todos
+
+                if(!pedidosFiltrados.length) {
+
+                    pedidosFiltrados = todosLosPedidos;
+
+                    renderizarPedidos(todosLosPedidos);
+
+                }
+
+
+
+            } catch (error) { console.error("Error cargando datos:", error); }
+
+        }
+
+
+
+
+
+
+
+
+
+        function renderizarProductos(productos) {
+
+            const tbody = document.querySelector('#tabla-productos tbody');
+
+            tbody.innerHTML = productos.map(p => {
+
+                const esBajoStock = p.stock < 5;
+
+                return `
+
+                <tr class="fila-producto ${esBajoStock ? 'stock-bajo' : ''}" data-id="${p.id}">
+
+                     <td><input type="text" class="edit-image" value="${p.image}"></td>
+
+                    <td><input type="text" class="edit-title" value="${p.title}"></td>
+
+                    <td><input type="text" class="edit-category" value="${p.category}"></td>
+
+                    <td><input type="text" class="edit-clase" value="${p.clase || ''}"></td>
+
+                    <td><input type="number" step="0.01" class="edit-price" value="${p.price}"></td>
+
+                    <td>
+
+                        <input type="number" style="width: 50px;" class="edit-stock" value="${p.stock}">
+
+                        ${esBajoStock ? '<span class="stock-label">⚠️ Reponer</span>' : ''}
+
+                    </td>
+
+                    <td style="text-align:center;"><span class="badge-ventas">${p.ventas || 0}</span></td>
+
+                    <td class="no-print">
+
+                        <button onclick="eliminarProducto('${p.id}')" style="background:#dc3545; color:white; border:none; padding:5px; cursor:pointer; border-radius:4px;">Eliminar</button>
+
+                    </td>
+
+                </tr>
+
+            `}).join('');
+
+        }
+
+
+
+function actualizarDashboard(pedidos, countReponer) {
+    // 1. Calcular ventas de hoy
+    const hoy = new Date().toLocaleDateString();
+    const totalHoy = todosLosPedidos
+        .filter(p => new Date(p.fecha).toLocaleDateString() === hoy && p.cancelado === 'No')
+        .reduce((sum, p) => {
+            // Limpiamos el símbolo $ si existe y sumamos
+            const valor = typeof p.total === 'string' ? p.total.replace('$', '').replace(',', '') : p.total;
+            return sum + parseFloat(valor || 0);
+        }, 0);
+
+    document.getElementById('ventas-hoy').innerText = `$${totalHoy.toFixed(2)}`;
+
+    // 2. Calcular el producto más vendido (Top Producto)
+    if (productosLocales && productosLocales.length > 0) {
+        // Ordenamos una copia de los productos de mayor a menor ventas
+        const top = [...productosLocales].sort((a, b) => (b.ventas || 0) - (a.ventas || 0))[0];
+
+        if (top && top.ventas > 0) {
+            document.getElementById('top-producto').innerText = `${top.title} (${top.ventas})`;
+        } else {
+            document.getElementById('top-producto').innerText = "Sin ventas aún";
+        }
+    }
+
+    // 3. Actualizar contador de reponer
+    const stockBajoCount = productosLocales.filter(p => p.stock < 5).length;
+    document.getElementById('count-reponer').innerText = `${stockBajoCount} productos`;
+}
+
+
+
+
+function aplicarFiltros() {
+    const pago = document.getElementById('filter-pago').value;
+    const envio = document.getElementById('filter-envio').value;
+    const desde = document.getElementById('filter-desde').value;
+    const hasta = document.getElementById('filter-hasta').value;
+    const busqueda = document.getElementById('filter-busqueda').value.toLowerCase();
+
+    pedidosFiltrados = todosLosPedidos.filter(p => {
+        let match = true;
+        if (busqueda && !String(p.id).includes(busqueda) && !p.cliente.toLowerCase().includes(busqueda)) match = false;
+        if (pago !== 'todos' && p.pago !== pago) match = false;
+        if (envio === 'enviados' && p.enviado === 'pendiente') match = false;
+        if (envio === 'cancelados' && p.cancelado === 'pendiente') match = false;
+
+        const fechaPed = new Date(p.fecha).setHours(0,0,0,0);
+        if (desde && fechaPed < new Date(desde).setHours(0,0,0,0)) match = false;
+        if (hasta && fechaPed > new Date(hasta).setHours(0,0,0,0)) match = false;
+        return match;
+    });
+
+    const totalRango = pedidosFiltrados.reduce((s, p) => s + parseFloat(p.total), 0);
+
+    document.getElementById('resumen-reporte').innerHTML =
+        `Resultados: ${pedidosFiltrados.length} pedidos | Total en vista: $${totalRango.toFixed(2)}`;
+
+    renderizarPedidos(pedidosFiltrados);
+}
+
+function limpiarFiltros() {
+    document.getElementById('filter-pago').value = 'todos';
+    document.getElementById('filter-envio').value = 'todos';
+    document.getElementById('filter-desde').value = '';
+    document.getElementById('filter-hasta').value = '';
+    document.getElementById('filter-busqueda').value = '';
+    document.getElementById('resumen-reporte').innerHTML = "";
+    pedidosFiltrados = todosLosPedidos;
+    renderizarPedidos(todosLosPedidos);
+}
+
+function exportarCSV() {
+    if (pedidosFiltrados.length === 0) return alert("Nada que exportar");
+    let csv = "ID;Fecha;Cliente;Items;Total;Pago;Envio;Observaciones\n";
+    pedidosFiltrados.forEach(p => {
+        const items = p.items.map(i => `${i.title}(x${i.cantidad})`).join(" - ");
+        csv += `${p.id};${new Date(p.fecha).toLocaleString().replace(/;/g,"")};${p.cliente};${items};${p.total};${p.pago};${p.enviado};${p.observaciones || ""}\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Reporte_${new Date().toLocaleDateString()}.csv`;
+    link.click();
+}
+                                                        
+
+
+
+
+        async function guardarCambios() {
+            const filas = document.querySelectorAll('.fila-producto');
+            const data = Array.from(filas).map(f => {
+                const id = f.dataset.id;
+                const p = productosLocales.find(p => String(p.id) === String(id));
+                return { ...p, title: f.querySelector('.edit-title').value, category: f.querySelector('.edit-category').value.split(','), image: f.querySelector('.edit-image').value, clase: f.querySelector('.edit-clase').value, price: parseFloat(f.querySelector('.edit-price').value), stock: parseInt(f.querySelector('.edit-stock').value) };
+            });
+            const res = await fetch('http://localhost:3000/api/update-products', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+            if (res.ok) { alert("¡Actualizado!"); cargarDatos(); }
+        }
+
+
+
+        async function crearProducto() {
+            const nuevo = { id: Date.now(), title: document.getElementById('new-title').value, image: document.getElementById('new-image').value || "../img/default.png", price: parseFloat(document.getElementById('new-price').value), stock: parseInt(document.getElementById('new-stock').value), category: [document.getElementById('new-category').value], clase: document.getElementById('new-clase').value, ventas: 0 };
+            const res = await fetch('http://localhost:3000/api/admin/productos/nuevo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(nuevo) });
+            if (res.ok) { document.getElementById('form-nuevo').style.display='none'; cargarDatos(); }
+        }
+
+        async function eliminarProducto(id) {
+            if (confirm("¿Eliminar?")) { await fetch(`http://localhost:3000/api/admin/productos/${id}`, { method: 'DELETE' }); cargarDatos(); }
+        }
+
+        setInterval(cargarDatos, 30000);
+        (async () => {
+            await cargarDatos();
+        })();
+
+    </script>
+
+</body>
+
+</html>

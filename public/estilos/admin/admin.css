@@ -1,0 +1,10 @@
+.btn-save {
+    background: #28a745;
+    color: white;
+    /* Cambiado de aquel rosa/gris a blanco puro */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}

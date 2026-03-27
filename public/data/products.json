@@ -1,0 +1,1192 @@
+[
+  {
+    "id": 1,
+    "title": "Gourmet",
+    "price": 999.99,
+    "category": [
+      "Americana"
+    ],
+    "image": "../img/productos/Americana.png",
+    "description": "Bombones x 3Un.",
+    "cantidad": 1,
+    "stock": 97,
+    "ventas": 3,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 2,
+    "title": "Gourmet",
+    "price": 999.99,
+    "category": [
+      "Choc-Sublime"
+    ],
+    "image": "../img/productos/chocolateamargo.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 96,
+    "ventas": 4,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 3,
+    "title": "Gourmet",
+    "price": 999.99,
+    "category": [
+      "Choc-Dulce"
+    ],
+    "image": "../img/productos/chocolatedulce.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 8,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 4,
+    "title": "Gourmet",
+    "price": 999.99,
+    "category": [
+      "Frutilla"
+    ],
+    "image": "../img/productos/frutillacrema.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 5,
+    "title": "Gourmet",
+    "price": 599.99,
+    "category": [
+      "D de Leche"
+    ],
+    "image": "../img/productos/dulcedeleche.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 5,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 6,
+    "title": "Gourmet",
+    "price": 34.99,
+    "category": [
+      "Menta"
+    ],
+    "image": "../img/productos/mentas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 19,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 7,
+    "title": "Gourmet",
+    "price": 449.99,
+    "category": [
+      "Vainilla"
+    ],
+    "image": "../img/productos/vainillas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 1008,
+    "title": "Gourmet",
+    "price": 449.99,
+    "category": [
+      "Anana"
+    ],
+    "image": "../img/productos/ananas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Frutal"
+  },
+  {
+    "id": 1009,
+    "title": "Gourmet",
+    "price": 449.99,
+    "category": [
+      "Frutilla"
+    ],
+    "image": "../img/productos/frutillas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 9,
+    "ventas": 2,
+    "clase": "Frutal"
+  },
+  {
+    "id": 1010,
+    "title": "Gourmet",
+    "price": 449.99,
+    "category": [
+      "Durazno"
+    ],
+    "image": "../img/productos/duraznos.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Frutal"
+  },
+  {
+    "id": 1011,
+    "title": "Gourmet",
+    "price": 449.99,
+    "category": [
+      "Naranja"
+    ],
+    "image": "../img/productos/naranjas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 12,
+    "ventas": 0,
+    "clase": "Frutal"
+  },
+  {
+    "id": 1012,
+    "title": "Gourmet",
+    "price": 449.99,
+    "category": [
+      "Limon"
+    ],
+    "image": "../img/productos/limones.png",
+    "description": " ",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Frutal"
+  },
+  {
+    "id": 10,
+    "title": "Tabletas",
+    "price": 299.99,
+    "category": [
+      "Americana"
+    ],
+    "image": "../img/productos/americana.png",
+    "description": "Bombones x 3Un.",
+    "cantidad": 1,
+    "stock": 9,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 11,
+    "title": "Tabletas",
+    "price": 89.99,
+    "category": [
+      "Choc-Sublime"
+    ],
+    "image": "../img/productos/chocolateamargo.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 8,
+    "ventas": 7,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 12,
+    "title": "Tabletas",
+    "price": 45.99,
+    "category": [
+      "Choc-Dulce"
+    ],
+    "image": "../img/productos/chocolatedulce.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 6,
+    "ventas": 2,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 13,
+    "title": "Tabletas",
+    "price": 67.99,
+    "category": [
+      "Frutilla"
+    ],
+    "image": "../img/productos/frutillacrema.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 14,
+    "title": "Tabletas",
+    "price": 599.99,
+    "category": [
+      "D de Leche"
+    ],
+    "image": "../img/productos/dulcedeleche.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 5,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 15,
+    "title": "Tabletas",
+    "price": 34.99,
+    "category": [
+      "Menta"
+    ],
+    "image": "../img/productos/mentas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 20,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 16,
+    "title": "Tabletas",
+    "price": 449.99,
+    "category": [
+      "Vainilla"
+    ],
+    "image": "../img/productos/vainillas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 3,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 20,
+    "title": "Lolitas",
+    "price": 89.99,
+    "category": [
+      "Americana"
+    ],
+    "image": "../img/productos/Americana.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 15,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 21,
+    "title": "Lolitas",
+    "price": 89.99,
+    "category": [
+      "Choc-Sublime"
+    ],
+    "image": "../img/productos/chocolateamargo.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 15,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 22,
+    "title": "Lolitas",
+    "price": 45.99,
+    "category": [
+      "Choc-Dulce"
+    ],
+    "image": "../img/productos/chocolatedulce.png",
+    "description": "  ",
+    "cantidad": 1,
+    "stock": 8,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 23,
+    "title": "Lolitas",
+    "price": 67.99,
+    "category": [
+      "Frutilla"
+    ],
+    "image": "../img/productos/frutillacrema.png",
+    "description": "  ",
+    "cantidad": 1,
+    "stock": 9,
+    "ventas": 3,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 24,
+    "title": "Lolitas",
+    "price": 599.99,
+    "category": [
+      "D de Leche"
+    ],
+    "image": "../img/productos/dulcedeleche.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 5,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 25,
+    "title": "Lolitas",
+    "price": 34.99,
+    "category": [
+      "Menta"
+    ],
+    "image": "../img/productos/mentas.png",
+    "description": " ",
+    "cantidad": 1,
+    "stock": 20,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 26,
+    "title": "Lolitas",
+    "price": 449.99,
+    "category": [
+      "Vainilla"
+    ],
+    "image": "../img/productos/vainillas.png",
+    "description": "Proyector de alta definición ideal para presentaciones y entretenimiento",
+    "cantidad": 1,
+    "stock": 3,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 30,
+    "title": "Pinito",
+    "price": 89.99,
+    "category": [
+      "Americana"
+    ],
+    "image": "../img/productos/Americana.png",
+    "description": "PINITO",
+    "cantidad": 1,
+    "stock": 14,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 31,
+    "title": "Pinito",
+    "price": 89.99,
+    "category": [
+      "Choc-Sublime"
+    ],
+    "image": "../img/productos/chocolateamargo.png",
+    "description": "PINITO",
+    "cantidad": 1,
+    "stock": 15,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 32,
+    "title": "Pinito",
+    "price": 45.99,
+    "category": [
+      "Choc-Dulce"
+    ],
+    "image": "../img/productos/chocolatedulce.png",
+    "description": "PINITO",
+    "cantidad": 1,
+    "stock": 6,
+    "ventas": 2,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 33,
+    "title": "Pinito",
+    "price": 67.99,
+    "category": [
+      "Frutilla"
+    ],
+    "image": "../img/productos/frutillacrema.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 34,
+    "title": "Pinito",
+    "price": 599.99,
+    "category": [
+      "D de Leche"
+    ],
+    "image": "../img/productos/dulcedeleche.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 5,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 35,
+    "title": "Pinito",
+    "price": 34.99,
+    "category": [
+      "Menta"
+    ],
+    "image": "../img/productos/mentas.png",
+    "description": "Elemento decorativo moderno para dar estilo a tu hogar",
+    "cantidad": 1,
+    "stock": 18,
+    "ventas": 2,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 36,
+    "title": "Pinito",
+    "price": 449.99,
+    "category": [
+      "Vainilla"
+    ],
+    "image": "../img/productos/vainillas.png",
+    "description": "Proyector de alta definición ideal para presentaciones y entretenimiento",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 40,
+    "title": "Palito",
+    "price": 89.99,
+    "category": [
+      "Americana"
+    ],
+    "image": "../img/productos/palitovainilla.jpg",
+    "description": "PINITO",
+    "cantidad": 1,
+    "stock": 15,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 41,
+    "title": "Palito",
+    "price": 89.99,
+    "category": [
+      "Choc-Sublime"
+    ],
+    "image": "../img/productos/chocolateamargo.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 14,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 42,
+    "title": "Palito",
+    "price": 45.99,
+    "category": [
+      "Choc-Dulce"
+    ],
+    "image": "../img/productos/chocolatedulce.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 8,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 43,
+    "title": "Palito",
+    "price": 67.99,
+    "category": [
+      "Frutilla"
+    ],
+    "image": "../img/productos/frutillacrema.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 12,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 44,
+    "title": "Palito",
+    "price": 599.99,
+    "category": [
+      "D de Leche"
+    ],
+    "image": "../img/productos/dulcedeleche.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 5,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 45,
+    "title": "Palito",
+    "price": 34.99,
+    "category": [
+      "Menta"
+    ],
+    "image": "../img/productos/mentas.png",
+    "description": "Elemento decorativo moderno para dar estilo a tu hogar",
+    "cantidad": 1,
+    "stock": 17,
+    "ventas": 3,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 46,
+    "title": "Palito",
+    "price": 449.99,
+    "category": [
+      "Vainilla"
+    ],
+    "image": "../img/productos/vainillas.png",
+    "description": "Proyector de alta definición ideal para presentaciones y entretenimiento",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 50,
+    "title": "Palito Bombon",
+    "price": 89.99,
+    "category": [
+      "Americana"
+    ],
+    "image": "../img/productos/Americana.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 15,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 51,
+    "title": "Palito Bombon",
+    "price": 89.99,
+    "category": [
+      "Choc-Sublime"
+    ],
+    "image": "../img/productos/chocolateamargo.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 15,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 52,
+    "title": "Palito Bombon",
+    "price": 45.99,
+    "category": [
+      "Choc-Dulce"
+    ],
+    "image": "../img/productos/chocolatedulce.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 7,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 53,
+    "title": "Palito Bombon",
+    "price": 67.99,
+    "category": [
+      "Frutilla"
+    ],
+    "image": "../img/productos/frutillacrema.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 7,
+    "ventas": 5,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 54,
+    "title": "Palito Bombon",
+    "price": 599.99,
+    "category": [
+      "D de Leche"
+    ],
+    "image": "../img/productos/dulcedeleche.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 55,
+    "title": "Palito Bombon",
+    "price": 34.99,
+    "category": [
+      "Menta"
+    ],
+    "image": "../img/productos/mentas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 17,
+    "ventas": 3,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 56,
+    "title": "Palito Bombon",
+    "price": 449.99,
+    "category": [
+      "Vainilla"
+    ],
+    "image": "../img/productos/vainillas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 10,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 57,
+    "title": "Palito Granizado",
+    "price": 599.99,
+    "category": [
+      "Americana"
+    ],
+    "image": "../img/productos/americana.png",
+    "description": "T",
+    "cantidad": 1,
+    "stock": 10,
+    "ventas": 2,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 58,
+    "title": "Palito Granizado",
+    "price": 34.99,
+    "category": [
+      "D de Leche"
+    ],
+    "image": "../img/productos/dulcedeleche.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 15,
+    "ventas": 5,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 59,
+    "title": "Palito Granizado",
+    "price": 449.99,
+    "category": [
+      "Menta"
+    ],
+    "image": "../img/productos/mentas.png",
+    "description": "",
+    "cantidad": 0,
+    "stock": 19,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 60,
+    "title": "Drill",
+    "price": 89.99,
+    "category": [
+      "Anana"
+    ],
+    "image": "../img/productos/ananas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 15,
+    "ventas": 0,
+    "clase": "Agua con Fruta"
+  },
+  {
+    "id": 61,
+    "title": "Drill",
+    "price": 89.99,
+    "category": [
+      "Frutilla"
+    ],
+    "image": "../img/productos/frutillacrema.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 15,
+    "ventas": 0,
+    "clase": "Agua con Fruta"
+  },
+  {
+    "id": 62,
+    "title": "Drill",
+    "price": 45.99,
+    "category": [
+      "Durazno"
+    ],
+    "image": "../img/productos/duraznos.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 8,
+    "ventas": 0,
+    "clase": "Agua con Fruta"
+  },
+  {
+    "id": 23,
+    "title": "Pinito",
+    "price": 67.99,
+    "category": [
+      "Frutilla"
+    ],
+    "image": "../img/productos/frutillas.png",
+    "description": "  ",
+    "cantidad": 1,
+    "stock": 12,
+    "ventas": 1,
+    "clase": "Agua con Fruta"
+  },
+  {
+    "id": 64,
+    "title": "Drill",
+    "price": 599.99,
+    "category": [
+      "Naranja"
+    ],
+    "image": "../img/productos/naranjas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 5,
+    "ventas": 0,
+    "clase": "Agua con Fruta"
+  },
+  {
+    "id": 65,
+    "title": "Drill",
+    "price": 34.99,
+    "category": [
+      "Limon"
+    ],
+    "image": "../img/productos/limones.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 20,
+    "ventas": 0,
+    "clase": "Agua con Fruta"
+  },
+  {
+    "id": 70,
+    "title": "Vasito 1 Bocha",
+    "price": 89.99,
+    "category": [
+      "Americana"
+    ],
+    "image": "../img/productos/americana.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 15,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 71,
+    "title": "Vasito 1 Bocha",
+    "price": 89.99,
+    "category": [
+      "Choc-Sublime"
+    ],
+    "image": "../img/productos/chocolateamargo.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 15,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 72,
+    "title": "Vasito 1 Bocha",
+    "price": 45.99,
+    "category": [
+      "Choc-Dulce"
+    ],
+    "image": "../img/productos/chocolatedulce.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 8,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 73,
+    "title": "Vasito 1 Bocha",
+    "price": 67.99,
+    "category": [
+      "Frutilla"
+    ],
+    "image": "../img/productos/frutillacrema.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 12,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 74,
+    "title": "Vasito 1 Bocha",
+    "price": 599.99,
+    "category": [
+      "D de Leche"
+    ],
+    "image": "../img/productos/dulcedeleche.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 5,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 75,
+    "title": "Vasito 1 Bocha",
+    "price": 34.99,
+    "category": [
+      "Menta"
+    ],
+    "image": "../img/productos/mentas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 20,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 76,
+    "title": "Vasito 1 Bocha",
+    "price": 449.99,
+    "category": [
+      "Vainilla"
+    ],
+    "image": "../img/productos/vainillas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 80,
+    "title": "Vasito Base Rellena",
+    "price": 89.99,
+    "category": [
+      "Americana"
+    ],
+    "image": "../img/productos/americana.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 14,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 81,
+    "title": "Vasito Base Rellena",
+    "price": 89.99,
+    "category": [
+      "Choc-Sublime"
+    ],
+    "image": "../img/productos/chocolateamargo.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 15,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 82,
+    "title": "Vasito Base Rellena",
+    "price": 45.99,
+    "category": [
+      "Choc-Dulce"
+    ],
+    "image": "../img/productos/chocolatedulce.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 6,
+    "ventas": 2,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 83,
+    "title": "Vasito Base Rellena",
+    "price": 67.99,
+    "category": [
+      "Frutilla"
+    ],
+    "image": "../img/productos/frutillacrema.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 12,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 84,
+    "title": "Vasito Base Rellena",
+    "price": 599.99,
+    "category": [
+      "D de Leche"
+    ],
+    "image": "../img/productos/dulcedeleche.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 5,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 85,
+    "title": "Vasito Base Rellena",
+    "price": 34.99,
+    "category": [
+      "Menta"
+    ],
+    "image": "../img/productos/mentas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 18,
+    "ventas": 2,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 86,
+    "title": "Vasito Base Rellena",
+    "price": 449.99,
+    "category": [
+      "Vainilla"
+    ],
+    "image": "../img/productos/vainillas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 90,
+    "title": "Sandwich Helado",
+    "price": 34.99,
+    "category": [
+      "Americana/"
+    ],
+    "image": "../img/productos/americana.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 20,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 100,
+    "title": "Cilindro",
+    "price": 449.99,
+    "category": [
+      "Vainilla"
+    ],
+    "image": "../img/productos/americana.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 2,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 110,
+    "title": "Rellenos",
+    "price": 34.99,
+    "category": [
+      "D de Leche"
+    ],
+    "image": "../img/productos/Americana.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 12,
+    "ventas": 8,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 120,
+    "title": "Pote Boutique x 10 Uns",
+    "price": 449.99,
+    "category": [
+      "Americana"
+    ],
+    "image": "../img/productos/americana.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 121,
+    "title": "Pote Boutique x 10 Uns",
+    "price": 449.99,
+    "category": [
+      "Choc-Sublime"
+    ],
+    "image": "../img/productos/chocolateamargo.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 122,
+    "title": "Pote Boutique x 10 Uns",
+    "price": 449.99,
+    "category": [
+      "Choc-Dulce"
+    ],
+    "image": "../img/productos/chocolatedulce.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 123,
+    "title": "Pote Boutique x 10 Uns",
+    "price": 449.99,
+    "category": [
+      "Frutilla"
+    ],
+    "image": "../img/productos/frutillacrema.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 124,
+    "title": "Pote Boutique x 10 Uns",
+    "price": 449.99,
+    "category": [
+      "D de Leche"
+    ],
+    "image": "../img/productos/dulcedeleche.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 125,
+    "title": "Pote Boutique x 10 Uns",
+    "price": 449.99,
+    "category": [
+      "Menta"
+    ],
+    "image": "../img/productos/mentas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 126,
+    "title": "Pote Boutique x 10 Uns",
+    "price": 449.99,
+    "category": [
+      "Vainilla"
+    ],
+    "image": "../img/productos/vainillas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 130,
+    "title": "Especiales",
+    "price": 449.99,
+    "category": [
+      "Sandwich Helado"
+    ],
+    "image": "../img/productos/caritas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 131,
+    "title": "Especiales",
+    "price": 449.99,
+    "category": [
+      "Chocotorta"
+    ],
+    "image": "../img/productos/carritas.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 10,
+    "ventas": 1,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 136,
+    "title": "Eventos",
+    "price": 449.99,
+    "category": [
+      "Vainilla"
+    ],
+    "image": "../img/productos/carrito.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 0,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 400,
+    "title": "Ofertas",
+    "price": 449.99,
+    "category": [
+      "3x2 Doc Palitos"
+    ],
+    "image": "../img/productos/carrito.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 10,
+    "ventas": 4,
+    "clase": "Cremoso"
+  },
+  {
+    "id": 401,
+    "title": "Ofertas",
+    "price": 449.99,
+    "category": [
+      "2do 70% Descuento"
+    ],
+    "image": "../img/productos/carrito.png",
+    "description": "",
+    "cantidad": 1,
+    "stock": 11,
+    "ventas": 2,
+    "clase": "Cremoso"
+  }
+]
