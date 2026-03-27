@@ -87,11 +87,11 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
         <td>$${producto.price.toFixed(2)}</td>
         <td><input type="number" value="${producto.cantidad}" min="1" max="${producto.stock}" id="${producto.id}"
                 class="cantidad-producto"></td>
-        <td>$${sub.toFixed(2)}</td>
+        <td>${sub.toFixed(2)}</td>
     </tr>`;
     });
     }
-
+    
     actualizarTotalCarrito(subtotalCalculado);
     eventosFila();
     recalcularTodo();
@@ -177,15 +177,7 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
 
     async function enviarPedidoWhatsApp() {
 
-
-
-
-
-
-
-
-
-        
+     
     const faltantes = validarFormulario();
     if (faltantes.length > 0) {
     return alert("Falta completar: " + faltantes.join(", "));
