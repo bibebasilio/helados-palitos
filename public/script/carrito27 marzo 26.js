@@ -28,7 +28,6 @@ function validarFormulario() {
 const nombre = document.getElementById("nombre")?.value.trim() || "";
 const direccion = document.getElementById("direccion")?.value.trim() || "";
 const telefono = document.getElementById("telefono")?.value.trim() || "";
-const comentario = document.getElementById("comentario")?.value.trim() || "";
 const metodoPago = document.querySelector('input[name="metodo-pago"]:checked');
 const finalTotalText = document.getElementById("final-total")?.innerText || "0";
 const valorFinalNum = parseFloat(finalTotalText.replace("$", "")) || 0;
@@ -42,11 +41,11 @@ if (nombre === "") faltantes.push("Nombre");
 if (direccion === "") faltantes.push("Dirección");
 if (telefono === "") faltantes.push("Teléfono");
 if (!metodoPago) faltantes.push("Método de Pago");
-if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { const esValido=faltantes.length===0;
-    boton.disabled=!esValido; boton.style.opacity=esValido ? "1" : "0.5" ; boton.style.cursor=esValido ? "pointer"
-    : "not-allowed" ; if (mensajeError) { if (!esValido) { mensajeError.innerText="Falta completar: " +
-    faltantes.join(", ");
-        mensajeError.style.color = " orange"; mensajeError.style.display="block" ; } else {
+if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { const esValido=faltantes.length===0; //
+    Solo modificamos si no está en proceso de envío if (boton.innerText !=="PROCESANDO..." ) { boton.disabled=!esValido;
+    boton.style.opacity=esValido ? "1" : "0.5" ; boton.style.cursor=esValido ? "pointer" : "not-allowed" ; } if
+    (mensajeError) { if (!esValido) { mensajeError.innerText="Falta completar: " + faltantes.join(", ");
+                mensajeError.style.color = " orange"; mensajeError.style.display="block" ; } else {
     mensajeError.innerText="✓ Todo listo para finalizar" ; mensajeError.style.color="green" ; } } } return faltantes; }
     document.addEventListener("DOMContentLoaded", ()=> {
     cargarProductosCarrito();
@@ -64,7 +63,8 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     });
 
     function cargarProductosCarrito() {
-    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    // CAMBIO IMPORTANTE: Unificado a "carrito"
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     const tabla = document.querySelector("#tabla_carrito");
     if (!tabla) return;
 
@@ -72,7 +72,9 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     let subtotalCalculado = 0;
 
     if (carrito.length === 0) {
-    tabla.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;">Tu carrito está vacío.</td></tr>';
+    tabla.innerHTML = '<tr>
+        <td colspan="8" style="text-align: center; padding: 20px;">Tu carrito está vacío.</td>
+    </tr>';
     } else {
     carrito.forEach((producto) => {
     const sub = producto.price * producto.cantidad;
@@ -100,20 +102,20 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     function eventosFila() {
     document.querySelectorAll(".remove-btn").forEach((boton) => {
     boton.onclick = () => {
-    let carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     carrito = carrito.filter((p) => String(p.id) !== String(boton.id));
-    localStorage.setItem("carritoDeCompras", JSON.stringify(carrito));
+    localStorage.setItem("carrito", JSON.stringify(carrito));
     cargarProductosCarrito();
     };
     });
 
     document.querySelectorAll(".cantidad-producto").forEach((input) => {
     input.onchange = (e) => {
-    let carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     const producto = carrito.find((p) => String(p.id) === String(e.target.id));
     if (producto) {
     producto.cantidad = parseInt(e.target.value);
-    localStorage.setItem("carritoDeCompras", JSON.stringify(carrito));
+    localStorage.setItem("carrito", JSON.stringify(carrito));
     actualizarTotales();
     }
     };
@@ -121,7 +123,7 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     }
 
     function actualizarTotales() {
-    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
     let subtotal = 0;
     document.querySelectorAll("#tabla_carrito tr").forEach((fila) => {
     const input = fila.querySelector(".cantidad-producto");
@@ -176,20 +178,18 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     }
 
     async function enviarPedidoWhatsApp() {
+    const boton = document.getElementById("btn-finalizar");
 
+    if (boton.disabled && boton.innerText === "PROCESANDO...") return;
 
-
-
-
-
-
-
-
-        
     const faltantes = validarFormulario();
     if (faltantes.length > 0) {
     return alert("Falta completar: " + faltantes.join(", "));
     }
+
+    boton.disabled = true;
+    boton.innerText = "PROCESANDO...";
+    boton.style.opacity = "0.5";
 
     const nombre = document.getElementById("nombre")?.value.trim();
     const direccion = document.getElementById("direccion")?.value.trim();
@@ -201,10 +201,10 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     const descEfectivo = document.getElementById("des-efectivo")?.innerText.replace("-$", "") || "0";
     const costoEnvio = document.getElementById("shipping-cost")?.innerText.replace("$", "") || "0";
     const metodoPagoCheck = document.querySelector('input[name="metodo-pago"]:checked');
-    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
     try {
-    const response = await fetch("https://helados-palitos.onrender.com/api/confirmar-pedido", {
+    const response = await fetch("/api/confirmar-pedido", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -212,25 +212,22 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     cliente: nombre,
     direccion: direccion,
     telefono: telefono,
+    comentario: comentario,
     subtotal,
     descCupon,
     descEfectivo,
     costoEnvio,
     total: finalTotalText,
-    pago: "pendiente",
-    enviado: "pendiente",
-    entregado: "pendiente",
-    cancelado: "No",
+    pago: metodoPagoCheck.value,
+    fecha: new Date(),
     impreso: false
     }),
     });
-// 4. Procesar respuesta del servidor
+
     const resultado = await response.json();
 
     if (resultado.success) {
-    //--const nroReal = resultado.id;
     const nroParaWhatsApp = String(resultado.nro).padStart(3, '0');
-
     let productosTexto = carrito.map((p) => `• ${p.title} (x${p.cantidad})`).join("\n");
 
     const texto = `*--- NUEVO PEDIDO #${nroParaWhatsApp} ---*\n\n` +
@@ -244,14 +241,18 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
 
     const urlWA = `https://wa.me/5491138461130?text=${encodeURIComponent(texto)}`;
 
-    alert("¡Pedido #" + resultado.nro + " confirmado!");
-    localStorage.removeItem("carritoDeCompras");
+    alert("¡Pedido #" + nroParaWhatsApp + " confirmado!");
+
+    localStorage.removeItem("carrito");
     window.open(urlWA, "_blank");
     window.location.href = "index.html";
     } else {
-    alert("Error: " + resultado.mensaje);
+    throw new Error(resultado.mensaje || "Error en el servidor");
     }
     } catch (err) {
-    alert("Error de conexión con el servidor Eustakio.");
+    alert("Error: No se pudo conectar con el servidor Eustakio.");
+    boton.disabled = false;
+    boton.innerText = "FINALIZAR COMPRA";
+    boton.style.opacity = "1";
     }
     }
