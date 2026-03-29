@@ -53,7 +53,3 @@ if (data.success) alert("¡Inventario actualizado correctamente!");
 }
 
 await cargarDatos();
-//</script>
-//</body>
-
-//</html>
