@@ -218,10 +218,13 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     const resultado = await response.json();
 
     if (resultado.success) {
-    const nroReal = resultado.id;
-    let productosTexto = carrito.map((p) => `• ${p.title} (x${p.cantidad})`).join("\n");
-
-    const texto = `*--- NUEVO PEDIDO #00${nroReal} ---*\n\n` +
+        //const nroReal = resultado.id;
+        const nroParaWhatsApp = String(resultado.nro).padStart(4, '0');   
+        
+   // let productosTexto = carrito.map((p) => `• ${p.title} (x${p.cantidad})`).join("\n");
+    let productosTexto = carrito.map(p => `• ${p.title} ${p.category} (x${p.cantidad})`).join('\n');
+        
+    const texto = `*--- NUEVO PEDIDO #${nroParaWhatsApp} ---*\n\n` +
     `*Cliente:* ${nombre}\n` +
     `*Dirección:* ${direccion}\n` +
     `*Teléfono:* ${telefono}\n` +
@@ -232,7 +235,7 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
 
     const urlWA = `https://wa.me/5491138461130?text=${encodeURIComponent(texto)}`;
 
-    alert("¡Pedido #" + nroReal + " confirmado!");
+    alert("¡Pedido #" + nroParaWhatsApp + " confirmado!");
     localStorage.removeItem("carritoDeCompras");
     window.open(urlWA, "_blank");
     window.location.href = "index.html";
