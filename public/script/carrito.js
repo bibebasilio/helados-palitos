@@ -26,47 +26,59 @@ const cuponesValidos = {
 };
 
 // --- VALIDACIÓN DE BOTÓN Y MENSAJES ---
+function obtenerFaltantes() {
+    const nombre = document.getElementById('nombre')?.value.trim() || "";
+    const direccion = document.getElementById('direccion')?.value.trim() || "";
+    const telefono = document.getElementById('telefono')?.value.trim() || "";
+    const comentario = document.getElementById('comentario')?.value.trim() || "";
+    const metodoPago = document.querySelector('input[name="metodo-pago"]:checked');
+    const finalTotalText = document.getElementById('final-total')?.innerText || "0";
+    const valorFinalNum = Number.parseFloat(finalTotalText.replace('$', '')) || 0;
+
+    const faltantes = [];
+    
+    if (nombre === "") faltantes.push("Nombre");
+    if (direccion === "") faltantes.push("Dirección");
+    if (telefono === "") faltantes.push("Teléfono");
+    if (comentario === "") faltantes.push("Comentario");
+    if (!metodoPago) faltantes.push("Método de Pago");
+    if (valorFinalNum <= 0) faltantes.push("Productos en el carrito");
+    
+    return faltantes;
+}
+
+function actualizarEstadoBoton(esValido) {
+    const boton = document.getElementById('btn-finalizar');
+    if (!boton) return;
+    
+    boton.disabled = !esValido;
+    boton.style.opacity = esValido ? "1" : "0.5";
+    boton.style.cursor = esValido ? "pointer" : "not-allowed";
+}
+
+function mostrarMensajeValidacion(esValido, faltantes) {
+    const mensajeError = document.getElementById('mensaje-validacion');
+    if (!mensajeError) return;
+    
+    if (esValido) {
+        mensajeError.innerText = "✓ Todo listo para finalizar";
+        mensajeError.style.color = "green";
+    } else {
+        mensajeError.innerText = "Falta completar: " + faltantes.join(", ");
+        mensajeError.style.color = "orange";
+        mensajeError.style.display = "block";
+    }
+}
+
 function validarFormulario() {
-const nombre = document.getElementById('nombre')?.value.trim() || "";
-const direccion = document.getElementById('direccion')?.value.trim() || "";
-const telefono = document.getElementById('telefono')?.value.trim() || "";
-const comentario = document.getElementById('comentario')?.value.trim() || "";
-const metodoPago = document.querySelector('input[name="metodo-pago"]:checked');
-const finalTotalText = document.getElementById('final-total')?.innerText || "0";
-const valorFinalNum = Number.parseFloat(finalTotalText.replace('$', '')) || 0;
-
-const boton = document.getElementById('btn-finalizar');
-const mensajeError = document.getElementById('mensaje-validacion'); // Asegúrate de tener este ID en un <span> o <p> en tu HTML
-
-            let faltantes = [];
-        
-            if (nombre === "") faltantes.push("Nombre");
-            if (direccion === "") faltantes.push("Dirección");
-            if (telefono === "") faltantes.push("Teléfono");
-            if (comentario === "") faltantes.push("Comentario");
-            if (!metodoPago) faltantes.push("Método de Pago");
-            if (valorFinalNum <= 0) faltantes.push("Productos en el carrito");
-        
-            if (boton) {
-                const esValido = faltantes.length === 0;
-                boton.disabled = !esValido;
-                boton.style.opacity = esValido ? "1" : "0.5";
-                boton.style.cursor = esValido ? "pointer" : "not-allowed";
-        
-                if (mensajeError) {
-                    if (!esValido) {
-                        mensajeError.innerText = "Falta completar: " + faltantes.join(", ");
-                        mensajeError.style.color = "orange";
-                        mensajeError.style.display = "block";
-                    } else {
-                        mensajeError.innerText = "✓ Todo listo para finalizar";
-                        mensajeError.style.color = "green";
-                    }
-                }
-            }
-        
-            return faltantes;
-        }
+    const faltantes = obtenerFaltantes();
+    const esValido = faltantes.length === 0;
+    
+    actualizarEstadoBoton(esValido);
+    mostrarMensajeValidacion(esValido, faltantes);
+    
+    return faltantes;
+}
 
             document.addEventListener('DOMContentLoaded', () => {
             cargarProductosCarrito();
