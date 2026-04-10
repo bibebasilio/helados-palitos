@@ -28,6 +28,7 @@ function validarFormulario() {
 const nombre = document.getElementById("nombre")?.value.trim() || "";
 const direccion = document.getElementById("direccion")?.value.trim() || "";
 const telefono = document.getElementById("telefono")?.value.trim() || "";
+const comentario = document.getElementById("comentario")?.value.trim() || "";
 const metodoPago = document.querySelector('input[name="metodo-pago"]:checked');
 const finalTotalText = document.getElementById("final-total")?.innerText || "0";
 const valorFinalNum = parseFloat(finalTotalText.replace("$", "")) || 0;
@@ -36,20 +37,17 @@ const boton = document.getElementById("btn-finalizar");
 const mensajeError = document.getElementById("mensaje-validacion");
 
 let faltantes = [];
-// Validamos cada campo y el total  
+
 if (nombre === "") faltantes.push("Nombre");
 if (direccion === "") faltantes.push("Dirección");
 if (telefono === "") faltantes.push("Teléfono");
 if (!metodoPago) faltantes.push("Método de Pago");
-if (valorFinalNum <= 0) faltantes.push("Productos en el carrito");
-if (boton) { const esValido=faltantes.length===0; //    Solo modificamos si no está en proceso de envío 
-if (boton.innerText !=="PROCESANDO..." ) { boton.disabled=!esValido;
-    boton.style.opacity=esValido ? "1" : "0.5" ; boton.style.cursor=esValido ? "pointer" : "not-allowed" ; } if
-    (mensajeError) { if (!esValido) { mensajeError.innerText="Falta completar: " + faltantes.join(", ");
-    mensajeError.style.color = " orange"; mensajeError.style.display="block" ; } else {
+if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { const esValido=faltantes.length===0;
+    boton.disabled=!esValido; boton.style.opacity=esValido ? "1" : "0.5" ; boton.style.cursor=esValido ? "pointer"
+    : "not-allowed" ; if (mensajeError) { if (!esValido) { mensajeError.innerText="Falta completar: " +
+    faltantes.join(", ");
+        mensajeError.style.color = " orange"; mensajeError.style.display="block" ; } else {
     mensajeError.innerText="✓ Todo listo para finalizar" ; mensajeError.style.color="green" ; } } } return faltantes; }
-    
-    // 2. Carga inicial y eventos   
     document.addEventListener("DOMContentLoaded", ()=> {
     cargarProductosCarrito();
 
@@ -60,15 +58,13 @@ if (boton.innerText !=="PROCESANDO..." ) { boton.disabled=!esValido;
     });
     });
 
-// Validar campos en tiempo real
     ["nombre", "direccion", "telefono"].forEach((id) => {
     document.getElementById(id)?.addEventListener("input", validarFormulario);
     });
     });
 
     function cargarProductosCarrito() {
-    // CAMBIO IMPORTANTE: Unificado a "carrito"
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
     const tabla = document.querySelector("#tabla_carrito");
     if (!tabla) return;
 
@@ -76,9 +72,7 @@ if (boton.innerText !=="PROCESANDO..." ) { boton.disabled=!esValido;
     let subtotalCalculado = 0;
 
     if (carrito.length === 0) {
-    tabla.innerHTML = '<tr>
-        <td colspan="8" style="text-align: center; padding: 20px;">Tu carrito está vacío.</td>
-    </tr>';
+    tabla.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;">Tu carrito está vacío.</td></tr>';
     } else {
     carrito.forEach((producto) => {
     const sub = producto.price * producto.cantidad;
@@ -106,20 +100,20 @@ if (boton.innerText !=="PROCESANDO..." ) { boton.disabled=!esValido;
     function eventosFila() {
     document.querySelectorAll(".remove-btn").forEach((boton) => {
     boton.onclick = () => {
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    let carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
     carrito = carrito.filter((p) => String(p.id) !== String(boton.id));
-    localStorage.setItem("carrito", JSON.stringify(carrito));
+    localStorage.setItem("carritoDeCompras", JSON.stringify(carrito));
     cargarProductosCarrito();
     };
     });
 
     document.querySelectorAll(".cantidad-producto").forEach((input) => {
     input.onchange = (e) => {
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    let carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
     const producto = carrito.find((p) => String(p.id) === String(e.target.id));
     if (producto) {
     producto.cantidad = parseInt(e.target.value);
-    localStorage.setItem("carrito", JSON.stringify(carrito));
+    localStorage.setItem("carritoDeCompras", JSON.stringify(carrito));
     actualizarTotales();
     }
     };
@@ -127,7 +121,7 @@ if (boton.innerText !=="PROCESANDO..." ) { boton.disabled=!esValido;
     }
 
     function actualizarTotales() {
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
     let subtotal = 0;
     document.querySelectorAll("#tabla_carrito tr").forEach((fila) => {
     const input = fila.querySelector(".cantidad-producto");
@@ -182,18 +176,10 @@ if (boton.innerText !=="PROCESANDO..." ) { boton.disabled=!esValido;
     }
 
     async function enviarPedidoWhatsApp() {
-    const boton = document.getElementById("btn-finalizar");
-
-    if (boton.disabled && boton.innerText === "PROCESANDO...") return;
-
     const faltantes = validarFormulario();
     if (faltantes.length > 0) {
     return alert("Falta completar: " + faltantes.join(", "));
     }
-
-    boton.disabled = true;
-    boton.innerText = "PROCESANDO...";
-    boton.style.opacity = "0.5";
 
     const nombre = document.getElementById("nombre")?.value.trim();
     const direccion = document.getElementById("direccion")?.value.trim();
@@ -205,10 +191,10 @@ if (boton.innerText !=="PROCESANDO..." ) { boton.disabled=!esValido;
     const descEfectivo = document.getElementById("des-efectivo")?.innerText.replace("-$", "") || "0";
     const costoEnvio = document.getElementById("shipping-cost")?.innerText.replace("$", "") || "0";
     const metodoPagoCheck = document.querySelector('input[name="metodo-pago"]:checked');
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
 
     try {
-    const response = await fetch("/api/confirmar-pedido", {
+    const response = await fetch("https://helados-palitos.onrender.com/api/confirmar-pedido", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -216,14 +202,15 @@ if (boton.innerText !=="PROCESANDO..." ) { boton.disabled=!esValido;
     cliente: nombre,
     direccion: direccion,
     telefono: telefono,
-    comentario: comentario,
     subtotal,
     descCupon,
     descEfectivo,
     costoEnvio,
     total: finalTotalText,
-    pago: metodoPagoCheck.value,
-    fecha: new Date(),
+    pago: "pendiente",
+    enviado: "pendiente",
+    entregado: "pendiente",
+    cancelado: "No",
     impreso: false
     }),
     });
@@ -231,9 +218,12 @@ if (boton.innerText !=="PROCESANDO..." ) { boton.disabled=!esValido;
     const resultado = await response.json();
 
     if (resultado.success) {
-    const nroParaWhatsApp = String(resultado.nro).padStart(3, '0');
-    let productosTexto = carrito.map((p) => `• ${p.title} (x${p.cantidad})`).join("\n");
-
+        //const nroReal = resultado.id;
+        const nroParaWhatsApp = String(resultado.nro).padStart(4, '0');   
+        
+   // let productosTexto = carrito.map((p) => `• ${p.title} (x${p.cantidad})`).join("\n");
+    let productosTexto = carrito.map(p => `• ${p.title} ${p.category} (x${p.cantidad})`).join('\n');
+        
     const texto = `*--- NUEVO PEDIDO #${nroParaWhatsApp} ---*\n\n` +
     `*Cliente:* ${nombre}\n` +
     `*Dirección:* ${direccion}\n` +
@@ -246,17 +236,13 @@ if (boton.innerText !=="PROCESANDO..." ) { boton.disabled=!esValido;
     const urlWA = `https://wa.me/5491138461130?text=${encodeURIComponent(texto)}`;
 
     alert("¡Pedido #" + nroParaWhatsApp + " confirmado!");
-
-    localStorage.removeItem("carrito");
+    localStorage.removeItem("carritoDeCompras");
     window.open(urlWA, "_blank");
     window.location.href = "index.html";
     } else {
-    throw new Error(resultado.mensaje || "Error en el servidor");
+    alert("Error: " + resultado.mensaje);
     }
     } catch (err) {
-    alert("Error: No se pudo conectar con el servidor Eustakio.");
-    boton.disabled = false;
-    boton.innerText = "FINALIZAR COMPRA";
-    boton.style.opacity = "1";
+    alert("Error de conexión con el servidor Eustakio.");
     }
     }
