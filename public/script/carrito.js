@@ -36,28 +36,37 @@ const finalTotalText = document.getElementById('final-total')?.innerText || "0";
 const valorFinalNum = Number.parseFloat(finalTotalText.replace('$', '')) || 0;
 
 const boton = document.getElementById('btn-finalizar');
-const mensajeError = document.getElementById('mensaje-validacion'); // Asegúrate de tener este ID en un <span> o <p> en
-        tu HTML
+const mensajeError = document.getElementById('mensaje-validacion'); // Asegúrate de tener este ID en un <span> o <p> en tu HTML
 
-        let faltantes = [];
-
-        if (nombre === "") faltantes.push("Nombre");
-        if (direccion === "") faltantes.push("Dirección");
-        if (telefono === "") faltantes.push("Teléfono");
-        if (comentario === "") faltantes.push("Comentario");
-        if (!metodoPago) faltantes.push("Método de Pago");
-        if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); //btn-finalizar-compra if (boton) { const
-            esValido=faltantes.length===0; boton.disabled=!esValido; boton.style.opacity=esValido ? "1" : "0.5" ;
-            boton.style.cursor=esValido ? "pointer" : "not-allowed" ; // Mostrar mensaje de qué falta if (mensajeError)
-            { if (!esValido) { mensajeError.innerText="Falta completar: " + faltantes.join(", ");
-                mensajeError.style.color = " orange"; mensajeError.style.display="block" ; } else {
-            mensajeError.innerText="✓ Todo listo para finalizar" ; mensajeError.style.color="green" ; // Opcional:
-            ocultarlo después de unos segundos // setTimeout(()=> { mensajeError.style.display = "none"; }, 2000);
+            let faltantes = [];
+        
+            if (nombre === "") faltantes.push("Nombre");
+            if (direccion === "") faltantes.push("Dirección");
+            if (telefono === "") faltantes.push("Teléfono");
+            if (comentario === "") faltantes.push("Comentario");
+            if (!metodoPago) faltantes.push("Método de Pago");
+            if (valorFinalNum <= 0) faltantes.push("Productos en el carrito");
+        
+            if (boton) {
+                const esValido = faltantes.length === 0;
+                boton.disabled = !esValido;
+                boton.style.opacity = esValido ? "1" : "0.5";
+                boton.style.cursor = esValido ? "pointer" : "not-allowed";
+        
+                if (mensajeError) {
+                    if (!esValido) {
+                        mensajeError.innerText = "Falta completar: " + faltantes.join(", ");
+                        mensajeError.style.color = "orange";
+                        mensajeError.style.display = "block";
+                    } else {
+                        mensajeError.innerText = "✓ Todo listo para finalizar";
+                        mensajeError.style.color = "green";
+                    }
+                }
             }
-            }
-            }
-            return faltantes; // Lo usamos para la validación final
-            }
+        
+            return faltantes;
+        }
 
             document.addEventListener('DOMContentLoaded', () => {
             cargarProductosCarrito();
@@ -86,9 +95,9 @@ const mensajeError = document.getElementById('mensaje-validacion'); // Asegúrat
             let subtotalCalculado = 0;
 
             if (carrito.length === 0) {
-            tabla.innerHTML = '<tr>
+            tabla.innerHTML = `<tr>
                 <td colspan="8" style="text-align: center; padding: 20px;">Tu carrito está vacío.</td>
-            </tr>';
+            </tr>`;
             } else {
             carrito.forEach(producto => {
             const sub = (producto.price * producto.cantidad);
