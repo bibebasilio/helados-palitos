@@ -229,6 +229,8 @@ const mensajeError = document.getElementById('mensaje-validacion'); // Asegúrat
             `*Pago:* ${metodoPagoCheck.value.toUpperCase()}\n\n` +
             `*Productos:*\n${productosTexto}\n\n` +
             `*TOTAL:* ${finalTotalText}`;
+            
+                
 
             const numero = "+5491138461130";
             const url = `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
@@ -249,6 +251,7 @@ const mensajeError = document.getElementById('mensaje-validacion'); // Asegúrat
             })
             }).catch(err => console.log("Servidor offline..."));
 
+                
             localStorage.removeItem('carritoDeCompras');
             window.open(url, '_blank');
             }
