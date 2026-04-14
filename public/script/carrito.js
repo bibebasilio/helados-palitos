@@ -233,12 +233,12 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     `*Productos:*\n${productosTexto}\n\n` +
     `*TOTAL:* ${finalTotalText}`;
 
-    const urlWA = `https://wa.me/5491138461130?text=${encodeURIComponent(texto)}`;
+    const urlWA = `https://wa.me/541138461130?text=${encodeURIComponent(texto)}`;
 
     alert("¡Pedido #" + nroParaWhatsApp + " confirmado!");
     localStorage.removeItem("carritoDeCompras");
     window.open(urlWA, "_blank");
-    window.location.href = "index.html";
+    window.location.href = "../index.html";
     } else {
     alert("Error: " + resultado.mensaje);
     }
