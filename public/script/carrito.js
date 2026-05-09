@@ -25,36 +25,62 @@ BLACKFRIDAY: 0.25,
 
 // --- VALIDACIÓN DE BOTÓN Y MENSAJES ---
 function validarFormulario() {
-const nombre = document.getElementById("nombre")?.value.trim() || "";
-const direccion = document.getElementById("direccion")?.value.trim() || "";
-const telefono = document.getElementById("telefono")?.value.trim() || "";
-const comentario = document.getElementById("comentario")?.value.trim() || "";
-const metodoPago = document.querySelector('input[name="metodo-pago"]:checked');
-const finalTotalText = document.getElementById("final-total")?.innerText || "0";
-const valorFinalNum = parseFloat(finalTotalText.replace("$", "")) || 0;
+    const campos = [
+        { id: "nombre", label: "Nombre" },
+        { id: "direccion", label: "Dirección" },
+        { id: "telefono", label: "Teléfono" },
+        { id: "comentario", label: "Comentario" },
+    ];
 
-const boton = document.getElementById("btn-finalizar");
-const mensajeError = document.getElementById("mensaje-validacion");
+    const faltantes = campos.reduce((lista, campo) => {
+        const valor = document.getElementById(campo.id)?.value.trim() || "";
+        if (!valor) lista.push(campo.label);
+        return lista;
+    }, []);
 
-let faltantes = [];
+    if (!document.querySelector('input[name="metodo-pago"]:checked')) {
+        faltantes.push("Método de Pago");
+    }
 
-if (nombre === "") faltantes.push("Nombre");
-if (direccion === "") faltantes.push("Dirección");
-if (telefono === "") faltantes.push("Teléfono");
-if (!metodoPago) faltantes.push("Método de Pago");
-if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { const esValido=faltantes.length===0;
-    boton.disabled=!esValido; boton.style.opacity=esValido ? "1" : "0.5" ; boton.style.cursor=esValido ? "pointer"
-    : "not-allowed" ; if (mensajeError) { if (!esValido) { mensajeError.innerText="Falta completar: " +
-    faltantes.join(", ");
-        mensajeError.style.color = " orange"; mensajeError.style.display="block" ; } else {
-    mensajeError.innerText="✓ Todo listo para finalizar" ; mensajeError.style.color="green" ; } } } return faltantes; }
+    const finalTotalText = document.getElementById("final-total")?.innerText || "0";
+    const valorFinalNum = Number.parseFloat(finalTotalText.replace("$", "")) || 0;
+    if (valorFinalNum <= 0) faltantes.push("Productos en el carrito");
+
+    const boton = document.getElementById("btn-finalizar");
+    const mensajeError = document.getElementById("mensaje-validacion");
+    const esValido = faltantes.length === 0;
+
+    if (!boton) {
+        if (mensajeError && !esValido) {
+            mensajeError.innerText = "Falta completar: " + faltantes.join(", ");
+            mensajeError.style.color = "orange";
+            mensajeError.style.display = "block";
+        }
+        return faltantes;
+    }
+
+    boton.disabled = !esValido;
+    boton.style.opacity = esValido ? "1" : "0.5";
+    boton.style.cursor = esValido ? "pointer" : "not-allowed";
+
+    if (!mensajeError) return faltantes;
+
+    mensajeError.innerText = esValido
+        ? "✓ Todo listo para finalizar"
+        : "Falta completar: " + faltantes.join(", ");
+    mensajeError.style.color = esValido ? "green" : "orange";
+    mensajeError.style.display = "block";
+
+    return faltantes;
+}
+           
     document.addEventListener("DOMContentLoaded", ()=> {
     cargarProductosCarrito();
 
     document.querySelectorAll('input[name="metodo-pago"]').forEach((radio) => {
     radio.addEventListener("change", () => {
-    recalcularTodo();
-    validarFormulario();
+        recalcularTodo();
+        validarFormulario();
     });
     });
 
@@ -62,6 +88,7 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     document.getElementById(id)?.addEventListener("input", validarFormulario);
     });
     });
+
 
     function cargarProductosCarrito() {
     const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
@@ -143,7 +170,7 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
     }
 
     function recalcularTodo() {
-    const totalBase = parseFloat(document.getElementById("total")?.innerText) || 0;
+    const totalBase = Number.parseFloat(document.getElementById("total")?.innerText) || 0;
     const cuponInput = document.getElementById("coupon-input")?.value.trim().toUpperCase() || "";
     const metodoPagoCheck = document.querySelector('input[name="metodo-pago"]:checked');
     const metodoPago = metodoPagoCheck?.value;
@@ -217,23 +244,25 @@ if (valorFinalNum <= 0) faltantes.push("Productos en el carrito"); if (boton) { 
 
     const resultado = await response.json();
 
-    if (resultado.success) {
+    if (resultado.success)  {
         //const nroReal = resultado.id;
         const nroParaWhatsApp = String(resultado.nro).padStart(4, '0');   
         
    // let productosTexto = carrito.map((p) => `• ${p.title} (x${p.cantidad})`).join("\n");
     let productosTexto = carrito.map(p => `• ${p.title} ${p.category} (x${p.cantidad})`).join('\n');
         
-    const texto = `*--- NUEVO PEDIDO #${nroParaWhatsApp} ---*\n\n` +
+        const texto = `*==== Presione el botón VERDE !! ==*\n` +
+    `*para confirmar el pedido por WhatsApp ..*\n\n` +
+    `*--- NUEVO PEDIDO # ${nroParaWhatsApp} ---*\n\n` +
     `*Cliente:* ${nombre}\n` +
     `*Dirección:* ${direccion}\n` +
     `*Teléfono:* ${telefono}\n` +
-    `*Comentario:* ${comentario}\n` +
+    `*Comentario:* ${comentario}\n\n` +
     `*Pago:* ${metodoPagoCheck.value.toUpperCase()}\n\n` +
     `*Productos:*\n${productosTexto}\n\n` +
     `*TOTAL:* ${finalTotalText}`;
 
-    const urlWA = `https://wa.me/541138461130?text=${encodeURIComponent(texto)}`;
+    const urlWA = `https://wa.me/5491138461130?text=${encodeURIComponent(texto)}`;
 
     alert("¡Pedido #" + nroParaWhatsApp + " confirmado!");
     localStorage.removeItem("carritoDeCompras");
