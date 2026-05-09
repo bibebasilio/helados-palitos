@@ -251,9 +251,10 @@ function validarFormulario() {
    // let productosTexto = carrito.map((p) => `• ${p.title} (x${p.cantidad})`).join("\n");
     let productosTexto = carrito.map(p => `• ${p.title} ${p.category} (x${p.cantidad})`).join('\n');
         
-        const texto = `*==== Presione el botón VERDE !! ==*\n` +
+        const texto = `*=== Presione el botón VERDE !!===*\n` +
     `*para confirmar el pedido por WhatsApp ..*\n\n` +
-    `*--- NUEVO PEDIDO # ${nroParaWhatsApp} ---*\n\n` +
+    `*---- NUEVO PEDIDO ----\n` +
+    `*---- # ${nroParaWhatsApp} ----*\n\n` +
     `*Cliente:* ${nombre}\n` +
     `*Dirección:* ${direccion}\n` +
     `*Teléfono:* ${telefono}\n` +
