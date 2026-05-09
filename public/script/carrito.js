@@ -139,7 +139,7 @@ function validarFormulario() {
     let carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
     const producto = carrito.find((p) => String(p.id) === String(e.target.id));
     if (producto) {
-    producto.cantidad = parseInt(e.target.value);
+    producto.cantidad = Number.parseInt(e.target.value);
     localStorage.setItem("carritoDeCompras", JSON.stringify(carrito));
     actualizarTotales();
     }
@@ -251,9 +251,10 @@ function validarFormulario() {
    // let productosTexto = carrito.map((p) => `• ${p.title} (x${p.cantidad})`).join("\n");
     let productosTexto = carrito.map(p => `• ${p.title} ${p.category} (x${p.cantidad})`).join('\n');
         
-        const texto = `*==== Presione el botón VERDE !! ==*\n` +
+        const texto = `*=== Presione el botón VERDE !! ===*\n` +
     `*para confirmar el pedido por WhatsApp ........*\n\n` +
-    `*-- NUEVO PEDIDO # ${nroParaWhatsApp} --*\n\n` +
+    `* ---- NUEVO PEDIDO ` + 
+    `* ---- # ${ nroParaWhatsApp } --*\n\n` +
     `*Cliente:* ${nombre}\n` +
     `*Dirección:* ${direccion}\n` +
     `*Teléfono:* ${telefono}\n` +
