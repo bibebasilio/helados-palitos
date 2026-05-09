@@ -254,7 +254,7 @@ function validarFormulario() {
         const texto = `*=== Presione el botón VERDE !! ===*\n` +
     `*para confirmar el pedido por WhatsApp ........*\n\n` +
     `*--- NUEVO PEDIDO ---*\n` + 
-    `*   -- # ${ nroParaWhatsApp } --*\n\n` +
+    `*   -- # ${ nroParaWhatsApp } --  *\n\n` +
     `*Cliente:* ${nombre}\n` +
     `*Dirección:* ${direccion}\n` +
     `*Teléfono:* ${telefono}\n` +
