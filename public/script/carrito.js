@@ -442,6 +442,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 async function enviarPedidoWhatsApp() {
+    // ESTA LÍNEA ES LA QUE FALTA O ESTÁ MAL UBICADA
+    const boton = document.getElementById("btn-finalizar");
+
+
      // 1. ejecutar validacion   
     const faltantes = validarFormulario();
     if (faltantes.length > 0) {
