@@ -32,6 +32,54 @@ function validarFormulario() {
         { id: "comentario", label: "Comentario" },
     ];
 
+    const faltantes = [];
+    
+    // Validar campos de texto
+    campos.forEach(campo => {
+        const el = document.getElementById(campo.id);
+        if (!el || el.value.trim() === "") {
+            faltantes.push(campo.label);
+        }
+    });
+
+    // Validar pago
+    if (!document.querySelector('input[name="metodo-pago"]:checked')) {
+        faltantes.push("Método de Pago");
+    }
+
+    // Validar carrito
+    const finalTotalEl = document.getElementById("final-total");
+    const valorFinal = Number.parseFloat(finalTotalEl?.innerText.replace("$", "")) || 0;
+    if (valorFinal <= 0) faltantes.push("Productos en el carrito");
+
+    // Lógica de UI (Botón y Mensajes)
+    const boton = document.getElementById("btn-finalizar");
+    const mensajeError = document.getElementById("mensaje-validacion");
+    const esValido = faltantes.length === 0;
+
+    if (boton) {
+        boton.disabled = !esValido;
+        boton.style.opacity = esValido ? "1" : "0.5";
+        boton.style.cursor = esValido ? "pointer" : "not-allowed";
+    }
+
+    if (mensajeError) {
+        mensajeError.innerText = esValido ? "✓ Todo listo para finalizar" : "Falta completar: " + faltantes.join(", ");
+        mensajeError.style.color = esValido ? "green" : "orange";
+        mensajeError.style.display = "block";
+    }
+
+    return faltantes;
+}
+/////////////////////////////
+/*function validarFormulario() {
+    const campos = [
+        { id: "nombre", label: "Nombre" },
+        { id: "direccion", label: "Dirección" },
+        { id: "telefono", label: "Teléfono" },
+        { id: "comentario", label: "Comentario" },
+    ];
+
     const faltantes = campos.reduce((lista, campo) => {
         const valor = document.getElementById(campo.id)?.value.trim() || "";
         if (!valor) lista.push(campo.label);
@@ -73,9 +121,9 @@ function validarFormulario() {
     mensajeError.style.display = "block";
 
     return faltantes;
-}
+}*/
            
-    document.addEventListener("DOMContentLoaded", ()=> {
+  /*  document.addEventListener("DOMContentLoaded", ()=> {
     cargarProductosCarrito();
 
     document.querySelectorAll('input[name="metodo-pago"]').forEach((radio) => {
@@ -88,8 +136,31 @@ function validarFormulario() {
     ["nombre", "direccion", "telefono"].forEach((id) => {
     document.getElementById(id)?.addEventListener("input", validarFormulario);
     });
+    });*/
+/////////////////////////////
+    document.addEventListener("DOMContentLoaded", () => {
+    cargarProductosCarrito();
+
+    // Función envoltorio para asegurar que el DOM se actualice antes de validar
+    const validarConRetraso = () => {
+        setTimeout(validarFormulario, 0);
+    };
+
+    // Eventos para inputs de texto (Nombre, Dirección, Teléfono, Comentario)
+    const camposTexto = ["nombre", "direccion", "telefono", "comentario"];
+    camposTexto.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener("input", validarConRetraso);
     });
 
+    // Eventos para radio buttons
+    document.querySelectorAll('input[name="metodo-pago"]').forEach((radio) => {
+        radio.addEventListener("change", () => {
+            recalcularTodo(); // recalcularTodo ya llama a validarFormulario
+        });
+    });
+});
+/////////////////////////////
 
     function cargarProductosCarrito() {
     const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
