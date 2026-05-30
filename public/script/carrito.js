@@ -47,6 +47,7 @@ function validarFormulario() {
     if (valorFinalNum <= 0) faltantes.push("Productos en el carrito");
 
     const boton = document.getElementById("btn-finalizar");
+    
     const mensajeError = document.getElementById("mensaje-validacion");
     const esValido = faltantes.length === 0;
 
@@ -202,7 +203,10 @@ function validarFormulario() {
     validarFormulario();
     }
 
-    async function enviarPedidoWhatsApp() {
+
+
+
+    /*async function enviarPedidoWhatsApp() {
     const faltantes = validarFormulario();
     if (faltantes.length > 0) {
     return alert("Falta completar: " + faltantes.join(", "));
@@ -221,25 +225,25 @@ function validarFormulario() {
     const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
 
     try {
-    const response = await fetch("https://helados-palitos.onrender.com/api/confirmar-pedido", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-    items: carrito,
-    cliente: nombre,
-    direccion: direccion,
-    telefono: telefono,
-    subtotal,
-    descCupon,
-    descEfectivo,
-    costoEnvio,
-    total: finalTotalText,
-    pago: "pendiente",
-    enviado: "pendiente",
-    entregado: "pendiente",
-    cancelado: "No",
-    impreso: false
-    }),
+        const response = await fetch("https://helados-palitos.onrender.com/api/confirmar-pedido", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+        items: carrito,
+        cliente: nombre,
+        direccion: direccion,
+        telefono: telefono,
+        subtotal,
+        descCupon,
+        descEfectivo,
+        costoEnvio,
+        total: finalTotalText,
+        pago: "pendiente",
+        enviado: "pendiente",
+        entregado: "pendiente",
+        cancelado: "No",
+        impreso: false
+        }),
     });
 
     const resultado = await response.json();
@@ -275,4 +279,91 @@ function validarFormulario() {
     } catch (err) {
     alert("Error de conexión con el servidor Eustakio.");
     }
+    }*/
+/////////////////////////////////////////////////////////////////
+async function enviarPedidoWhatsApp() {
+    // 1. Ejecutar validación
+    const faltantes = validarFormulario();
+    if (faltantes.length > 0) {
+        alert("Por favor, completa los campos: " + faltantes.join(", "));
+        return; 
     }
+
+    // 2. Obtener datos después de validar
+    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    if (carrito.length === 0) return alert("Tu carrito está vacío.");
+
+    const nombre = document.getElementById("nombre").value.trim();
+    const direccion = document.getElementById("direccion").value.trim();
+    const telefono = document.getElementById("telefono").value.trim();
+    const comentario = document.getElementById("comentario")?.value.trim() || "Sin comentarios";
+    
+    // Obtenemos valores de forma segura
+    const finalTotalText = document.getElementById("final-total")?.innerText || "$0";
+    const metodoPagoCheck = document.querySelector('input[name="metodo-pago"]:checked');
+
+    try {
+        const response = await fetch("https://helados-palitos.onrender.com/api/confirmar-pedido", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                items: carrito,
+                cliente: nombre,
+                direccion: direccion,
+                telefono: telefono,
+                subtotal: document.getElementById("total")?.innerText || "0",
+                descCupon: document.getElementById("des-cupon")?.innerText.replace("-$", "") || "0",
+                descEfectivo: document.getElementById("des-efectivo")?.innerText.replace("-$", "") || "0",
+                costoEnvio: document.getElementById("shipping-cost")?.innerText.replace("$", "") || "0",
+                total: finalTotalText,
+                pago: metodoPagoCheck.value,
+                enviado: "pendiente",
+                entregado: "pendiente",
+                cancelado: "No",
+                impreso: false
+            }),
+        });
+
+        const resultado = await response.json();
+
+        if (resultado.success) {
+            const nroParaWhatsApp = String(resultado.nro).padStart(4, '0');
+            let productosTexto = carrito.map(p => `• ${p.title} ${p.category} (x${p.cantidad})`).join('\n');
+            
+          /*  const texto = `*--- NUEVO PEDIDO #${nroParaWhatsApp} ---\n\n` +
+                          `*Cliente:* ${nombre}\n` +
+                          `*Dirección:* ${direccion}\n` +
+                          `*Teléfono:* ${telefono}\n` +
+                          `*Pago:* ${metodoPagoCheck.value.toUpperCase()}\n\n` +
+                          `*Productos:*\n${productosTexto}\n\n` +
+                          `*TOTAL:* ${finalTotalText}`;*/
+
+                 const texto =  `*=== Presione el botón VERDE !! ===*\n` +
+                                `*para confirmar el pedido por WhatsApp ........*\n\n` +
+                                `*--- NUEVO PEDIDO ---*\n` + 
+                                `*   -- # ${ nroParaWhatsApp } --  *\n\n` +
+                                `*Cliente:* ${nombre}\n` +
+                                `*Dirección:* ${direccion}\n` +
+                                `*Teléfono:* ${telefono}\n` +
+                                `*Comentario:* ${comentario}\n\n` +
+                                `*Pago:* ${metodoPagoCheck.value.toUpperCase()}\n\n` +
+                                `*Productos:*\n${productosTexto}\n\n` +
+                                `*TOTAL:* ${finalTotalText}`;
+
+            const urlWA = `https://wa.me/5491138461130?text=${encodeURIComponent(texto)}`;
+
+            localStorage.removeItem("carritoDeCompras");
+            alert("¡Pedido #" + nroParaWhatsApp + " registrado!");
+            
+            // Abrir WhatsApp y redirigir
+            window.open(urlWA, "_blank");
+            window.location.href = "../index.html";
+        } else {
+            alert("Error al registrar el pedido: " + (resultado.mensaje || "Error desconocido"));
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Error de conexión con el servidor.");
+    }
+}
+    
