@@ -662,7 +662,9 @@ document.addEventListener("DOMContentLoaded", () => {
     validarFormulario();
     }
 
-async function enviarPedidoWhatsApp() {
+/*sync function enviarPedidoWhatsApp() {*/
+    /*// Declaración explícita dentro de la función
+    const boton = document.getElementById("btn-finalizar");
      // 1. ejecutar validacion   
     const faltantes = validarFormulario();
     if (faltantes.length > 0) {
@@ -670,8 +672,27 @@ async function enviarPedidoWhatsApp() {
     }
     // 2. desactivar boton inmediatamente para evitar clicks múltiples
     boton.disabled = true;
-    boton.innerText = "Procesando...";
+    boton.innerText = "Procesando...";*/
+  async function enviarPedidoWhatsApp() {
+    // Declaración explícita dentro de la función
+    const boton = document.getElementById("btn-finalizar");
     
+    // Validamos que el botón exista antes de usarlo
+    if (!boton) {
+        console.error("No se encontró el botón con ID btn-finalizar");
+        return;
+    }
+
+    const faltantes = validarFormulario();
+    if (faltantes.length > 0) {
+        alert("Por favor, completa los campos: " + faltantes.join(", "));
+        return; 
+    }
+
+    // Desactivamos el botón
+    boton.disabled = true;
+      boton.innerText = "Procesando...";
+      
     const nombre = document.getElementById("nombre")?.value.trim();
     const direccion = document.getElementById("direccion")?.value.trim();
     const telefono = document.getElementById("telefono")?.value.trim();
@@ -731,9 +752,16 @@ async function enviarPedidoWhatsApp() {
     window.open(urlWA, "_blank");
     window.location.href = "index.html";
     } else {
-    alert("Error: " + resultado.mensaje);
+        alert("Error: " + resultado.mensaje);
+        boton.disabled = false; // Reactivar si falla
+        boton.innerText = "Finalizar Pedido";
+        
     }
     } catch (err) {
-    alert("Error de conexión con el servidor Eustakio.");
+console.error(err);
+        alert("Error de conexión con el servidor Eustakio.");
+        boton.disabled = false;
+        boton.innerText = "Finalizar Pedido";
+   
     }
     }
