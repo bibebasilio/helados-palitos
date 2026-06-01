@@ -33,7 +33,7 @@ const nroFormateado = String(nroOriginal).padStart(3, '0');
 
 console.log(`🖨️ Imprimiendo Orden #${nroFormateado}...`);
 
-printer
+/*printer
 .font('a')
 .align('ct')
 .style('b')
@@ -49,10 +49,99 @@ printer
 .text(`Cliente: ${pedido.cliente || 'Mostrador'}`)
 .text(`Direccion: ${pedido.direccion || 'N/A'}`)
 .text(`Tel: ${pedido.telefono || 'N/A'}`)
-.text('--------------------------------');
+.text('--------------------------------');*/
+///////////////////////////////// nvo
+printer
+.font('a')
+.align('ct')
+.style('b')
+.size(1, 1)
+/*.font('B').align('ct').style('b').size(1, 1)*/
+.text('HELADOS EUSTAKIO')
+.size(2, 2)
+.text(`ORDEN: #${nroFormateado}`)
+.font('B').align('ct').style('b').size(1, 1)  
+.text('--------------------------------')
+.font('A').align('ct').style('b').size(0, 0)
+                
+.align('lt').style('normal')
+.text(`Cliente: ${pedido.cliente || 'Mostrador'}`)
+.text(`Direccion: ${pedido.direccion || 'N/A'}`)
+.text(`Tel: ${pedido.telefono || 'N/A'}`)   
+.text(`Fecha: ${new Date().toLocaleString()}`)
+.font('B').align('ct').style('b').size(1, 1)
+.text('--------------------------------')
+.font('A').align('lt').style('b').size(0, 0)
+    
+    // Imprimir items
+    //////////////////////////
+// Imprimir items con precio y subtotal   
+if (pedido.items) {
+                pedido.items.forEach(item => {
+                    const nombreProd = `${item.title} ${item.category || ''}`.substring(0, 22);
+                    const precioUnitario = Number(item.price) || 0;
+                    const subtotalItem = (item.cantidad * precioUnitario).toFixed(2);
+                    printer.text(`${item.cantidad}x ${nombreProd} $${subtotalItem}`);
+                });
+            }
 
-// Imprimir items
-if (pedido.items && pedido.items.length > 0) {
+ // 2. Desglose de Totales (Antes del Total Final)
+            printer
+                .font('B').align('ct').style('b')
+                .text('---------------------------------------------')
+                .font('A').align('rt').style('normal'); // Alineado a la derecha para montos
+
+            // Subtotal (Suma de productos sin descuentos)
+            // Si no viene calculado del front, lo podemos omitir o enviarlo como pedido.subtotal
+            if (pedido.subtotal) {
+                printer.text(`Subtotal: $${pedido.subtotal}`);
+            }
+
+            // Descuento Cupón (Solo si existe)
+            if (pedido.descCupon && parseFloat(pedido.descCupon) > 0) {
+                printer.text(`Descuento Cupon: -$${pedido.descCupon}`);
+            }
+
+            // Descuento Efectivo (Solo si existe)
+            if (pedido.descEfectivo && parseFloat(pedido.descEfectivo) > 0) {
+                printer.text(`Desc. Efectivo: -$${pedido.descEfectivo}`);
+            }
+
+            // Costo de Envío
+            if (pedido.costoEnvio) {
+                printer.text(`Envio: $${pedido.costoEnvio}`);
+            }
+    ////////////////////
+    // 3. total final
+      printer
+/*.text('--------------------------------')
+.align('ct')
+.style('b')
+.size(1, 1)
+.text(`TOTAL: $${pedido.total || 0}`)
+.feed(3)
+.cut()*/
+    .font('B').align('ct').style('b').size(1, 1)
+    .text('---------------------------------------------')
+    .text(`TOTAL: ${pedido.total}`)
+    .feed(3)
+    .cut()      
+    .flush();
+
+setTimeout(() => {
+device.close();
+resolve(true);
+}, 2000);
+});
+} catch (e) {
+console.error("❌ Error en impresión:", e.message);
+resolve(false);
+    };
+});
+};
+////////////////////////////////////////////////
+
+/*if (pedido.items && pedido.items.length > 0) {
 pedido.items.forEach(item => {
 const nombreProd = (item.title || 'Producto').substring(0, 20);
 printer.text(`${item.cantidad || 1}x ${nombreProd}`);
@@ -79,7 +168,16 @@ console.error("❌ Error en impresión:", e.message);
 resolve(false);
 }
 });
-}
+}*/
+
+
+
+
+
+
+
+
+
 
 async function revisarPedidos() {
 try {
