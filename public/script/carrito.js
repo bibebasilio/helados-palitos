@@ -223,6 +223,7 @@ if (boton) {
     boton.style.opacity = "0.5";
 
     const nombre = document.getElementById("nombre")?.value.trim();
+    const apellido = document.getElementyById("apellido")?.value.trim();
     const direccion = document.getElementById("direccion")?.value.trim();
     const telefono = document.getElementById("telefono")?.value.trim();
     const comentario = document.getElementById("comentario")?.value.trim() || "Sin comentarios";
@@ -240,7 +241,7 @@ if (boton) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
     items: carrito,
-    cliente: nombre,
+    cliente: { nombre, apellido },
     direccion: direccion,
     telefono: telefono,
     comentario: comentario,
