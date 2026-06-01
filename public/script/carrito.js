@@ -148,8 +148,109 @@ function validarFormulario() {
     return faltantes;
 }
 
+
+// --- FUNCIONES DEL CARRITO ---
+
 async function enviarPedidoWhatsApp() {
+    // 1. Declaración obligatoria de la variable al inicio para evitar errores
     const boton = document.getElementById("btn-finalizar");
+    
+    // Verificación de existencia del botón
+    if (!boton) {
+        console.error("No se encontró el botón btn-finalizar");
+        return;
+    }
+
+    // 2. Ejecutar validación
+    const faltantes = validarFormulario();
+    if (faltantes.length > 0) {
+        return alert("Por favor, completa los campos: " + faltantes.join(", "));
+    }
+
+    // 3. Desactivar botón para evitar envíos múltiples
+    boton.disabled = true;
+    boton.innerText = "Procesando...";
+    
+    // Recopilación de datos
+    const nombre = document.getElementById("nombre")?.value.trim();
+    const direccion = document.getElementById("direccion")?.value.trim();
+    const telefono = document.getElementById("telefono")?.value.trim();
+    const comentario = document.getElementById("comentario")?.value.trim() || "Sin comentarios";
+    const finalTotalText = document.getElementById("final-total")?.innerText || "$0";
+    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+
+    try {
+        const response = await fetch("https://helados-palitos.onrender.com/api/confirmar-pedido", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                items: carrito,
+                cliente: nombre,
+                direccion: direccion,
+                telefono: telefono,
+                total: finalTotalText,
+                comentario: comentario,
+                pago: document.querySelector('input[name="metodo-pago"]:checked')?.value || "No especificado",
+                enviado: "pendiente",
+                entregado: "pendiente",
+                cancelado: "No",
+                impreso: false
+            }),
+        });
+
+        const resultado = await response.json();
+
+        if (resultado.success) {
+            // Se usa el nro que viene del backend (actualizado en tu index.js)
+            const nroParaWhatsApp = String(resultado.nro).padStart(4, '0');
+            
+            let productosTexto = carrito.map(p => `• ${p.title} ${p.category} (x${p.cantidad})`).join('\n');
+            
+            const texto = `*--- NUEVO PEDIDO #${nroParaWhatsApp} ---*\n\n` +
+            `*Cliente:* ${nombre}\n` +
+            `*Dirección:* ${direccion}\n` +
+            `*Teléfono:* ${telefono}\n` +
+            `*Comentario:* ${comentario}\n\n` +
+            `*Productos:*\n${productosTexto}\n\n` +
+            `*TOTAL:* ${finalTotalText}`;
+
+            const urlWA = `https://wa.me/5491138461130?text=${encodeURIComponent(texto)}`;
+
+            alert("¡Pedido #" + nroParaWhatsApp + " confirmado!");
+            localStorage.removeItem("carritoDeCompras");
+            
+            // Abrir WhatsApp y redirigir
+            window.open(urlWA, "_blank");
+            window.location.href = "index.html";
+        } else {
+            throw new Error(resultado.mensaje || "Error desconocido");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Error de conexión con el servidor Eustakio: " + err.message);
+        boton.disabled = false;
+        boton.innerText = "Finalizar Pedido";
+    }
+}
+/*async function enviarPedidoWhatsApp() {
+    // ESTO ES LO QUE FALTA O ESTÁ MAL
+    const boton = document.getElementById("btn-finalizar"); 
+    
+    // Ahora el código puede usar 'boton' sin problemas
+    if (!boton) {
+        console.error("No se encontró el botón btn-finalizar");
+        return;
+    }
+
+    const faltantes = validarFormulario();
+    if (faltantes.length > 0) {
+        return alert("Por favor, completa los campos: " + faltantes.join(", "));
+    }
+
+    // Ahora sí puedes desactivarlo
+    boton.disabled = true;
+    boton.innerText = "Procesando...";
+    /*const boton = document.getElementById("btn-finalizar");
     const faltantes = validarFormulario();
     
     if (faltantes.length > 0) {
@@ -197,4 +298,4 @@ async function enviarPedidoWhatsApp() {
         boton.disabled = false;
         boton.innerText = "Finalizar Pedido";
     }
-}
+}*/
