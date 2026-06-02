@@ -207,6 +207,96 @@ if (boton) {
 
     validarFormulario();
     }
+//////
+/*async function confirmarPedidoEnServidor() {
+    // Obtenemos el carrito real desde el localStorage
+    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    
+    // Obtenemos los valores de los inputs (ajusta los IDs si tus inputs tienen otros IDs)
+    const nombre = document.getElementById("nombre")?.value || "Anónimo";
+    const totalFinal = document.getElementById("final-total")?.innerText.replace("$", "") || 0;
+    const metodoPago = document.querySelector('input[name="metodo-pago"]:checked')?.value || "EFECTIVO";
+
+    const datosPedido = {
+        cliente: nombre,
+        total: parseFloat(totalFinal),
+        pago: metodoPago,
+        items: carrito
+    };
+
+    try {
+        const response = await fetch('/api/confirmar-pedido', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datosPedido)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert(`¡Pedido confirmado! Nro: ${data.nro}`);
+            
+            // Restar stock
+            await fetch('/api/productos/restar-stock', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: carrito })
+            });
+
+            localStorage.removeItem("carritoDeCompras");
+            window.location.reload(); 
+        } else {
+            alert("Error al guardar el pedido: " + (data.mensaje || "Error desconocido"));
+        }
+    } catch (error) {
+        console.error('Error al confirmar pedido:', error);
+        alert('Hubo un problema de conexión con el servidor.');
+    }
+}*/
+
+
+///////
+/*async function confirmarPedidoEnServidor() {
+    // 1. Preparamos los datos tal como los espera tu index.js
+    const datosPedido = {
+        cliente: document.getElementById('nombre-cliente')?.value || "Anónimo", // Ajusta el ID según tu HTML
+        total: carrito.reduce((acc, item) => acc + (item.price * item.cantidad), 0),
+        pago: "EFECTIVO", // O el valor que selecciones en tu formulario
+        items: carrito
+    };
+
+    try {
+        // 2. Llamada al endpoint que ya tienes creado en index.js
+        const response = await fetch('/api/confirmar-pedido', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datosPedido)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert(`Pedido confirmado! Nro: ${data.nro}`);
+            
+            // 3. Opcional: Llamar también a la ruta de restar stock que creaste en index.js
+            await fetch('/api/productos/restar-stock', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: carrito })
+            });
+
+            localStorage.removeItem('carrito');
+            location.reload(); 
+        }
+    } catch (error) {
+        console.error('Error al confirmar pedido:', error);
+    }
+}*/
+
+///////
+
+
+
 
     async function enviarPedidoWhatsApp() {
     const boton = document.getElementById("btn-finalizar");
@@ -236,6 +326,7 @@ if (boton) {
     const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
     try {
+<<<<<<< HEAD
     const response = await fetch("/api/confirmar-pedido", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -254,6 +345,27 @@ if (boton) {
     fecha: new Date(),
     impreso: false
     }),
+=======
+        const response = await fetch("https://helados-palitos.onrender.com/api/confirmar-pedido", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+        items: carrito,
+        cliente: nombre,
+        direccion: direccion,
+        telefono: telefono,
+        subtotal,
+        descCupon,
+        descEfectivo,
+        costoEnvio,
+        total: finalTotalText,
+        pago: "pendiente",
+        enviado: "pendiente",
+        entregado: "pendiente",
+        cancelado: "No",
+        impreso: false
+        }),
+>>>>>>> d433471 (Limpieza y restauracion de version 29 mayo)
     });
 
     const resultado = await response.json();

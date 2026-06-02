@@ -40,25 +40,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //////////////////////////////////////
 
-// Esta ruta la consultará tu PC cada 15 segundos
-app.get('/api/pedidos/pendientes', (req, res) => {
-    const pendientes = pedidos.filter(p => p.impreso === false);
-    res.json(pendientes);
-});
+//------------////////////-- Esta ruta la consultará tu PC cada 15 segundos
+//app.get('/api/pedidos/pendientes', (req, res) => {
+//    const pendientes = pedidos.filter(p => p.impreso === false);
+//    res.json(pendientes);
+//});
 
-// Esta ruta la llamará tu PC después de que la térmica saque el papel
-app.post('/api/pedidos/marcar-impreso/:id', (req, res) => {
-    const { id } = req.params;
-    const pedido = pedidos.find(p => p.id == id);
+//---------------///////////// Esta ruta la llamará tu PC después de que la térmica saque el papel
+//app.post('/api/pedidos/marcar-impreso/:id', (req, res) => {
+//    const { id } = req.params;
+//    const pedido = pedidos.find(p => p.id == id);
     
-    if (pedido) {
-        pedido.impreso = true; // Lo marcamos para que no se duplique
-        console.log(`Pedido ${id} marcado como impreso.`);
-        res.status(200).send("OK");
-    } else {
-        res.status(404).send("Pedido no encontrado");
-    }
-});
+//    if (pedido) {
+//        pedido.impreso = true; // Lo marcamos para que no se duplique
+//        console.log(`Pedido ${id} marcado como impreso.`);
+//        res.status(200).send("OK");
+//    } else {
+//        res.status(404).send("Pedido no encontrado");
+//    }
+//});
 
 
 ////////////////////////////////////////////

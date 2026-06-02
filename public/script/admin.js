@@ -52,4 +52,5 @@ const data = await res.json();
 if (data.success) alert("¡Inventario actualizado correctamente!");
 }
 
-await cargarDatos();
+//await cargarDatos();
+    

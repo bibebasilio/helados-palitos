@@ -3,102 +3,21 @@
     <meta charset="UTF-8">
     <title>Productos y Dashboard - Admin</title>
     <style>
-      /*  body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; color: #333; }
         .section { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
         .stat-card { background: #e9ecef; padding: 15px; border-radius: 8px; border-left: 5px solid #007bff; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .stat-card h3 { margin: 0; font-size: 0.9em; color: #666; }
+        .stat-card p { margin: 5px 0 0; font-size: 1.4em; font-weight: bold; color: #222; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; font-size: 0.9em; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background: #007bff; color: white; }
-        .stock-bajo { background-color: #ffebeb !important; }
-        .btn-save { background: #28a745; color: white; padding: 10px; border: none; cursor: pointer; border-radius: 4px; }
+        th { background: #007bff; color: white; position: sticky; top: 0; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .stock-bajo { background-color: #ffebeb !important; border-left: 4px solid #dc3545; }
+        input { padding: 6px; border: 1px solid #ccc; border-radius: 4px; width: 90%; }
+        .btn-save { background: #28a745; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
         .nav-links { margin-bottom: 20px; }
         .nav-links a { text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; }
-        input { padding: 4px; width: 90%; }*/
-
-        
- 
-
-        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; color: #333; }
-
-        .section { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-
-       
-
-        /* Dashboard de Stats */
-
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
-
-        .stat-card { background: #e9ecef; padding: 15px; border-radius: 8px; border-left: 5px solid #007bff; }
-
-        .stat-card h3 { margin: 0; font-size: 0.9em; color: #666; }
-
-        .stat-card p { margin: 5px 0 0; font-size: 1.4em; font-weight: bold; color: #222; }
-
-
-
-        /* Filtros de Reportes */
-
-        .filters-container {
-
-            display: flex; gap: 10px; flex-wrap: wrap; background: #f8f9fa;
-
-            padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;
-
-        }
-
-        .filter-group { display: flex; flex-direction: column; gap: 5px; }
-
-        .filter-group label { font-size: 0.75em; font-weight: bold; text-transform: uppercase; color: #555; }
-
-        .btn-report { background: #17a2b8; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; align-self: flex-end; font-weight: bold; }
-
-        .btn-export { background: #28a745 !important; }
-
-
-
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; font-size: 0.9em; }
-
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-
-        th { background: #007bff; color: white; position: sticky; top: 0; }
-
-        tr:nth-child(even) { background-color: #f9f9f9; }
-
-       
-
-        .stock-bajo { background-color: #ffebeb !important; border-left: 4px solid #dc3545; }
-
-        .stock-label { color: #dc3545; font-weight: bold; font-size: 0.8em; }
-
-
-
-        input, select { padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
-
-        .btn-save { background: #28a745; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 4px; font-weight: bold; }
-
-        .badge-ventas { background: #6f42c1; color: white; padding: 3px 8px; border-radius: 10px; font-weight: bold; }
-
-        .pedido-card { border-left: 5px solid #17a2b8; padding: 15px; margin: 10px 0; background: #f8fdff; border-radius: 4px; border-bottom: 1px solid #eee; }
-
-
-
-        @media print {
-
-            .no-print, button, input, select, .btn-save, #form-nuevo, .filters-container { display: none !important; }
-
-            body { background: white; padding: 0; }
-
-            .section { box-shadow: none; border: none; }
-
-        }
-
-   
-
-
-
-
-       
     </style>
 </head>
 <body>
@@ -121,10 +40,11 @@
         <button onclick="document.getElementById('form-nuevo').style.display='block'" style="background:#007bff; color:white; border:none; padding:10px; cursor:pointer; border-radius:4px;">+ Nuevo Producto</button>
         
         <div id="form-nuevo" style="display:none; margin-top:15px; padding: 20px; border: 2px dashed #007bff;">
-            <input type="text" id="new-title" placeholder="Título">
-            <input type="number" id="new-price" placeholder="Precio">
-            <input type="number" id="new-stock" placeholder="Stock">
-            <button class="btn-save" onclick="crearProducto()">Confirmar Alta</button>
+            <input type="text" id="new-title" placeholder="Título" style="margin-bottom:10px; display:block;">
+            <input type="number" id="new-price" placeholder="Precio" style="margin-bottom:10px; display:block;">
+            <input type="number" id="new-stock" placeholder="Stock" style="margin-bottom:10px; display:block;">
+            <button class="btn-save" onclick="crearProducto()">Confirmar Alta en MongoDB</button>
+            <button onclick="document.getElementById('form-nuevo').style.display='none'" style="background:#666; color:white; border:none; padding:10px; border-radius:4px; margin-left:10px;">Cancelar</button>
         </div>
     </div>
 
@@ -149,25 +69,31 @@
     <script>
         let productosLocales = [];
 
+        // Cambiamos a rutas relativas (sin http://localhost:3000) para que funcione en Render
         async function cargarDatos() {
-            const resProd = await fetch('http://localhost:3000/api/admin/productos');
-            productosLocales = await resProd.json();
-            renderizarProductos(productosLocales);
+            try {
+                const resProd = await fetch('/api/admin/productos');
+                productosLocales = await resProd.json();
+                renderizarProductos(productosLocales);
 
-            const resPed = await fetch('http://localhost:3000/api/admin/pedidos');
-            const pedidos = await resPed.json();
-            actualizarDashboard(pedidos);
+                const resPed = await fetch('/api/admin/pedidos');
+                const pedidos = await resPed.json();
+                actualizarDashboard(pedidos);
+            } catch (error) {
+                console.error("Error cargando datos:", error);
+            }
         }
 
         function renderizarProductos(productos) {
             const tbody = document.querySelector('#tabla-productos tbody');
+            // IMPORTANTE: Cambié p.id por p._id que es como lo guarda MongoDB
             tbody.innerHTML = productos.map(p => `
-                <tr class="${p.stock < 5 ? 'stock-bajo' : ''}" data-id="${p.id}">
+                <tr class="${p.stock < 5 ? 'stock-bajo' : ''}" data-id="${p._id}">
                     <td><input type="text" class="edit-title" value="${p.title}"></td>
                     <td><input type="number" class="edit-price" value="${p.price}"></td>
                     <td><input type="number" class="edit-stock" value="${p.stock}"></td>
                     <td style="text-align:center;">${p.ventas || 0}</td>
-                    <td><button onclick="eliminarProducto('${p.id}')">🗑️</button></td>
+                    <td><button onclick="eliminarProducto('${p._id}')">🗑️</button></td>
                 </tr>
             `).join('');
         }
@@ -175,10 +101,10 @@
         function actualizarDashboard(pedidos) {
             const hoy = new Date().toLocaleDateString();
             const totalHoy = pedidos
-                .filter(p => new Date(p.fecha).toLocaleDateString() === hoy && p.cancelado === 'No')
-                .reduce((sum, p) => sum + parseFloat(p.total.replace('$', '') || 0), 0);
+                .filter(p => new Date(p.fecha).toLocaleDateString() === hoy)
+                .reduce((sum, p) => sum + (parseFloat(p.total) || 0), 0);
             
-            document.getElementById('ventas-hoy').innerText = `$${totalHoy.toFixed(2)}`;
+            document.getElementById('ventas-hoy').innerText = `$${totalHoy.toLocaleString('es-AR')}`;
             const stockBajo = productosLocales.filter(p => p.stock < 5).length;
             document.getElementById('count-reponer').innerText = `${stockBajo} productos`;
             
@@ -189,17 +115,55 @@
         async function guardarCambios() {
             const filas = document.querySelectorAll('tbody tr');
             const data = Array.from(filas).map(f => ({
-                id: f.dataset.id,
+                _id: f.dataset.id,
                 title: f.querySelector('.edit-title').value,
                 price: parseFloat(f.querySelector('.edit-price').value),
                 stock: parseInt(f.querySelector('.edit-stock').value)
             }));
-            await fetch('http://localhost:3000/api/update-products', {
+
+            const res = await fetch('/api/admin/update-products', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
             });
-            alert("Inventario actualizado");
+
+            if(res.ok) alert("✅ Inventario actualizado en MongoDB");
+            else alert("❌ Error al actualizar");
+            cargarDatos();
+        }
+
+        async function crearProducto() {
+            const title = document.getElementById('new-title').value;
+            const price = document.getElementById('new-price').value;
+            const stock = document.getElementById('new-stock').value;
+
+            if (!title || !price || !stock) {
+                alert("Completa todos los campos");
+                return;
+            }
+
+            const res = await fetch('/api/admin/nuevo-producto', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, price, stock })
+            });
+
+            if (res.ok) {
+                alert("✅ ¡Producto creado!");
+                document.getElementById('form-nuevo').style.display = 'none';
+                cargarDatos();
+            } else {
+                alert("❌ Error al crear");
+            }
+        }
+
+        async function eliminarProducto(id) {
+            if(!confirm("¿Borrar este producto de MongoDB?")) return;
+            const res = await fetch(`/api/admin/productos/${id}`, { method: 'DELETE' });
+            if(res.ok) {
+                alert("Eliminado");
+                cargarDatos();
+            }
         }
 
         cargarDatos();

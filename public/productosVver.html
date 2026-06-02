@@ -207,7 +207,20 @@
             async function cargarDatos() {
                 try {
                     const resProd = await fetch('http://localhost:3000/api/admin/productos');
-                    productosLocales = await resProd.json();
+                  /// productosLocales = await resProd.json();
+                  let productos = await resProd.json();
+
+                    // Lógica de ordenamiento: Formato (title), luego Sabor (category), luego Clase (clase)
+                    productos.sort((a, b) => {
+                        // Ordenar por Formato (title)
+                        if (a.title !== b.title) return a.title.localeCompare(b.title);
+                        // Si el formato es igual, ordenar por Sabor (category)
+                        if (a.category !== b.category) return a.category.localeCompare(b.category);
+                        // Si el sabor es igual, ordenar por Clase (clase)
+                        return (a.clase || "").localeCompare(b.clase || "");
+                    });
+                    
+                    productosLocales = productos;
                     renderizarProductos(productosLocales);
 
                     const resPed = await fetch('http://localhost:3000/api/admin/pedidos');
@@ -218,27 +231,92 @@
                 }
             }
 
-            function renderizarProductos(productos) {
-                const tbody = document.querySelector('#tabla-productos tbody');
-                let filas = '';
-                productos.forEach(p => {
-                    //filas += '<tr class="fila-producto ' + (p.stock < 5 ? 'stock-bajo' : '') + '" data-id="' + p.id + '">';
-                    // Por esto (usando _id que viene de MongoDB):
-                    filas += '<tr class="fila-producto ' + (p.stock < 5 ? 'stock-bajo' : '') + '" data-id="' + (p._id || p.id) + '">';
-                    filas += '<td><input type="text" class="edit-image" value="' + (p.image || '') + '"></td>';
-                    filas += '<td><input type="text" class="edit-title" value="' + (p.title || '') + '"></td>';
-                    filas += '<td><input type="text" class="edit-category" value="' + (p.category || '') + '"></td>';
-                    filas += '<td><input type="text" class="edit-clase" value="' + (p.clase || '') + '"></td>';
-                    filas += '<td><input type="number" step="0.01" class="edit-price" value="' + (p.price || 0) + '"></td>';
-                    filas += '<td><input type="number" style="width: 50px;" class="edit-stock" value="' + (p.stock || 0) + '"></td>';
-                    filas += '<td style="text-align:center;"><span class="badge-ventas">' + (p.ventas || 0) + '</span></td>';
-                    filas += '<td class="no-print">';
-                    filas += '<button onclick="eliminarProducto(\'' + p._id + '\')" style="background:#dc3545; color:white; border:none; padding:5px; cursor:pointer; border-radius:4px;">Eliminar</button>';
-                    filas += '</td>';
-                    filas += '</tr>';
-                });
-                tbody.innerHTML = filas;
-            }
+        /*    function renderizarProductos(productos) {
+               const tbody = document.querySelector('#tabla-productos tbody');
+                // Asegúrate de usar p._id (si viene de MongoDB) o p.id
+                tbody.innerHTML = productos.map(p => {
+                    const idProducto = p._id || p.id; // ¡Muy importante!
+                    return `
+                        <tr class="fila-producto ${p.stock < 5 ? 'stock-bajo' : ''}" data-id="${p.id}">
+                     
+                        <td><input type="text" class="edit-image" value="${p.image || ''}"></td>
+                        <td><input type="text" class="edit-title" value="${p.title || ''}"></td>
+                        <td><input type="text" class="edit-category" value="${p.category || ''}"></td>
+                        <td><input type="text" class="edit-clase" value="${p.clase || ''}"></td>
+                        <td><input type="number" step="0.01" class="edit-price" value="${p.price || 0}"></td>
+                        <td><input type="number" style="width: 50px;" class="edit-stock" value="${p.stock || 0}"></td>
+                        <td style="text-align:center;"><span class="badge-ventas">${p.ventas || 0}</span></td>
+                        <td class="no-print">
+                        
+                            <button onclick="eliminarProducto('${idProducto}')" style="background:#dc3545; color:white; border:none; padding:5px; cursor:pointer; border-radius:4px;">Eliminar</button> 
+                        </td>
+                        </tr>
+                `;  
+                     }).join('');  
+          }*/
+          ////////////
+                        function renderizarProductos(productos) {
+    const tbody = document.querySelector('#tabla-productos tbody');
+    tbody.innerHTML = productos.map(p => {
+        // Aseguramos que el ID siempre sea el identificador real (prefiriendo _id de Mongo)
+        const idReal = p._id || p.id;
+        
+        return `
+            <tr class="fila-producto ${p.stock < 5 ? 'stock-bajo' : ''}" data-id="${idReal}">
+                <td><input type="text" class="edit-image" value="${p.image || ''}"></td>
+                <td><input type="text" class="edit-title" value="${p.title || ''}"></td>
+                <td><input type="text" class="edit-category" value="${p.category || ''}"></td>
+                <td><input type="text" class="edit-clase" value="${p.clase || ''}"></td>
+                <td><input type="number" step="0.01" class="edit-price" value="${p.price || 0}"></td>
+                <td><input type="number" style="width: 50px;" class="edit-stock" value="${p.stock || 0}"></td>
+                <td style="text-align:center;"><span class="badge-ventas">${p.ventas || 0}</span></td>
+                <td class="no-print">
+                    <button onclick="eliminarProducto('${idReal}')" style="background:#dc3545; color:white; border:none; padding:5px; cursor:pointer; border-radius:4px;">Eliminar</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+async function guardarCambios() {
+    const filas = document.querySelectorAll('tbody tr');
+    const data = Array.from(filas).map(f => ({
+        id: f.dataset.id, // Esto leerá el data-id correcto que pusimos arriba
+        image: f.querySelector('.edit-image').value,
+        title: f.querySelector('.edit-title').value,
+        category: f.querySelector('.edit-category').value,
+        clase: f.querySelector('.edit-clase').value,
+        price: parseFloat(f.querySelector('.edit-price').value),
+        stock: parseInt(f.querySelector('.edit-stock').value)
+    }));
+
+    try {
+        const res = await fetch('http://localhost:3000/api/update-products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+            alert("Inventario actualizado correctamente");
+            cargarDatos();
+        } else {
+            alert("Error al guardar en el servidor");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("No se pudo conectar con el servidor");
+    }
+}
+
+
+
+
+
+
+
+
+          ///////////
 
             async function crearProducto() {
                 const nuevo = {
@@ -263,113 +341,72 @@
                 } else {
                     alert("Error al agregar producto");
                 }
-            };
-      /////////////////////////////
-     async function guardarCambios() {
-    const filas = document.querySelectorAll('tbody tr');
-    
-    // Convertimos a array y extraemos datos
-    const data = Array.from(filas).map(f => {
-        const item = {
-            id: f.dataset.id, // Esto debe coincidir con el data-id del <tr>
-            image: f.querySelector('.edit-image').value,
-            title: f.querySelector('.edit-title').value,
-            category: f.querySelector('.edit-category').value,
-            clase: f.querySelector('.edit-clase').value,
-            price: Number.parseFloat(f.querySelector('.edit-price').value),
-            stock: Number.parseInt(f.querySelector('.edit-stock').value)
-        };
-        return item;
-    });
+            }
 
-    console.log("Datos capturados para guardar:", data); // <--- ESTO ES CLAVE
-
-    // Verificamos si hay IDs undefined
-    if (data.some(p => !p.id)) {
-        alert("¡Error! Algunos productos no tienen ID. Revisa el renderizado.");
-        return;
-    }
-
-    try {
-        const res = await fetch('http://localhost:3000/api/update-products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-
-        if (res.ok) {
-            alert("Inventario actualizado correctamente");
-            cargarDatos();
-        } else {
-            const errorMsg = await res.text();
-            alert("Error al guardar: " + errorMsg);
-        }
-    } catch (err) {
-        console.error("Error de conexión:", err);
-    }
-} 
-      
-                                                
-///////////////////////</input>
-            async function guardarCambios() {
+           /* async function guardarCambios() {
                 const filas = document.querySelectorAll('tbody tr');
-                                        
-                const data= Array.from(filas).map(f => ({
-                    id: f.dataset.id, // Esto ahora tomará el _id correctamente gracias al cambio anterior
+                const data = Array.from(filas).map(f => ({
+                    id: f.dataset.id,
                     image: f.querySelector('.edit-image').value,
                     title: f.querySelector('.edit-title').value,
                     category: f.querySelector('.edit-category').value,
                     clase: f.querySelector('.edit-clase').value,
-                    price: Number.parseFloat(f.querySelector('.edit-price').value),
-                    stock: Number.parseInt(f.querySelector('.edit-stock').value)
+                    price: parseFloat(f.querySelector('.edit-price').value),
+                    stock: parseInt(f.querySelector('.edit-stock').value)
                 }));
-                // DEBUG: Mira esto en la consola (F12) al pulsar el botón
-                console.log("Enviando al servidor:", data);
-/////////
-                try {
-                    const res = await fetch('http://localhost:3000/api/update-products', {
+
+                const res = await fetch('http://localhost:3000/api/update-products', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
 
-                    if (res.ok) {
-                       alert("Inventario actualizado correctamente");
-                       cargarDatos(); // Esto refrescará la tabla
-                    } else {
-                       const err = await res.text();
-                        alert("Error del servidor: " + err);
-                    }
-                } catch (err) {
-                    console.error("Error de conexión:", err);
+                if (res.ok) {
+                    alert("Inventario actualizado");
+                    cargarDatos();
+                } else {
+                    alert("Error al guardar cambios");
                 }
-            }
-
- /////////////////////////////////////////////////////////////////////               
-               /* try {                         
-                    const res = await fetch('http://localhost:3000/api/update-products', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data)
-                    });
-
-                    if (res.ok) {
-                        alert("Inventario actualizado correctamente");
-                        cargarDatos();
-                    } else {
-                        const err = await res.text()
-                        alert("Error del servidor: " + err););
-                    }
-                } catch (error) {
-                     console.error("Error de conexión:", err);)
-
             }*/
-///////////////////////////////////////////////////
-            async function eliminarProducto(id) {
+////////////////////////
+    async function eliminarProducto(id) {
+        // Verificamos que el ID exista
+        if (!id || id === 'undefined') {
+            alert("Error: ID de producto no válido.");
+            return;
+        }
+
+        if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
+
+        try {
+            const res = await fetch(`http://localhost:3000/api/admin/productos/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (res.ok) {
+                alert("Producto eliminado");
+                cargarDatos(); // Recargar tabla
+            } else {
+                alert("Error al eliminar en el servidor");
+            }
+        } catch (e) {
+            console.error("Error al borrar:", e);
+        }
+      }
+   
+
+/////////////////////////////////////
+         /*   async function eliminarProducto(id) {
+                // Verificamos que el ID exista
+                if (!id || id === 'undefined') {
+                    alert("Error: ID de producto no válido.");
+                    return;
+                }
+                
                 if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
                 await fetch(`http://localhost:3000/api/admin/productos/${id}`, { method: 'DELETE' });
                 cargarDatos();
-            }
+            }*/
 
             function actualizarDashboard(pedidos) {
                 const hoy = new Date().toLocaleDateString();
@@ -387,7 +424,8 @@
 
             cargarDatos();
         /////////////////////////////////////////////
-    </script>
+        </script>
+    
     
 </body>
 </html>

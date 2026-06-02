@@ -32,15 +32,36 @@ const nroOriginal = pedido.nroPedido || '0';
 const nroFormateado = String(nroOriginal).padStart(3, '0');
 
 console.log(`🖨️ Imprimiendo Orden #${nroFormateado}...`);
+<<<<<<< HEAD
 
 /*printer
+=======
+///////////////////////////////// nvo
+printer
+>>>>>>> d433471 (Limpieza y restauracion de version 29 mayo)
 .font('a')
 .align('ct')
 .style('b')
 .size(1, 1)
+/*.font('B').align('ct').style('b').size(1, 1)*/
 .text('HELADOS EUSTAKIO')
 .size(2, 2)
 .text(`ORDEN: #${nroFormateado}`)
+.font('B').align('ct').style('b').size(1, 1)  
+.text('--------------------------------')
+.font('A').align('ct').style('b').size(0, 0)
+                
+.align('lt').style('normal')
+.text(`Cliente: ${pedido.cliente || 'Mostrador'}`)
+.text(`Direccion: ${pedido.direccion || 'N/A'}`)
+.text(`Tel: ${pedido.telefono || 'N/A'}`)   
+.text(`Fecha: ${new Date().toLocaleString()}`)
+.font('B').align('ct').style('b').size(1, 1)
+.text('--------------------------------')
+.font('A').align('lt').style('b').size(0, 0)
+    
+    
+/*.font('A').align('ct').style('b').size(0, 0)    
 .size(1, 1)
 .text('--------------------------------')
 .align('lt')
@@ -50,6 +71,7 @@ console.log(`🖨️ Imprimiendo Orden #${nroFormateado}...`);
 .text(`Direccion: ${pedido.direccion || 'N/A'}`)
 .text(`Tel: ${pedido.telefono || 'N/A'}`)
 .text('--------------------------------');*/
+<<<<<<< HEAD
 ///////////////////////////////// nvo
 printer
 .font('a')
@@ -141,22 +163,129 @@ resolve(false);
 };
 ////////////////////////////////////////////////
 
+=======
+    
+     // 1. Listado de Productos
+////////////////////////////////////////////////  A - 
+// Imprimir items
+>>>>>>> d433471 (Limpieza y restauracion de version 29 mayo)
 /*if (pedido.items && pedido.items.length > 0) {
 pedido.items.forEach(item => {
 const nombreProd = (item.title || 'Producto').substring(0, 20);
 printer.text(`${item.cantidad || 1}x ${nombreProd}`);
 });
-}
+    }*/
+    /////////////////////////////////////////////////  AA - 
+ // Imprimir items con precio y subtotal   
+if (pedido.items) {
+                pedido.items.forEach(item => {
+                    const nombreProd = `${item.title} ${item.category || ''}`.substring(0, 22);
+                    const precioUnitario = Number(item.price) || 0;
+                    const subtotalItem = (item.cantidad * precioUnitario).toFixed(2);
+                    printer.text(`${item.cantidad}x ${nombreProd} $${subtotalItem}`);
+                });
+            }
 
-printer
-.text('--------------------------------')
+ // 2. Desglose de Totales (Antes del Total Final)
+            printer
+                .font('B').align('ct').style('b')
+                .text('---------------------------------------------')
+                .font('A').align('rt').style('normal'); // Alineado a la derecha para montos
+
+            // Subtotal (Suma de productos sin descuentos)
+            // Si no viene calculado del front, lo podemos omitir o enviarlo como pedido.subtotal
+            if (pedido.subtotal) {
+                printer.text(`Subtotal: $${pedido.subtotal}`);
+            }
+
+            // Descuento Cupón (Solo si existe)
+            if (pedido.descCupon && parseFloat(pedido.descCupon) > 0) {
+                printer.text(`Descuento Cupon: -$${pedido.descCupon}`);
+            }
+
+            // Descuento Efectivo (Solo si existe)
+            if (pedido.descEfectivo && parseFloat(pedido.descEfectivo) > 0) {
+                printer.text(`Desc. Efectivo: -$${pedido.descEfectivo}`);
+            }
+
+            // Costo de Envío
+            if (pedido.costoEnvio) {
+                printer.text(`Envio: $${pedido.costoEnvio}`);
+            }
+
+
+//////////////////////////////////////////////////////// abajo 
+ /*          printer
+                .font('B').align('ct').style('b').size(1, 1)
+                .text('NUEVO PEDIDO')
+                .text(`ORDEN: #${pedido.idPedido || 'N/A'}`) 
+                .text('--------------------------------')
+                .font('A').align('ct').style('b').size(0, 0)
+                
+                .align('lt').style('normal')
+                .text(`Cliente: ${pedido.cliente || 'Mostrador'}`)
+                .text(`Fecha: ${new Date().toLocaleString()}`)
+                .font('B').align('ct').style('b').size(1, 1)
+                .text('--------------------------------')
+                .font('A').align('lt').style('b').size(0, 0)
+
+            // 1. Listado de Productos
+            if (pedido.items) {
+                pedido.items.forEach(item => {
+                    const nombreProd = `${item.title} ${item.category || ''}`.substring(0, 22);
+                    const precioUnitario = Number(item.price) || 0;
+                    const subtotalItem = (item.cantidad * precioUnitario).toFixed(2);
+                    printer.text(`${item.cantidad}x ${nombreProd} $${subtotalItem}`);
+                });
+            }
+
+            // 2. Desglose de Totales (Antes del Total Final)
+            printer
+                .font('B').align('ct').style('b')
+                .text('---------------------------------------------')
+                .font('A').align('rt').style('normal'); // Alineado a la derecha para montos
+
+            // Subtotal (Suma de productos sin descuentos)
+            // Si no viene calculado del front, lo podemos omitir o enviarlo como pedido.subtotal
+            if (pedido.subtotal) {
+                printer.text(`Subtotal: $${pedido.subtotal}`);
+            }
+
+            // Descuento Cupón (Solo si existe)
+            if (pedido.descCupon && parseFloat(pedido.descCupon) > 0) {
+                printer.text(`Descuento Cupon: -$${pedido.descCupon}`);
+            }
+
+            // Descuento Efectivo (Solo si existe)
+            if (pedido.descEfectivo && parseFloat(pedido.descEfectivo) > 0) {
+                printer.text(`Desc. Efectivo: -$${pedido.descEfectivo}`);
+            }
+
+            // Costo de Envío
+            if (pedido.costoEnvio) {
+                printer.text(`Envio: $${pedido.costoEnvio}`);
+            }*/
+
+
+
+
+    
+    //////////////////////////////////////////////////
+    //3 .Total Final
+    printer
+/*.text('--------------------------------')
 .align('ct')
 .style('b')
 .size(1, 1)
 .text(`TOTAL: $${pedido.total || 0}`)
 .feed(3)
-.cut()
-.flush();
+.cut()*/
+    .font('B').align('ct').style('b').size(1, 1)
+    .text('---------------------------------------------')
+    .text(`TOTAL: ${pedido.total}`)
+    .feed(3)
+    .cut()      
+    .flush();
 
 setTimeout(() => {
 device.close();
@@ -166,8 +295,9 @@ resolve(true);
 } catch (e) {
 console.error("❌ Error en impresión:", e.message);
 resolve(false);
-}
+    };
 });
+<<<<<<< HEAD
 }*/
 
 
@@ -178,7 +308,14 @@ resolve(false);
 
 
 
+=======
+};
+////////////////////////////////////////////////
+>>>>>>> d433471 (Limpieza y restauracion de version 29 mayo)
 
+
+
+///////////////////////////////////////////////////////
 async function revisarPedidos() {
 try {
 // CAMBIO: La ruta correcta para el polling en tu index.js es /api/proximo-ticket
