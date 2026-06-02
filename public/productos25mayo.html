@@ -220,24 +220,20 @@
 
             function renderizarProductos(productos) {
                 const tbody = document.querySelector('#tabla-productos tbody');
-                let filas = '';
-                productos.forEach(p => {
-                    //filas += '<tr class="fila-producto ' + (p.stock < 5 ? 'stock-bajo' : '') + '" data-id="' + p.id + '">';
-                    // Por esto (usando _id que viene de MongoDB):
-                    filas += '<tr class="fila-producto ' + (p.stock < 5 ? 'stock-bajo' : '') + '" data-id="' + (p._id || p.id) + '">';
-                    filas += '<td><input type="text" class="edit-image" value="' + (p.image || '') + '"></td>';
-                    filas += '<td><input type="text" class="edit-title" value="' + (p.title || '') + '"></td>';
-                    filas += '<td><input type="text" class="edit-category" value="' + (p.category || '') + '"></td>';
-                    filas += '<td><input type="text" class="edit-clase" value="' + (p.clase || '') + '"></td>';
-                    filas += '<td><input type="number" step="0.01" class="edit-price" value="' + (p.price || 0) + '"></td>';
-                    filas += '<td><input type="number" style="width: 50px;" class="edit-stock" value="' + (p.stock || 0) + '"></td>';
-                    filas += '<td style="text-align:center;"><span class="badge-ventas">' + (p.ventas || 0) + '</span></td>';
-                    filas += '<td class="no-print">';
-                    filas += '<button onclick="eliminarProducto(\'' + p._id + '\')" style="background:#dc3545; color:white; border:none; padding:5px; cursor:pointer; border-radius:4px;">Eliminar</button>';
-                    filas += '</td>';
-                    filas += '</tr>';
-                });
-                tbody.innerHTML = filas;
+                tbody.innerHTML = productos.map(p => `
+            <tr class="fila-producto ${p.stock < 5 ? 'stock-bajo' : ''}" data-id="${p.id}">
+                <td><input type="text" class="edit-image" value="${p.image || ''}"></td>
+                <td><input type="text" class="edit-title" value="${p.title || ''}"></td>
+                <td><input type="text" class="edit-category" value="${p.category || ''}"></td>
+                <td><input type="text" class="edit-clase" value="${p.clase || ''}"></td>
+                <td><input type="number" step="0.01" class="edit-price" value="${p.price || 0}"></td>
+                <td><input type="number" style="width: 50px;" class="edit-stock" value="${p.stock || 0}"></td>
+                <td style="text-align:center;"><span class="badge-ventas">${p.ventas || 0}</span></td>
+                <td class="no-print">
+                    <button onclick="eliminarProducto('${p.id}')" style="background:#dc3545; color:white; border:none; padding:5px; cursor:pointer; border-radius:4px;">Eliminar</button>
+                </td>
+            </tr>
+        `).join('');
             }
 
             async function crearProducto() {
@@ -263,108 +259,34 @@
                 } else {
                     alert("Error al agregar producto");
                 }
-            };
-      /////////////////////////////
-     async function guardarCambios() {
-    const filas = document.querySelectorAll('tbody tr');
-    
-    // Convertimos a array y extraemos datos
-    const data = Array.from(filas).map(f => {
-        const item = {
-            id: f.dataset.id, // Esto debe coincidir con el data-id del <tr>
-            image: f.querySelector('.edit-image').value,
-            title: f.querySelector('.edit-title').value,
-            category: f.querySelector('.edit-category').value,
-            clase: f.querySelector('.edit-clase').value,
-            price: Number.parseFloat(f.querySelector('.edit-price').value),
-            stock: Number.parseInt(f.querySelector('.edit-stock').value)
-        };
-        return item;
-    });
+            }
 
-    console.log("Datos capturados para guardar:", data); // <--- ESTO ES CLAVE
-
-    // Verificamos si hay IDs undefined
-    if (data.some(p => !p.id)) {
-        alert("¡Error! Algunos productos no tienen ID. Revisa el renderizado.");
-        return;
-    }
-
-    try {
-        const res = await fetch('http://localhost:3000/api/update-products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-
-        if (res.ok) {
-            alert("Inventario actualizado correctamente");
-            cargarDatos();
-        } else {
-            const errorMsg = await res.text();
-            alert("Error al guardar: " + errorMsg);
-        }
-    } catch (err) {
-        console.error("Error de conexión:", err);
-    }
-} 
-      
-                                                
-///////////////////////</input>
             async function guardarCambios() {
                 const filas = document.querySelectorAll('tbody tr');
-                                        
-                const data= Array.from(filas).map(f => ({
-                    id: f.dataset.id, // Esto ahora tomará el _id correctamente gracias al cambio anterior
+                const data = Array.from(filas).map(f => ({
+                    id: f.dataset.id,
                     image: f.querySelector('.edit-image').value,
                     title: f.querySelector('.edit-title').value,
                     category: f.querySelector('.edit-category').value,
                     clase: f.querySelector('.edit-clase').value,
-                    price: Number.parseFloat(f.querySelector('.edit-price').value),
-                    stock: Number.parseInt(f.querySelector('.edit-stock').value)
+                    price: parseFloat(f.querySelector('.edit-price').value),
+                    stock: parseInt(f.querySelector('.edit-stock').value)
                 }));
-                // DEBUG: Mira esto en la consola (F12) al pulsar el botón
-                console.log("Enviando al servidor:", data);
-/////////
-                try {
-                    const res = await fetch('http://localhost:3000/api/update-products', {
+
+                const res = await fetch('http://localhost:3000/api/update-products', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
 
-                    if (res.ok) {
-                       alert("Inventario actualizado correctamente");
-                       cargarDatos(); // Esto refrescará la tabla
-                    } else {
-                       const err = await res.text();
-                        alert("Error del servidor: " + err);
-                    }
-                } catch (err) {
-                    console.error("Error de conexión:", err);
+                if (res.ok) {
+                    alert("Inventario actualizado");
+                    cargarDatos();
+                } else {
+                    alert("Error al guardar cambios");
                 }
             }
 
- /////////////////////////////////////////////////////////////////////               
-               /* try {                         
-                    const res = await fetch('http://localhost:3000/api/update-products', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data)
-                    });
-
-                    if (res.ok) {
-                        alert("Inventario actualizado correctamente");
-                        cargarDatos();
-                    } else {
-                        const err = await res.text()
-                        alert("Error del servidor: " + err););
-                    }
-                } catch (error) {
-                     console.error("Error de conexión:", err);)
-
-            }*/
-///////////////////////////////////////////////////
             async function eliminarProducto(id) {
                 if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
                 await fetch(`http://localhost:3000/api/admin/productos/${id}`, { method: 'DELETE' });
@@ -387,7 +309,108 @@
 
             cargarDatos();
         /////////////////////////////////////////////
-    </script>
+        
+      /*<let productosLocales = [];
+
+        async function cargarDatos() {
+            const resProd = await fetch('http://localhost:3000/api/admin/productos');
+            productosLocales = await resProd.json();
+            renderizarProductos(productosLocales);
+
+            const resPed = await fetch('http://localhost:3000/api/admin/pedidos');
+            const pedidos = await resPed.json();
+            actualizarDashboard(pedidos);
+        }
+
+        function renderizarProductos(productos) {
+            const tbody = document.querySelector('#tabla-productos tbody');
+
+            tbody.innerHTML = productos.map(p => {
+
+                const esBajoStock = p.stock < 5;
+
+                return `
+
+                <tr class="fila-producto ${esBajoStock ? 'stock-bajo' : ''}" data-id="${p.id}">
+
+                     <td><input type="text" class="edit-image" value="${p.image}"></td>
+
+                    <td><input type="text" class="edit-title" value="${p.title}"></td>
+
+                    <td><input type="text" class="edit-category" value="${p.category}"></td>
+
+                    <td><input type="text" class="edit-clase" value="${p.clase || ''}"></td>
+
+                    <td><input type="number" step="0.01" class="edit-price" value="${p.price}"></td>
+
+                    <td>
+
+                        <input type="number" style="width: 50px;" class="edit-stock" value="${p.stock}">
+
+                        ${esBajoStock ? '<span class="stock-label">⚠️ Reponer</span>' : ''}
+
+                    </td>
+
+                    <td style="text-align:center;"><span class="badge-ventas">${p.ventas || 0}</span></td>
+
+                    <td class="no-print">
+
+                        <button onclick="eliminarProducto('${p.id}')" style="background:#dc3545; color:white; border:none; padding:5px; cursor:pointer; border-radius:4px;">Eliminar</button>
+
+                    </td>
+
+                </tr>
+
+            `}).join('');
+
+        }
+
+                
+      
+           /* const tbody = document.querySelector('#tabla-productos tbody');
+            tbody.innerHTML = productos.map(p => `
+                <tr class="${p.stock < 5 ? 'stock-bajo' : ''}" data-id="${p.id}">
+                    <td><input type="text" class="edit-title" value="${p.title}"></td>
+                    <td><input type="number" class="edit-price" value="${p.price}"></td>
+                    <td><input type="number" class="edit-stock" value="${p.stock}"></td>
+                    <td style="text-align:center;">${p.ventas || 0}</td>
+                    <td><button onclick="eliminarProducto('${p.id}')">🗑️</button></td>
+                </tr>
+            `).join('');
+        }*/
+
+      /*  function actualizarDashboard(pedidos) {
+            const hoy = new Date().toLocaleDateString();
+            const totalHoy = pedidos
+                .filter(p => new Date(p.fecha).toLocaleDateString() === hoy && p.cancelado === 'No')
+                .reduce((sum, p) => sum + parseFloat(p.total.replace('$', '') || 0), 0);
+            
+            document.getElementById('ventas-hoy').innerText = `$${totalHoy.toFixed(2)}`;
+            const stockBajo = productosLocales.filter(p => p.stock < 5).length;
+            document.getElementById('count-reponer').innerText = `${stockBajo} productos`;
+            
+            const top = [...productosLocales].sort((a,b) => (b.ventas||0) - (a.ventas||0))[0];
+            document.getElementById('top-producto').innerText = top ? top.title : '-';
+        }
+
+        async function guardarCambios() {
+            const filas = document.querySelectorAll('tbody tr');
+            const data = Array.from(filas).map(f => ({
+                id: f.dataset.id,
+                title: f.querySelector('.edit-title').value,
+                price: parseFloat(f.querySelector('.edit-price').value),
+                stock: parseInt(f.querySelector('.edit-stock').value)
+            }));
+            await fetch('http://localhost:3000/api/update-products', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            alert("Inventario actualizado");
+        }
+
+        cargarDatos();*/
+                </script>    
     
 </body>
 </html>

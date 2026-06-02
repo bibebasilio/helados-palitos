@@ -1,82 +1,375 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Panel de Pedidos - Eustakio</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Gestión de Pedidos - Admin</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
-        .pedido-card { background: white; padding: 15px; margin-bottom: 10px; border-radius: 8px; shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .pendiente { border-left: 10px solid gold; }
-        .pagado { border-left: 10px solid limegreen; }
-        .cancelado { border-left: 10px solid crimson; opacity: 0.6; }
-        .btn { padding: 8px 12px; cursor: pointer; border: none; border-radius: 4px; margin-right: 5px; }
-        .btn-pagar { background: #28a745; color: white; }
-        .btn-cancelar { background: #dc3545; color: white; }
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+        background: #f4f4f4;
+        color: #333;
+        transition: background 0.5s;
+      }
+
+      .section {
+        background: white;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .filters-container {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+      }
+
+      .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .filter-group label {
+        font-size: 0.75em;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #555;
+      }
+
+      .btn-report {
+        background: #17a2b8;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        align-self: flex-end;
+        font-weight: bold;
+      }
+
+      .btn-export {
+        background: #28a745 !important;
+      }
+
+      .pedido-card {
+        border-left: 5px solid #17a2b8;
+        padding: 15px;
+        margin: 10px 0;
+        background: #f8fdff;
+        border-radius: 4px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .btn-accion {
+        padding: 6px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        color: white;
+      }
+
+      .btn-pago { background: #28a745; }
+      .btn-envio { background: #007bff; }
+      .btn-entrega { background: #6f42c1; }
+      .btn-cancelar { background: #dc3545; }
+
+      input,
+      select {
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      .nav-links {
+        margin-bottom: 20px;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+        margin-right: 15px;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .stat-card {
+        background: #e9ecef;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 5px solid #007bff;
+      }
+
+      .stat-card h3 {
+        margin: 0;
+        font-size: 1em;
+        color: #555;
+      }
+
+      .stat-card p {
+        margin: 5px 0 0;
+        font-size: 1.4em;
+        font-weight: bold;
+        color: #222;
+      }
+
+      @keyframes flash-alert {
+        0% { background: #f4f4f4; }
+        50% { background: #cfe2ff; }
+        100% { background: #f4f4f4; }
+      }
+
+      .nuevo-pedido-alerta {
+        animation: flash-alert 1.5s ease-in-out 3;
+      }
+
+      @media print {
+        .no-print,
+        button,
+        input,
+        select,
+        .filters-container {
+          display: none !important;
+        }
+
+        body {
+          background: white;
+          padding: 0;
+        }
+
+        .section {
+          box-shadow: none;
+          border: none;
+        }
+      }
     </style>
-</head>
-<body>
-    <h1>🍦 Pedidos Entrantes - Heladería Eustakio</h1>
-    <div id="lista-pedidos">Cargando pedidos...</div>
+  </head>
+
+  <body>
+    <audio id="audio-notificacion" src="alerta.mp3" preload="auto"></audio>
+
+    <nav class="nav-links no-print">
+      <a href="productos.html">⬅ Ir a Productos y Dashboard</a>
+    </nav>
+    <h1>🚀 Dashboard y Pedidos</h1>
+
+    <div class="section">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>💰 Ventas de Hoy</h3>
+          <p id="ventas-hoy">$0.00</p>
+        </div>
+        <div class="stat-card" style="border-left-color: #6f42c1">
+          <h3>🔥 Más Vendido</h3>
+          <p id="top-producto">-</p>
+        </div>
+        <div class="stat-card" style="border-left-color: #dc3545">
+          <h3>⚠️ Por Reponer</h3>
+          <p id="count-reponer">0 productos</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <h1>📦 Gestión de Pedidos</h1>
+      <button
+        class="no-print"
+        onclick="window.print()"
+        style="
+          padding: 10px;
+          cursor: pointer;
+          background: #333;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          font-weight: bold;
+        "
+      >
+        🖨️ Imprimir Reporte
+      </button>
+    </div>
+
+    <div class="section">
+      <h2>📊 Reportes e Historial de Pedidos</h2>
+      <div class="filters-container no-print">
+        <div class="filter-group">
+          <label>Pago</label>
+          <select id="filter-pago">
+            <option value="todos">Todos</option>
+            <option value="Pagado">Solo Pagados</option>
+            <option value="Pendiente">Solo Pendientes</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Logística</label>
+          <select id="filter-envio">
+            <option value="todos">Todos</option>
+            <option value="enviados">Enviados</option>
+            <option value="cancelados">Cancelados</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Desde</label><input type="date" id="filter-desde" />
+        </div>
+        <div class="filter-group">
+          <label>Hasta</label><input type="date" id="filter-hasta" />
+        </div>
+        <div class="filter-group">
+          <label>ID o Cliente</label>
+          <input type="text" id="filter-busqueda" placeholder="Ej: Juan..." />
+        </div>
+        <button class="btn-report" onclick="aplicarFiltros()">
+          🔎 Filtrar
+        </button>
+        <button
+          class="btn-report"
+          style="background: #6c757d"
+          onclick="limpiarFiltros()"
+        >
+          🔄 Reset
+        </button>
+        <button class="btn-report btn-export" onclick="exportarCSV()">
+          📥 Excel (.csv)
+        </button>
+      </div>
+      <div
+        id="resumen-reporte"
+        style="
+          margin-bottom: 15px;
+          font-size: 1.1em;
+          font-weight: bold;
+          color: #007bff;
+        "
+      ></div>
+      <div id="lista-pedidos">Cargando pedidos...</div>
+    </div>
 
     <script>
-        // 1. Cargar pedidos desde la API
-        async function cargarPedidos() {
-            try {
-                const res = await fetch("/api/admin/pedidos");
-                if (!res.ok) throw new Error("Error en el servidor");
-                const pedidos = await res.json();
-                renderizarPedidos(pedidos);
-            } catch (error) {
-                console.error("🚩 Error:", error);
-                document.getElementById("lista-pedidos").innerHTML = "Error al cargar los datos.";
-            }
-        }
+     let todosLosPedidos = [];
+      let pedidosFiltrados = [];
+      let productosLocales = [];
+      let cantidadPedidosAnterior = 0;
 
-        // 2. Dibujar los pedidos en pantalla
-        function renderizarPedidos(pedidos) {
-            const contenedor = document.getElementById("lista-pedidos");
-            if (pedidos.length === 0) {
-                contenedor.innerHTML = "<p>No hay pedidos registrados.</p>";
-                return;
-            }
+      async function cargarDatos() {
+        try {
+          const resProd = await fetch("http://localhost:3000/api/admin/productos").catch(() => ({json: () => []}));
+          productosLocales = await resProd.json();
+          const resPed = await fetch("http://localhost:3000/api/admin/pedidos").catch(() => ({json: () => []}));
+          todosLosPedidos = await resPed.json();
+          
+          if (todosLosPedidos.length > cantidadPedidosAnterior && cantidadPedidosAnterior !== 0) {
+            document.getElementById("audio-notificacion")?.play();
+          }
+          cantidadPedidosAnterior = todosLosPedidos.length;
 
-            contenedor.innerHTML = pedidos.map(p => `
-                <div class="pedido-card ${p.pago || 'pendiente'}">
-                    <h3>Pedido #${p._id ? p._id.slice(-4) : 'S/N'}</h3>
-                    <p><strong>Cliente:</strong> ${p.cliente}</p>
-                    <p><strong>Total:</strong> $${p.total}</p>
-                    <p><strong>Estado Pago:</strong> ${p.pago || 'pendiente'}</p>
-                    <p><strong>Items:</strong> ${JSON.stringify(p.items)}</p>
-                    <hr>
-                    <button class="btn btn-pagar" onclick="cambiarEstado('${p.id || p._id}', 'pago', 'pagado')">Marcar Pagado</button>
-                    <button class="btn btn-cancelar" onclick="cambiarEstado('${p.id || p._id}', 'pago', 'cancelado')">Cancelar</button>
-                </div>
-            `).join('');
-        }
+          actualizarDashboard(todosLosPedidos);
+          aplicarFiltrosSilencioso();
+          renderizarPedidos(pedidosFiltrados);
+        } catch (error) { console.error("Error:", error); }
+      }
+////////////////////////////////////////////     
+        function actualizarDashboard(pedidos) {
+    const hoy = new Date().toLocaleDateString();
+    
+    // 1. Cálculo unificado de Ventas de Hoy
+    const totalHoy = pedidos.filter(p => {
+        const fechaPedido = new Date(p.fecha).toLocaleDateString();
+        const esHoy = fechaPedido === hoy;
+        const estaActivo = p.cancelado !== 'Si' && p.cancelado !== 'Sí' && p.cancelado !== 'true';
+        return esHoy && estaActivo;
+    }).reduce((sum, p) => {
+        const valor = parseFloat(String(p.total).replace('$', '').replace(',', '') || 0);
+        return sum + valor;
+    }, 0);
 
-        // 3. Función para actualizar estado (Aquí estaba el error del async)
-        async function cambiarEstado(id, campo, valor) {
-            try {
-                const res = await fetch(`/api/admin/pedidos/${id}/estado`, {
-                    method: "PATCH",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ campo, valor })
-                });
+    document.getElementById('ventas-hoy').innerText = `$${totalHoy.toFixed(2)}`;
 
-                if (res.ok) {
-                    console.log("✅ Estado actualizado");
-                    cargarPedidos(); // Recargar la lista
-                } else {
-                    alert("No se pudo actualizar el pedido.");
-                }
-            } catch (error) {
-                console.error("❌ Error al actualizar:", error);
-            }
-        }
+    // 2. Cálculo de Stock (Requiere los datos globales de productos)
+    const stockBajo = productosLocales.filter(p => p.stock < 5).length;
+    document.getElementById('count-reponer').innerText = `${stockBajo} productos`;
 
-        // Cargar al iniciar y cada 30 segundos
-        cargarPedidos();
-        setInterval(cargarPedidos, 30000);
+    // 3. Cálculo de Más Vendido
+    const top = [...productosLocales].sort((a, b) => (b.ventas || 0) - (a.ventas || 0))[0];
+    document.getElementById('top-producto').innerText = top ? top.title : '-';
+}
+//////////////////////////////////////////
+    /*  function actualizarDashboard(pedidos) {
+        const hoy = new Date().toLocaleDateString();
+        const totalHoy = pedidos.filter(p => new Date(p.fecha).toLocaleDateString() === hoy && !p.cancelado || p.cancelado === "No").reduce((sum, p) => sum + Number.parseFloat(String(p.total).replace("$", "") || 0), 0);
+        document.querySelectorAll("#ventas-hoy").forEach(el => el.innerText = `$${totalHoy.toFixed(2)}`);
+      }*/
+////////////////////////////////
+      function renderizarPedidos(pedidos) {
+        const contenedor = document.getElementById("lista-pedidos");
+        if (!contenedor) return;
+        contenedor.innerHTML = pedidos.slice().reverse().map((ped) => {
+          const id = ped._id || ped.id;
+          const esCancelado = ped.cancelado && ped.cancelado !== "No" && ped.cancelado !== "pendiente";
+          return `
+        <div class="pedido-card">
+              <strong>Nro Pedido:</strong> ${ped.nroPedido}<br></br>
+              <strong>ID:</strong> ${id} | <strong>Fecha:</strong> ${new Date(ped.fecha).toLocaleString()}<br>
+              <strong>Cliente:</strong> ${ped.cliente} | <strong>Total:</strong> ${ped.total}<br>
+              <div style="background:#eee; padding:10px; margin:10px 0; font-size:0.9em;">
+                <b>Pago:</b> ${ped.pago || "Pendiente"} | <b>Envío:</b> ${ped.enviado || "Pendiente"} | <b>Entrega:</b> ${ped.entregado || "Pendiente"}<br>
+                ${ped.receptor ? `<b>Recibió:</b> ${ped.receptor}<br>` : ""}
+                ${esCancelado ? `<b style="color:red">CANCELADO</b> | <b>Motivo:</b> ${ped.observaciones || "Sin motivo"}` : ""}
+              </div>
+              <div class="no-print" style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn-accion btn-pago" onclick="cambiarEstado('${id}', 'pago', 'Pagado')">💸 Pagado</button>
+                <button class="btn-accion btn-envio" onclick="cambiarEstado('${id}', 'enviado', 'Enviado')">🚚 Enviado</button>
+                <input type="text" id="rec-${id}" placeholder="Recibió..." style="width:80px">
+                <button class="btn-accion btn-entrega" onclick="prepararEntrega('${id}')">🎁 Entregado</button>
+                <input type="text" id="obs-${id}" placeholder="Motivo..." style="width:80px">
+                <button class="btn-accion btn-cancelar" onclick="prepararCancelacion('${id}')">✖ Cancelar</button>
+              </div>
+            </div>`;
+        }).join("");
+      }
+
+      async function cambiarEstado(id, campo, valor, extra = {}) {
+        const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const valorFinal = campo === 'cancelado' ? valor : `${valor} (${hora})`;
+        try {
+          await fetch(`http://localhost:3000/api/admin/pedidos/${id}/estado`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ campo, valor: valorFinal, ...extra }),
+          });
+          cargarDatos();
+        } catch (e) { console.error(e); }
+      }
+
+      function prepararEntrega(id) {
+        const r = document.getElementById(`rec-${id}`).value;
+        if (!r) return alert("Ingresa quién recibe");
+        cambiarEstado(id, "entregado", "Entregado", { receptor: `${r} a las ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` });
+      }
+
+      function prepararCancelacion(id) {
+        const o = document.getElementById(`obs-${id}`).value;
+        if (!o) return alert("Ingresa el motivo");
+        cambiarEstado(id, "cancelado", "Si", { observaciones: `${o} (${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})` });
+      }
+
+      function aplicarFiltrosSilencioso() { pedidosFiltrados = todosLosPedidos; }
+      cargarDatos();
+      setInterval(cargarDatos, 30000);
+
     </script>
-</body>
+  </body>
 </html>

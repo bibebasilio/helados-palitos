@@ -9,7 +9,7 @@ let productosLocales = [];
 
 
 
-
+fhfghfghfghfghfghfghfghfgh
 // Cargar Productos
 //const response = await fetch('http://localhost:3000/api/confirmar-pedi
 const resProd = await fetch('http://localhost:3000/api/admin/productos');
