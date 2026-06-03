@@ -10,11 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-<<<<<<< HEAD
-// 1. SERVIR EL FRONTEND
-=======
 // 1. SERVIR EL FRONTEND (Carpeta public)
->>>>>>> d433471 (Limpieza y restauracion de version 29 mayo)
 app.use(express.static(path.join(__dirname, 'public')));
 
 const uri = process.env.MONGO_URI;
@@ -32,23 +28,6 @@ async function connectDB() {
 }
 connectDB();
 
-<<<<<<< HEAD
-// --- 2. RUTAS DE NAVEGACIÓN ---
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'productos.html')));
-app.get('/pedidos', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pedidos.html')));
-
-// --- 3. API DE PRODUCTOS ---
-app.get('/api/productos', async (req, res) => {
-    try {
-        const productos = await db.collection('productos').find().toArray();
-        res.json(productos);
-    } catch (err) {
-        res.status(500).json({ error: "Error" });
-    }
-});
-
-// --- 4. API DE ADMINISTRACIÓN DE PRODUCTOS ---
-=======
 // --- 2. RUTAS DE NAVEGACIÓN (Vistas HTML) ---
 app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'productos.html')));
 app.get('/pedidos', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pedidos.html')));
@@ -67,13 +46,12 @@ app.get('/api/productos', async (req, res) => {
 
 
 // --- 4. API DE ADMINISTRACIÓN DE PRODUCTOS (Para productos.html) ---
->>>>>>> d433471 (Limpieza y restauracion de version 29 mayo)
 app.get('/api/admin/productos', async (req, res) => {
     try {
         const productos = await db.collection('productos').find().toArray();
         res.json(productos);
     } catch (err) {
-        res.status(500).json({ error: "Error" });
+        res.status(500).json({ error: "Error al obtener productos" });
     }
 });
 //////////////////////////////////////////////////////////
@@ -98,10 +76,6 @@ app.post('/api/admin/productos', async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
-// Actualizar Inventario (con todos los campos)
-app.post('/api/update-products', async (req, res) => {
-=======
 
 
 
@@ -191,23 +165,11 @@ app.post('/api/update-productos', async (req, res) => {
 });
 /////////////////////////////////////////////////////////////
 app.post('/api/admin/update-products', async (req, res) => {
->>>>>>> d433471 (Limpieza y restauracion de version 29 mayo)
     try {
         const lista = req.body;
         for (const p of lista) {
-            if (ObjectId.isValid(p.id)) {
+            if (ObjectId.isValid(p._id)) {
                 await db.collection('productos').updateOne(
-<<<<<<< HEAD
-                    { _id: new ObjectId(p.id) },
-                    { $set: { 
-                        image: p.image,
-                        title: p.title,
-                        category: p.category,
-                        clase: p.clase,
-                        price: parseFloat(p.price),
-                        stock: parseInt(p.stock) 
-                    }}
-=======
                     { _id: new ObjectId(p._id) },
                     {
                         $set: {
@@ -219,20 +181,11 @@ app.post('/api/admin/update-products', async (req, res) => {
                             stock: parseInt(p.stock)
                         }
                     }
->>>>>>> d433471 (Limpieza y restauracion de version 29 mayo)
                 );
             }
         }
         res.json({ success: true });
     } catch (err) {
-<<<<<<< HEAD
-        res.status(500).json({ error: "Error" });
-    }
-});
-
-// Alta de Nuevo Producto
-app.post('/api/admin/productos', async (req, res) => {
-=======
         console.log(err);
         res.status(500).json({ error: "Error al actualizar productos" });
     }
@@ -287,83 +240,14 @@ app.delete('/api/admin/productos/:id', async (req, res) => {
 
 // --- 5. API DE PEDIDOS & DASHBOARD (Manejo de Estados con Fechas) ---
 app.get('/api/admin/pedidos', async (req, res) => {
->>>>>>> d433471 (Limpieza y restauracion de version 29 mayo)
     try {
-        const { image, title, category, clase, price, stock } = req.body;
-        await db.collection('productos').insertOne({
-            image,
-            title,
-            category,
-            clase,
-            price: parseFloat(price),
-            stock: parseInt(stock),
-            ventas: 0,
-            fechaCreacion: new Date()
-        });
-        res.json({ success: true });
+        const pedidos = await db.collection('pedidos').find().toArray();
+        res.json(pedidos);
     } catch (err) {
-        res.status(500).json({ error: "Error" });
+        res.status(500).json({ error: "Error al obtener pedidos" });
     }
 });
 
-<<<<<<< HEAD
-app.delete('/api/admin/productos/:id', async (req, res) => {
-    try {
-        await db.collection('productos').deleteOne({ _id: new ObjectId(req.params.id) });
-        res.json({ success: true });
-    } catch (err) {
-        res.status(500).json({ error: "No se pudo eliminar" });
-    }
-});
-
-// --- 5. API DE PEDIDOS ---
-app.get('/api/admin/pedidos', async (req, res) => {
-    const pedidos = await db.collection('pedidos').find().toArray();
-    res.json(pedidos);
-});
-
-app.patch('/api/admin/pedidos/:id/estado', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { campo, valor, receptor, observaciones } = req.body;
-        let updateData = { [campo]: valor };
-        
-        if (receptor) updateData.receptor = receptor;
-        if (observaciones) updateData.observaciones = observaciones;
-
-        await db.collection('pedidos').updateOne({ _id: new ObjectId(id) }, { $set: updateData });
-        res.json({ success: true });
-    } catch (err) {
-        res.status(500).json({ error: "Error" });
-    }
-});
-
-// --- 6. OTRAS RUTAS (Confirmar, tickets, stock) ---
-/*app.post('/api/confirmar-pedido', async (req, res) => {
-    await db.collection('pedidos').insertOne({ ...req.body, fecha: new Date(), impreso: false });
-    res.status(200).json({ success: true });
-});*/
-app.post('/api/confirmar-pedido', async (req, res) => {
-    try {
-        // 1. Buscamos el último pedido para saber qué número sigue
-        const ultimoPedido = await db.collection('pedidos').find().sort({ nro: -1 }).limit(1).toArray();
-        const nuevoNro = ultimoPedido.length > 0 ? (ultimoPedido[0].nro || 0) + 1 : 1;
-
-        // 2. Insertamos el pedido con el nuevo número
-        const nuevoPedido = { 
-            ...req.body, 
-            nro: nuevoNro, 
-            fecha: new Date(), 
-            impreso: false 
-        };
-        
-        await db.collection('pedidos').insertOne(nuevoPedido);
-
-        // 3. Respondemos con el número para que el frontend pueda seguir
-        res.status(200).json({ success: true, nro: nuevoNro });
-    } catch (err) {
-        res.status(500).json({ success: false, mensaje: "Error al guardar el pedido" });
-=======
 app.get('/api/pedidos', async (req, res) => {
     try {
         const pedidos = await db.collection('pedidos').find().sort({ nroPedido: -1 }).toArray();
@@ -497,20 +381,10 @@ app.get('/api/proximo-ticket', async (req, res) => {
         }
     } catch (err) {
         res.status(500).json({ error: "Error en polling" });
->>>>>>> d433471 (Limpieza y restauracion de version 29 mayo)
     }
 });
 
 
-<<<<<<< HEAD
-app.post('/api/productos/restar-stock', async (req, res) => {
-    for (const item of req.body.items) {
-        await db.collection('productos').updateOne({ _id: new ObjectId(item._id) }, { $inc: { stock: -parseInt(item.cantidad) } });
-    }
-    res.json({ success: true });
-});
-
-=======
 // --- RESTAR STOCK ---
 app.post('/api/productos/restar-stock', async (req, res) => {
     try {
@@ -551,6 +425,7 @@ app.post('/api/update-products', (req, res) => {
 
 
 // Inicialización del Servidor
->>>>>>> d433471 (Limpieza y restauracion de version 29 mayo)
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Servidor en puerto ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Motor Eustakio corriendo en puerto ${PORT}`);
+});
