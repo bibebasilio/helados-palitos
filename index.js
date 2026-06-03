@@ -31,7 +31,10 @@ connectDB();
 // --- 2. RUTAS DE NAVEGACIÓN (Vistas HTML) ---
 app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'productos.html')));
 app.get('/pedidos', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pedidos.html')));
-
+// Esto sirve el archivo index.html que está en la misma raíz que el index.js
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // --- 3. API PÚBLICA DE PRODUCTOS (Para tienda.js) ---
 app.get('/api/productos', async (req, res) => {
