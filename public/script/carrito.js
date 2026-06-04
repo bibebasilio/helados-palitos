@@ -25,66 +25,62 @@ BLACKFRIDAY: 0.25,
 
 // --- VALIDACIÓN DE BOTÓN Y MENSAJES ---
 function validarFormulario() {
-const nombre = document.getElementById("nombre")?.value.trim() || "";
-const direccion = document.getElementById("direccion")?.value.trim() || "";
-const telefono = document.getElementById("telefono")?.value.trim() || "";
-const metodoPago = document.querySelector('input[name="metodo-pago"]:checked');
-const finalTotalText = document.getElementById("final-total")?.innerText || "0";
-const valorFinalNum = parseFloat(finalTotalText.replace("$", "")) || 0;
+    const campos = [
+        { id: "nombre", label: "Nombre" },
+        { id: "direccion", label: "Dirección" },
+        { id: "telefono", label: "Teléfono" },
+        { id: "comentario", label: "Comentario" },
+    ];
 
-const boton = document.getElementById("btn-finalizar");
-const mensajeError = document.getElementById("mensaje-validacion");
+    const faltantes = campos.reduce((lista, campo) => {
+        const valor = document.getElementById(campo.id)?.value.trim() || "";
+        if (!valor) lista.push(campo.label);
+        return lista;
+    }, []);
 
-let faltantes = [];
-
-if (nombre === "") faltantes.push("Nombre");
-if (direccion === "") faltantes.push("Dirección");
-if (telefono === "") faltantes.push("Teléfono");
-if (!metodoPago) faltantes.push("Método de Pago");
-    if (valorFinalNum <= 0) faltantes.push("Productos en el carrito");
-    
-if (boton) {
-    const esValido = faltantes.length === 0;
-        //    Solo modificamos si no está en proceso de envío 
-    if (boton.innerText !=="PROCESANDO..." ) {
-    boton.disabled=!esValido;
-    boton.style.opacity=esValido ? "1" : "0.5" ;
-    boton.style.cursor = esValido ? "pointer" : "not-allowed";
-    } 
-    
-   /* if (mensajeError) {
-     if (!esValido) {
-            mensajeError.innerText = "Falta completar: " + faltantes.join(", ");
-                mensajeError.style.color = " orange"; mensajeError.style.display="block" ; } else {
-    mensajeError.innerText="✓ Todo listo para finalizar" ; mensajeError.style.color="green" ; } } } return faltantes; }*/
-    if (mensajeError) {
-            if (!faltantes.length > 0) {
-                mensajeError.innerText = "Falta completar: " + faltantes.join(", ");
-                mensajeError.style.color = "orange";
-                mensajeError.style.display = "block";
-            } else {
-                mensajeError.innerText = "✓ Todo listo para finalizar";
-                mensajeError.style.color = "green";
-                mensajeError.style.display = "block";
-            }
-        }
+    if (!document.querySelector('input[name="metodo-pago"]:checked')) {
+        faltantes.push("Método de Pago");
     }
+
+    const finalTotalText = document.getElementById("final-total")?.innerText || "0";
+    const valorFinalNum = Number.parseFloat(finalTotalText.replace("$", "")) || 0;
+    if (valorFinalNum <= 0) faltantes.push("Productos en el carrito");
+
+    const boton = document.getElementById("btn-finalizar");
+    const mensajeError = document.getElementById("mensaje-validacion");
+    const esValido = faltantes.length === 0;
+
+    if (!boton) {
+        if (mensajeError && !esValido) {
+            mensajeError.innerText = "Falta completar: " + faltantes.join(", ");
+            mensajeError.style.color = "orange";
+            mensajeError.style.display = "block";
+        }
+        return faltantes;
+    }
+
+    boton.disabled = !esValido;
+    boton.style.opacity = esValido ? "1" : "0.5";
+    boton.style.cursor = esValido ? "pointer" : "not-allowed";
+
+    if (!mensajeError) return faltantes;
+
+    mensajeError.innerText = esValido
+        ? "✓ Todo listo para finalizar"
+        : "Falta completar: " + faltantes.join(", ");
+    mensajeError.style.color = esValido ? "green" : "orange";
+    mensajeError.style.display = "block";
+
     return faltantes;
 }
-
-
+           
     document.addEventListener("DOMContentLoaded", ()=> {
     cargarProductosCarrito();
 
-     // Evento para el botón de finalizar compra
-    // Aquí es donde agregas la línea que mencionamos:
-    document.getElementById("btn-finalizar")?.addEventListener("click", enviarPedidoWhatsApp);   
-
-    // Eventos para los radios de método de pago    
     document.querySelectorAll('input[name="metodo-pago"]').forEach((radio) => {
     radio.addEventListener("change", () => {
-    recalcularTodo();
-    validarFormulario();
+        recalcularTodo();
+        validarFormulario();
     });
     });
 
@@ -93,9 +89,9 @@ if (boton) {
     });
     });
 
+
     function cargarProductosCarrito() {
-    // CAMBIO IMPORTANTE: Unificado a "carrito"
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
     const tabla = document.querySelector("#tabla_carrito");
     if (!tabla) return;
 
@@ -103,9 +99,7 @@ if (boton) {
     let subtotalCalculado = 0;
 
     if (carrito.length === 0) {
-    tabla.innerHTML = '<tr>
-        <td colspan="8" style="text-align: center; padding: 20px;">Tu carrito está vacío.</td>
-    </tr>';
+    tabla.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;">Tu carrito está vacío.</td></tr>';
     } else {
     carrito.forEach((producto) => {
     const sub = producto.price * producto.cantidad;
@@ -133,20 +127,20 @@ if (boton) {
     function eventosFila() {
     document.querySelectorAll(".remove-btn").forEach((boton) => {
     boton.onclick = () => {
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    let carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
     carrito = carrito.filter((p) => String(p.id) !== String(boton.id));
-    localStorage.setItem("carrito", JSON.stringify(carrito));
+    localStorage.setItem("carritoDeCompras", JSON.stringify(carrito));
     cargarProductosCarrito();
     };
     });
 
     document.querySelectorAll(".cantidad-producto").forEach((input) => {
     input.onchange = (e) => {
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    let carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
     const producto = carrito.find((p) => String(p.id) === String(e.target.id));
     if (producto) {
-    producto.cantidad = parseInt(e.target.value);
-    localStorage.setItem("carrito", JSON.stringify(carrito));
+    producto.cantidad = Number.parseInt(e.target.value);
+    localStorage.setItem("carritoDeCompras", JSON.stringify(carrito));
     actualizarTotales();
     }
     };
@@ -154,7 +148,7 @@ if (boton) {
     }
 
     function actualizarTotales() {
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
     let subtotal = 0;
     document.querySelectorAll("#tabla_carrito tr").forEach((fila) => {
     const input = fila.querySelector(".cantidad-producto");
@@ -176,7 +170,7 @@ if (boton) {
     }
 
     function recalcularTodo() {
-    const totalBase = parseFloat(document.getElementById("total")?.innerText) || 0;
+    const totalBase = Number.parseFloat(document.getElementById("total")?.innerText) || 0;
     const cuponInput = document.getElementById("coupon-input")?.value.trim().toUpperCase() || "";
     const metodoPagoCheck = document.querySelector('input[name="metodo-pago"]:checked');
     const metodoPago = metodoPagoCheck?.value;
@@ -207,23 +201,104 @@ if (boton) {
 
     validarFormulario();
     }
+//////
+/*async function confirmarPedidoEnServidor() {
+    // Obtenemos el carrito real desde el localStorage
+    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
+    
+    // Obtenemos los valores de los inputs (ajusta los IDs si tus inputs tienen otros IDs)
+    const nombre = document.getElementById("nombre")?.value || "Anónimo";
+    const totalFinal = document.getElementById("final-total")?.innerText.replace("$", "") || 0;
+    const metodoPago = document.querySelector('input[name="metodo-pago"]:checked')?.value || "EFECTIVO";
+
+    const datosPedido = {
+        cliente: nombre,
+        total: parseFloat(totalFinal),
+        pago: metodoPago,
+        items: carrito
+    };
+
+    try {
+        const response = await fetch('/api/confirmar-pedido', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datosPedido)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert(`¡Pedido confirmado! Nro: ${data.nro}`);
+            
+            // Restar stock
+            await fetch('/api/productos/restar-stock', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: carrito })
+            });
+
+            localStorage.removeItem("carritoDeCompras");
+            window.location.reload(); 
+        } else {
+            alert("Error al guardar el pedido: " + (data.mensaje || "Error desconocido"));
+        }
+    } catch (error) {
+        console.error('Error al confirmar pedido:', error);
+        alert('Hubo un problema de conexión con el servidor.');
+    }
+}*/
+
+
+///////
+/*async function confirmarPedidoEnServidor() {
+    // 1. Preparamos los datos tal como los espera tu index.js
+    const datosPedido = {
+        cliente: document.getElementById('nombre-cliente')?.value || "Anónimo", // Ajusta el ID según tu HTML
+        total: carrito.reduce((acc, item) => acc + (item.price * item.cantidad), 0),
+        pago: "EFECTIVO", // O el valor que selecciones en tu formulario
+        items: carrito
+    };
+
+    try {
+        // 2. Llamada al endpoint que ya tienes creado en index.js
+        const response = await fetch('/api/confirmar-pedido', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datosPedido)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert(`Pedido confirmado! Nro: ${data.nro}`);
+            
+            // 3. Opcional: Llamar también a la ruta de restar stock que creaste en index.js
+            await fetch('/api/productos/restar-stock', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: carrito })
+            });
+
+            localStorage.removeItem('carrito');
+            location.reload(); 
+        }
+    } catch (error) {
+        console.error('Error al confirmar pedido:', error);
+    }
+}*/
+
+///////
+
+
+
 
     async function enviarPedidoWhatsApp() {
-    const boton = document.getElementById("btn-finalizar");
-
-    if (boton.disabled && boton.innerText === "PROCESANDO...") return;
-
     const faltantes = validarFormulario();
     if (faltantes.length > 0) {
     return alert("Falta completar: " + faltantes.join(", "));
     }
 
-    boton.disabled = true;
-    boton.innerText = "PROCESANDO...";
-    boton.style.opacity = "0.5";
-
     const nombre = document.getElementById("nombre")?.value.trim();
-    const apellido = document.getElementyById("apellido")?.value.trim();
     const direccion = document.getElementById("direccion")?.value.trim();
     const telefono = document.getElementById("telefono")?.value.trim();
     const comentario = document.getElementById("comentario")?.value.trim() || "Sin comentarios";
@@ -233,40 +308,47 @@ if (boton) {
     const descEfectivo = document.getElementById("des-efectivo")?.innerText.replace("-$", "") || "0";
     const costoEnvio = document.getElementById("shipping-cost")?.innerText.replace("$", "") || "0";
     const metodoPagoCheck = document.querySelector('input[name="metodo-pago"]:checked');
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
 
     try {
-    const response = await fetch("/api/confirmar-pedido", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-    items: carrito,
-    cliente: { nombre, apellido },
-    direccion: direccion,
-    telefono: telefono,
-    comentario: comentario,
-    subtotal,
-    descCupon,
-    descEfectivo,
-    costoEnvio,
-    total: finalTotalText,
-    pago: metodoPagoCheck.value,
-    fecha: new Date(),
-    impreso: false
-    }),
+        const response = await fetch("https://helados-palitos.onrender.com/api/confirmar-pedido", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+        items: carrito,
+        cliente: nombre,
+        direccion: direccion,
+        telefono: telefono,
+        subtotal,
+        descCupon,
+        descEfectivo,
+        costoEnvio,
+        total: finalTotalText,
+        pago: "pendiente",
+        enviado: "pendiente",
+        entregado: "pendiente",
+        cancelado: "No",
+        impreso: false
+        }),
     });
 
     const resultado = await response.json();
 
-    if (resultado.success) {
-    const nroParaWhatsApp = String(resultado.nro).padStart(3, '0');
-    let productosTexto = carrito.map((p) => `• ${p.title} (x${p.cantidad})`).join("\n");
-
-    const texto = `*--- NUEVO PEDIDO #${nroParaWhatsApp} ---*\n\n` +
+    if (resultado.success)  {
+        //const nroReal = resultado.id;
+        const nroParaWhatsApp = String(resultado.nro).padStart(4, '0');   
+        
+   // let productosTexto = carrito.map((p) => `• ${p.title} (x${p.cantidad})`).join("\n");
+    let productosTexto = carrito.map(p => `• ${p.title} ${p.category} (x${p.cantidad})`).join('\n');
+        
+        const texto = `*=== Presione el botón VERDE !! ===*\n` +
+    `*para confirmar el pedido por WhatsApp ........*\n\n` +
+    `*--- NUEVO PEDIDO ---*\n` + 
+    `*   -- # ${ nroParaWhatsApp } --  *\n\n` +
     `*Cliente:* ${nombre}\n` +
     `*Dirección:* ${direccion}\n` +
     `*Teléfono:* ${telefono}\n` +
-    `*Comentario:* ${comentario}\n` +
+    `*Comentario:* ${comentario}\n\n` +
     `*Pago:* ${metodoPagoCheck.value.toUpperCase()}\n\n` +
     `*Productos:*\n${productosTexto}\n\n` +
     `*TOTAL:* ${finalTotalText}`;
@@ -274,17 +356,13 @@ if (boton) {
     const urlWA = `https://wa.me/5491138461130?text=${encodeURIComponent(texto)}`;
 
     alert("¡Pedido #" + nroParaWhatsApp + " confirmado!");
-
-    localStorage.removeItem("carrito");
+    localStorage.removeItem("carritoDeCompras");
     window.open(urlWA, "_blank");
-    window.location.href = "index.html";
+    window.location.href = "../index.html";
     } else {
-    throw new Error(resultado.mensaje || "Error en el servidor");
+    alert("Error: " + resultado.mensaje);
     }
     } catch (err) {
-    alert("Error: No se pudo conectar con el servidor Eustakio.");
-    boton.disabled = false;
-    boton.innerText = "FINALIZAR COMPRA";
-    boton.style.opacity = "1";
+    alert("Error de conexión con el servidor Eustakio.");
     }
     }
