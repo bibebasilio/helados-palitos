@@ -24,7 +24,39 @@ const cuponesValidos = {
 };
 
 // --- VALIDACIÓN DE BOTÓN Y MENSAJES ---
-function validarFormulario(){
+function validarFormulario() {
+    const nombre = document.getElementById("nombre")?.value.trim() || "";
+    const direccion = document.getElementById("direccion")?.value.trim() || "";
+    const telefono = document.getElementById("telefono")?.value.trim() || "";
+    const comentario = document.getElementById("comentario")?.value.trim() || ""; // Nota: ¿es obligatorio? Si no, quítalo de la validación
+    const metodoPago = document.querySelector('input[name="metodo-pago"]:checked');
+    
+    // Obtenemos el total de forma segura
+    const finalTotalText = document.getElementById("final-total")?.innerText.replace("$", "") || "0";
+    const valorFinalNum = parseFloat(finalTotalText) || 0;
+
+    const boton = document.getElementById("btn-finalizar");
+    const mensajeError = document.getElementById("mensaje-validacion");
+
+    const faltantes = [];
+    if (!nombre) faltantes.push("Nombre");
+    if (!direccion) faltantes.push("Dirección");
+    if (!telefono) faltantes.push("Teléfono");
+    if (!metodoPago) faltantes.push("Método de Pago");
+    if (valorFinalNum <= 0) faltantes.push("Productos en el carrito");
+    // Si comentario no es obligatorio, coméntalo o quita esta línea:
+    if (!comentario) faltantes.push("Comentario"); 
+
+    if (boton) {
+        actualizarEstadoBoton(boton, faltantes, mensajeError);
+    }
+    
+    return faltantes;
+}
+
+
+/////////////////////
+/*function validarFormulario(){
     const nombre = document.getElementById("nombre")?.value.trim() || "";
     const direccion = document.getElementById("direccion")?.value.trim() || "";
     const telefono = document.getElementById("telefono")?.value.trim() || "";
@@ -43,7 +75,7 @@ function validarFormulario(){
     }
     
     return faltantes;
-}
+}*/
 
 function validarCampos(nombre, direccion, telefono, comentario, metodoPago, valorFinalNum) {
     let faltantes = [];
@@ -76,7 +108,37 @@ function actualizarEstadoBoton(boton, faltantes, mensajeError) {
     }
 }
 
+/////////////////////
 document.addEventListener("DOMContentLoaded", () => {
+    cargarProductosCarrito();
+
+    // Evento para los radio buttons
+    document.querySelectorAll('input[name="metodo-pago"]').forEach((radio) => {
+        radio.addEventListener("change", validarFormulario);
+    });
+
+    // Evento para los inputs de texto
+    const camposTexto = ["nombre", "direccion", "telefono", "comentario"];
+    camposTexto.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener("input", validarFormulario);
+        }
+    });
+
+    // EJECUCIÓN INICIAL: Esto es lo que faltaba para que detecte el estado actual al cargar
+    validarFormulario();
+    
+    const btnFinalizar = document.getElementById("btn-finalizar");
+    if (btnFinalizar) {
+        btnFinalizar.onclick = enviarPedidoWhatsApp;
+    }
+});
+
+
+
+////////////////////////
+/*document.addEventListener("DOMContentLoaded", () => {
     cargarProductosCarrito();
 
     document.querySelectorAll('input[name="metodo-pago"]').forEach((radio) => {
@@ -95,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btnFinalizar) {
         btnFinalizar.onclick = enviarPedidoWhatsApp;
     }
-});
+});*/
 
 function cargarProductosCarrito() {
     const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
