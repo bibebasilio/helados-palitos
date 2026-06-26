@@ -22,9 +22,71 @@ BIENVENIDA: 0.15,
 VERANO26: 0.2,
 BLACKFRIDAY: 0.25,
 };
-
-// --- VALIDACIÓN DE BOTÓN Y MENSAJES ---
+// --- LÓGICA DE VALIDACIÓN ---
 function validarFormulario() {
+    // Definimos los campos obligatorios y sus IDs
+    const campos = [
+        { id: "nombre", nombre: "Nombre" },
+        { id: "direccion", nombre: "Dirección" },
+        { id: "telefono", nombre: "Teléfono" }
+    ];
+
+    const metodoPago = document.querySelector('input[name="metodo-pago"]:checked');
+    const finalTotalEl = document.getElementById("final-total");
+    const valorFinalNum = Number.parseFloat(finalTotalEl?.innerText.replaceAll(/[^0-9.]/g, "")) || 0;
+
+    const boton = document.getElementById("btn-finalizar");
+    const mensajeError = document.getElementById("mensaje-validacion");
+
+    const faltantes = [];
+
+    // Validamos campos de texto
+    campos.forEach(campo => {
+        const el = document.getElementById(campo.id);
+        if (!el) return; // Salvaguarda por si no existe el elemento
+
+        if (!el.value.trim()) {
+            faltantes.push(campo.nombre);
+            el.style.border = "2px solid #ff4d4d"; // Borde rojo de error
+            el.classList.add("input-error");
+        } else {
+            el.style.border = "1px solid #ccc";    // Borde normal
+            el.classList.remove("input-error");
+        }
+    });
+
+    // Validar método de pago
+    const contenedorPago = document.querySelector('.metodo-pago-container'); 
+    if (!metodoPago) {
+        faltantes.push("Método de Pago");
+        if (contenedorPago) contenedorPago.style.color = "#ff4d4d";
+    } else if (contenedorPago) {
+        contenedorPago.style.color = "inherit";
+    }
+
+    if (valorFinalNum <= 0) {
+        faltantes.push("Productos en el carrito");
+    }
+
+    // Actualizar UI del botón y mensajes
+    if (boton) {
+        const esValido = faltantes.length === 0;
+        
+        // IMPORTANTE: NO usamos boton.disabled para que el evento click responda 
+        // y pueda saltar el alert si el usuario intenta clickear a ciegas.
+        boton.style.opacity = esValido ? "1" : "0.7";
+        boton.style.cursor = "pointer"; 
+        
+        if (mensajeError) {
+            mensajeError.style.display = "block";
+            mensajeError.innerText = esValido ? "✓ Todo listo para finalizar" : "Falta completar: " + faltantes.join(", ");
+            mensajeError.style.color = esValido ? "green" : "#ff4d4d";
+        }
+    }
+    return faltantes;
+}
+// --- VALIDACIÓN DE BOTÓN Y MENSAJES ---
+function validarFormulario() {/*
     const campos = [
         { id: "nombre", label: "Nombre" },
         { id: "direccion", label: "Dirección" },
@@ -57,7 +119,7 @@ function validarFormulario() {
             mensajeError.style.display = "block";
         }
         return faltantes;
-    }
+    }*/
 
     boton.disabled = !esValido;
     boton.style.opacity = esValido ? "1" : "0.5";
