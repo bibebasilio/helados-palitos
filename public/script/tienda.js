@@ -1,11 +1,5 @@
 let productosGlobales = [];
 
-// En tu index.js actual:
-const { localId } = req.query; 
-if (!localId) {
-    return res.status(400).json({ error: "Falta el identificador de sucursal (localId)" });
-}
-
 // 1. Función para cargar productos desde la Base de Datos (API)
 /*async function cargarProductos() {
 try
