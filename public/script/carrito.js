@@ -516,7 +516,7 @@ function actualizarTotales() {
             const producto = carrito.find((p) => String(p._id || p.id) === String(input.id));
             if (producto) {
                 // Actualizamos la cantidad en el objeto del carrito
-                producto.cantidad = parseInt(input.value) || 0;
+                producto.cantidad = Number.parseInt(input.value) || 0;
                 
                 // Calculamos el subtotal de esta fila
                 const subFila = producto.price * producto.cantidad;
@@ -541,7 +541,7 @@ function actualizarTotales() {
 
 function actualizarTotalCarrito(subtotal) {
     // Si subtotal no llega, forzamos a 0
-    const total = subtotal || 0;
+    const total = Number.parseFloat(subtotal) || 0;
     // Seleccionamos todos los elementos con id="total" y actualizamos
     document.querySelectorAll("#total").forEach((el) => {
         el.innerText = total.toFixed(2);
@@ -601,7 +601,25 @@ function actualizarTotalCarrito(subtotal) {
 
         // 2. NUEVO PASO: Hacemos el descuento del Stock en MongoDB Atlas
             console.log("Descontando stock en MongoDB...");
-            const responseStock = await fetch(`${servidorBase}/api/productos/restar-stock`, {
+            //const responseStock = await fetch(`${servidorBase}/api/productos/restar-stock`, {
+            const responseStock = await fetch("https://helados-palitos.onrender.com/api/productos/restar-stock", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ items: carrito })
+        });
+
+        const resultadoStock = await responseStock.json();
+        if (!resultadoStock.success) {
+            console.warn("Advertencia: El pedido se guardó pero no se pudo actualizar el stock.");
+        }
+
+        // 3. Flujo original de WhatsApp... (el resto del código queda igual)
+
+💡 Un detalle extra para evitar que se dupliquen funciones
+
+Noté que en el archivo tenés la función actualizarTotales() duplicada y repetida abajo, y lo mismo con el evento DOMContentLoaded. No te va a romper el código porque JavaScript usa la última definición, pero para que tu archivo quede bien limpio y profesional cuando lo subas a producción, te recomiendo borrar las líneas comentadas o las funciones repetidas.
+
+Haciendo ese cambio en la URL del stock, guardá el archivo, ejecutá el git add, git commit y git push como hicimos antes, ¡y ya va a pasar directo a abrir el WhatsApp sin colgarse!
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ items: carrito })
