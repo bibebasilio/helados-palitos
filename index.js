@@ -39,13 +39,29 @@ app.get('/', (req, res) => {
 // --- 3. API PÚBLICA DE PRODUCTOS (Para tienda.js) ---
 app.get('/api/productos', async (req, res) => {
     try {
+        const { localId } = req.query; // Captura lo que llega en la URL
+        
+        if (!localId) {
+            return res.status(400).json({ error: "Falta el identificador de sucursal (localId)" });
+        }
+
+        const productos = await db.collection('productos').find({ localId: localId }).toArray();
+        res.json(productos);
+    } catch (err) {
+        res.status(500).json({ error: "Error al obtener productos" });
+    }
+});
+
+
+/*app.get('/api/productos', async (req, res) => {
+    try {
         if (!db) return res.status(500).json({ error: "Base de datos no conectada" });
         const productos = await db.collection('productos').find().toArray();
         res.json(productos);
     } catch (err) {
         res.status(500).json({ error: "Error al obtener productos para la tienda" });
     }
-});
+});*/
 
 
 // --- 4. API DE ADMINISTRACIÓN DE PRODUCTOS (Para productos.html) ---
