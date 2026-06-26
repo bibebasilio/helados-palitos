@@ -30,9 +30,10 @@ async function cargarProductos() {
         
         // 2. Apuntamos a la API relativa (sin poner http://localhost:3000)
         // Al dejarla relativa, el frontend le pega al mismo Render donde está alojado
-        const urlAPI = `/api/productos?localId=${sucursal}`;
-        
-        const response = await fetch(urlAPI);
+       // este esel uque va const urlAPI = `/api/productos?localId=${sucursal}`;
+       const urlAPI = `/api/productos?localId=local_01`;
+       const response = await fetch(urlAPI);
+       
         if (!response.ok) throw new Error("Error al conectar con la base de datos");
 
         const todosLosProductos = await response.json();
