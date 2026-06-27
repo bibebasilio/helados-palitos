@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taleno Tech Ecommerce Tutorial</title>
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+    <!-- estilos -->
+    <link rel="stylesheet" href="./estilos/index/style.css">
+ <!--   <link rel="stylesheet" href="../estilos/tienda/tienda.css"> -->
+</head>
+
+<body>
+    <header class="header">
+        <a href="#">
+            <img src="img/logo1.png" class="logo" alt="" width="40px" height="40px"></img>
+            <img src="img/productos/bicicleta.jpeg" class="logo" alt="" width="50px" height="50px"  border-radius="10px" ></img>  
+        </a>
+        <div>   
+            <ul id="navbar" class="navbar">
+                <li><a href="../index.html">Formatos</a></li>
+                <li><a href="./pages/tienda.html">Sabores</a></li>
+                <li><a href="#Ofertas">Ofertas</a></li>
+            <!--    <li><a href="">Acerca de</a></li> -->
+            <li><a href="./pages/asociarse.html">Asociate</a></li> 
+                <li>
+                    <a href="./pages/carrito.html">
+                        <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <!-- close button -->
+                <a href="#" id="close" class="close">
+                    <i class="far fa-times" aria-hidden="true"></i>
+                </a>
+            </ul>
+        </div>
+        <!-- version responsive -->
+        <div class="mobile">
+            <a href="./pages/carrito.html">
+                <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+            </a>
+            <i id="bar" class="fas fa-outdent "></i>
+        </div>
+    </header>
+    <main>
+        <!-- HERO 
+        <section class="hero">
+            <div class="hero-content">
+                <h4>¡Hacé el cambio que necesitás!</h4>
+                <h2>Súper ofertas</h2>
+                <h1>En todos los productos</h1>
+                <p>¡Aprovechá cupones y descuentos de hasta el 70%!</p>
+                <button>Comprar</button>
+            </div>
+        </section>-->
+        <!-- PRODUCTOS -->
+        <section class="section-productos section-p1">
+            <h2>Elegi el Helado que Más te Gusta !!!!!</h2>
+                                    <p>No te lo podés perder !!!</p> 
+ 
+               <!-- <div class="grid-item1 checkbox-container1 grupo">
+                    <input type="checkbox" id="activar1" name="Boutique" tipo="tp1" class="csf" class="checkbok" precio="800">
+                    <label for="activar1">Boutique
+                        <img src="imagenes/gourmet4.jpeg" alt="CD1" class="ppp">
+                    </label>$800
+             <input type="number" id="cantidad1" name="Boutique" min="0" tipo="tp1" placeholder="Cantidad" class="aa" precio="800">
+                    <a class="boton1" href="indexG1.html">Elegir Gusto</a>
+                    </input>
+               <button id="btn-rojo">Gusto ?</button>
+                </div>     -->
+
+
+            <div class="productos-container">
+
+                <div class="producto"  id="card" data-id="1" data-formato="Gourmet" data-price="78" name="Gourmet" class="csf"> 
+                    <img src="img/productos/gourmet.jpeg" alt="producto 1"></img> 
+                    <div class="producto-descripcion">
+                        <span>Gourmet x 3 Uns</span> 
+                        <h5>Cubierto con Chocolate</h5>   
+                        <h4>11cc</h4>
+                    </div>
+                    <a href="pages/tienda.html" class="carrito">
+                  
+                     <button>Sabores</button>
+                    </a> 
+                </div>
+                <div class="producto" class="card" data-id="2" data-formato="Tabletas" data-price="78" name="Tabletas" class="csf"> 
+                     <img src="img/productos/tabletab.jpeg" alt="producto 2">
+                    <div class="producto-descripcion" data-id="2" data-formato="Tabletas" data-price="78">
+                        <span>Tabletas x 2 Uns</span>
+                        <h5>Cubiertas con Chocolate</h5>
+                        <h4>35cc</h4>
+                    </div>
+                    <a href="pages/tienda.html" class="carrito">
+               
+                        <button>Sabores</button>
+                    </a>
+                </div>
+               
+                <div class="producto" data-id="3" data-formato="Lolitas" data-price="78">
+                    <img src="img/productos/lolita.jpeg" alt="producto 1">
+                    <div class="producto-descripcion" data-id="3" data-formato="Lolitas" data-price="78">
+                        <span>Lolitas</span>
+                        <h5>Para Peques </h5>
+                        <h4>38cc</h4>
+                    </div>
+   
+                    <a href="pages/tienda.html" class="carrito">
+                  
+                        <button>Sabores</button>
+                    </a>
+                </div>
+         
+                <div class="producto" data-id="4" data-formato="Pinito" data-price="78">
+                            <img src="img/productos/pinitos.jpeg" alt="producto 1">
+                    <div class="producto-descripcion" data-id="4" data-formato="Pinito" data-price="78">
+                        <span>Pinito</span>
+                        <h5>Para Peques !! </h5>
+                        <h4>43cc</h4>
+                    </div>
+                        <a href="./pages/tienda.html" class="carrito">
+                    
+                        <button>Sabores</button>
+                        </a>
+                </div>          
+               
+                <div class="producto" data-id="5" data-formato="Palito" data-price="78">
+                    <img src="img/productos/palitos.jpg" alt="producto 1" >
+                    <div class="producto-descripcion" data-id="5" data-formato="Palito" data-price="78">
+                        <span>Palitos</span>
+                        <h5>Cremosos, SLactosa y Frutales</h5>
+                        <h4>63cc</h4>
+                    </div>
+                  
+                    <a href="./pages/tienda.html" class="carrito">
+                    <!--    <i class="fal fa-shopping-cart"></i>-->
+                        <button>Sabores</button>
+                    </a>
+                </div>
+                
+                <div class="producto" data-id="6" data-formato="Palito Bombon" data-price="78">
+                    <img src="img/productos/palitobombones.jpeg" alt="producto 1">
+                    <div class="producto-descripcion" data-id="6" data-formato="Palito Bombon" data-price="78">
+                        <span>Palito Bombon</span>
+                        <h5>Cremosos cubietos en Chocolate</h5>
+                        <h4>63cc</h4>
+                    </div>
+                 
+                    <a href="./pages/tienda.html" class="carrito">
+                    
+                        <button>Sabores</button>
+                    </a>
+                </div>
+
+                <div class="producto" data-id="7" data-formato="Palito Granizado" data-price="78">
+                    <img src="img/productos/palitogranizado.jpeg" alt="producto 1">
+                    <div class="producto-descripcion" data-id="7" data-formato="Palito Granizado" data-price="78">
+                        <span>Palito Granizado</span>
+                        <h5>Recomendado</h5>
+                        <h4>63cc</h4>
+                    </div>
+                       <a href="./pages/tienda.html" class="carrito">
+                     
+                        <button>Sabores</button>
+                    </a>
+                </div>
+
+                <div class="producto" data-id="8" data-formato="Vasito 1 Bocha" data-price="78">
+                    <img src="img/productos/vasito1B.jpeg" alt="producto 1">    
+                    <div class="producto-descripcion" data-id="8" data-formato="Vasito 1 Bocha" data-price="78">
+                        <span>Vasito 1 Bocha</span>
+                        <h5>Cremosos - Sin Lactosa</h5>
+                        <h4>135cc</h4>
+                    </div>
+                    <a href="./pages/tienda.html" class="carrito">
+                  
+                        <button>Sabores</button>
+                    </a>
+                </div>
+                <div class="producto" data-id="9" data-formato="Vasito Base Rellena" data-price="78">
+                   <img src="img/productos/vasitobaserellena.jpeg" alt="producto 1" >
+                   <div class="producto-descripcion" data-id="9" data-formato="Vasito Base Rellena" data-price="78">
+        <span>Vasito Base Rellena</span>
+        <h5>Cremosos sin cobertura</h5>
+        <h4>173cc</h4>
+    </div>
+    <a href="pages/tienda.html" class="carrito">  
+     <button>Sabores</button>
+    </a>
+</div>
+<div class="producto" data-id="10" data-formato="Drill" data-price="78">
+    <img src="img/productos/drill.jpeg" alt="producto 1" >
+    <div class="producto-descripcion" data-id="10" data-formato="Drill" data-price="78">
+        <span>Drill</span>
+        <h5>Cremosos, SLactosa y Frutales</h5>
+        <h4>95cc</h4>
+    </div>
+    <a href="pages/tienda.html" class="carrito">
+       
+        <button>Sabores</button>
+
+    </a>
+</div>
+<div class="producto" data-id="11" data-formato="Cilindro" data-price="78">
+    <img src="img/productos/cilindro.jpeg" alt="producto 1" >
+        <div class="producto-descripcion" data-id="11" data-formato="Cilindro" data-price="78">
+        <span>Cilindro</span>
+        <h5>Recomendado</h5>
+        <h4>117cc</h4>  
+      </div>
+    <a href="./pages/tienda.html" class="carrito">
+     <!--   <i class="fal fa-shopping-cart"></i>-->
+        <button>Sabores</button>
+    </a>
+</div>
+<div class="producto" data-id="12" data-formato="Mega" data-price="78">
+    <img src="img/productos/mega1.jpeg" alt="producto 1">
+    <div class="producto-descripcion" data-id="12" data-formato="Mega" data-price="78">
+        <span>Mega </span>
+        <h5>A pedido</h5>
+        <h4>87cc</h4>
+    </div>
+    <a href="./pages/tienda.html" class="carrito">
+   
+        <button>Sabores</button>
+    </a>
+</div>
+
+<div class="producto" data-id="13" data-formato="Rellenos" data-price="78">
+    <img src="img/productos/carita2helados.jpeg" alt="producto 1">
+    <div class="producto-descripcion" data-id="13" data-formato="Rellenos" data-price="78">
+        <span>Rellenos</span>
+        <h5>A Pedido</h5>
+        <h4>90cc</h4>
+    </div>
+    <a href="./pages/tienda.html" class="carrito">
+     
+        <button>Sabores</button>
+    </a>
+</div>
+<div class="producto" data-id="14" data-formato="Pote Boutique x 10 Uns" data-price="78">
+    <img src="img/productos/pote10.jpg" alt="producto 1">
+    <div class="producto-descripcion" data-id="14" data-formato="Pote Boutique x 10 Uns" data-price="78 ">
+        <span>Pote Boutique x 10 Uns</span>
+        <h5>Cremosos y Frutales.</h5>
+        <h4>110cc</h4>
+    </div>
+    <a href="./pages/tienda.html" class="carrito">
+      
+        <button>Sabores</button>
+    </a>
+</div>
+<div class="producto" data-id="15" data-formato="Especiales" data-price="78">
+    <img src="img/productos/especiales.jpeg" alt="producto 1">
+    <div class="producto-descripcion" data-id="15" data-formato="Especiales" data-price="78">
+        <span>Especiales</span>
+        <h5>A pedido !!</h5>
+        <h4>-----</h4>
+    </div>
+    <a href="./pages/tienda.html" class="carrito">
+   
+        <button>Sabores</button>
+    </a>
+</div>
+<div class="producto" data-id="16" data-formato="Eventos" data-price="78">
+    <img src="img/productos/carrito.jpeg" alt="producto 1">
+    <div class="producto-descripcion" data-id="16" data-formato="Eventos" data-price="78">
+        <span>Eventos</span>
+        <h5>Cumpleanos, Fiestas, Resto, etc!</h5>
+        <h4>----</h4>
+    </div>
+    <a href="./pages/tienda.html" class="carrito">
+      
+        <button>Sabores</button>
+    </a>
+</div>
+
+
+
+
+
+
+
+                
+            </div>
+        </section>
+
+        
+        <!-- ------------------------------------------ BANNER -->
+        <section class="banner section-m1" id="Ofertas" >
+        <div class="producto" data-id="80" data-formato="Ofertas" data-price="">
+            <h4>Ofertas que no te podés perder  !!!</h4>
+            <h2>Hasta <span>70% OFF</span> - en Gourmet , Tabletas, y Más !!!</h2>
+                <a href="./pages/ofertas.html" class="carrito">
+                <button>Ver más</button>
+                </a>
+
+        </div>
+
+
+        </section>
+     <!-- NEWSLETTER 
+        <section class="newsletter section-p1 section-m1">
+            <div class="newstext">
+                <h4>Suscribite al Newsletter</h4>
+                <p>Recibí novedades de nuestra tienda y <span>ofertas exclusivas</span></p>
+            </div>
+            <div class="form">
+                <input type="text" placeholder="Tu correo electrónico">
+                <button>Suscribirme</button>
+            </div>
+        </section> /*-->
+        <!-- FOOTER -->
+    </main>
+    <footer class="section-p1">
+        <div class="col">
+            <h4>Contacto</h4>
+            <p><strong>Dirección:</strong> Av. Siempreviva 742, Ciudad Autónoma de Buenos Aires</p>
+            <p><strong>Teléfono:</strong> +54 11 1234 5678</p>
+            <p><strong>Horario:</strong> 9:00 - 18:00, Lunes a Viernes</p>
+            <div class="follow">
+                <h4>Seguinos</h4>
+                <div class="icon">
+                   <!-- <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>-->
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-pinterest-p"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+
+            </div>
+        </div>
+        <div class="col">
+            <h4>Mi Cuenta</h4>
+            <a href="../index.html">Formatos</a>
+            <a href="./pages/carrito.html">Ver Carrito</a>
+          <!--  <a href="#">Mis Favoritos</a> -->
+            <a href="../index.html">Ofertas</a>
+            <a href="./pages/asociarse.html">Asociarse</a>
+
+          
+        </div>
+        <div class="col install">
+            <h4>Descargá la App</h4>
+            <p>Desde App Store o Google Play</p>
+            <div class="row">
+                <img src="img/pay/app.jpg" alt="">
+                <img src="img/pay/play.jpg" alt="">
+            </div>
+            <p>Pasarelas de pago seguras</p>
+            <img src="img/pay/pay.png" alt="">
+        </div>
+        <div class="copyright">
+            <p>© 2025, Basilio Biberidis | Talento Tech - Plantilla HTML CSS para Ecommerce</p>
+        </div>
+    </footer>
+    
+
+
+    <script src="script/script.js"></script>
+  <!--<script src="script/tienda.js"></script> -->
+</body>
+
+</html>
