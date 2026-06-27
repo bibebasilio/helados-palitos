@@ -553,9 +553,95 @@ function actualizarTotalCarrito(subtotal) {
     
 }*/
 
+async function enviarPedidoWhatsApp() {
+    const faltantes = validarFormulario();
+    if (faltantes.length > 0) {
+        return alert("Falta completar: " + faltantes.join(", "));
+    }
 
+    const nombre = document.getElementById("nombre")?.value.trim();
+    const direccion = document.getElementById("direccion")?.value.trim();
+    const telefono = document.getElementById("telefono")?.value.trim();
+    const comentario = document.getElementById("comentario")?.value.trim() || "Sin comentarios";
+    const finalTotalText = document.getElementById("final-total")?.innerText || "$0";
+    const subtotal = document.getElementById("total")?.innerText || "0";
+    const descCupon = document.getElementById("des-cupon")?.innerText.replace("-$", "") || "0";
+    const descEfectivo = document.getElementById("des-efectivo")?.innerText.replace("-$", "") || "0";
+    const costoEnvio = document.getElementById("shipping-cost")?.innerText.replace("$", "") || "0";
+    const metodoPagoCheck = document.querySelector('input[name="metodo-pago"]:checked');
+    const carrito = JSON.parse(localStorage.getItem("carritoDeCompras")) || [];
 
-    async function enviarPedidoWhatsApp() {
+    // 1. Enviamos el pedido a la base de datos
+    try {
+        const response = await fetch("https://helados-palitos.onrender.com/api/confirmar-pedido", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                items: carrito,
+                cliente: nombre,
+                direccion: direccion,
+                telefono: telefono,
+                subtotal,
+                descCupon,
+                descEfectivo,
+                costoEnvio,
+                total: finalTotalText,
+                pago: "pendiente",
+                enviado: "pendiente",
+                entregado: "pendiente",
+                cancelado: "No",
+                impreso: false
+            }),
+        });
+
+        const resultado = await response.json();
+
+        if (resultado.success) {
+            // 2. Descuento del Stock en MongoDB Atlas usando la URL correcta
+            console.log("Descontando stock en MongoDB...");
+            const responseStock = await fetch("https://helados-palitos.onrender.com/api/productos/restar-stock", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ items: carrito })
+            });
+
+            const resultadoStock = await responseStock.json();
+            if (!resultadoStock.success) {
+                console.warn("Advertencia: El pedido se guardó pero no se pudo actualizar el stock.");
+            }
+
+            // 3. Flujo original de WhatsApp
+            const nroParaWhatsApp = String(resultado.nro).padStart(4, '0');   
+            let productosTexto = carrito.map(p => `• ${p.title} ${p.category} (x${p.cantidad})`).join('\n');
+            
+            const texto = `*=== Presione el botón VERDE !! ===*\n` +
+                `*para confirmar el pedido por WhatsApp ........*\n\n` +
+                `*--- NUEVO PEDIDO ---*\n` + 
+                `* -- # ${ nroParaWhatsApp } --  *\n\n` +
+                `*Cliente:* ${nombre}\n` +
+                `*Dirección:* ${direccion}\n` +
+                `*Teléfono:* ${telefono}\n` +
+                `*Comentario:* ${comentario}\n\n` +
+                `*Pago:* ${metodoPagoCheck.value.toUpperCase()}\n\n` +
+                `*Productos:*\n${productosTexto}\n\n` +
+                `*TOTAL:* ${finalTotalText}`;
+
+            const urlWA = `https://wa.me/5491138461130?text=${encodeURIComponent(texto)}`;
+
+            alert("¡Pedido #" + nroParaWhatsApp + " confirmado!");
+            localStorage.removeItem("carritoDeCompras");
+            window.open(urlWA, "_blank");
+            window.location.href = "../index.html";
+        } else {
+            alert("Error: " + resultado.mensaje);
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Error de conexión con el servidor Eustakio.");
+    }
+}
+
+/*    async function enviarPedidoWhatsApp() {
     const faltantes = validarFormulario();
     if (faltantes.length > 0) {
     return alert("Falta completar: " + faltantes.join(", "));
@@ -663,4 +749,4 @@ Haciendo ese cambio en la URL del stock, guardá el archivo, ejecutá el git add
     } catch (err) {
     alert("Error de conexión con el servidor Eustakio.");
     }
-    }
+    }*/
