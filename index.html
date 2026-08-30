@@ -1,31 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taleno Tech Ecommerce Tutorial</title>
+    <title>Heladería Eustakio</title>
     <!-- fontawesome -->
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <!-- estilos -->
     <link rel="stylesheet" href="./estilos/index/style.css">
- <!--   <link rel="stylesheet" href="../estilos/tienda/tienda.css"> -->
 </head>
 
 <body>
     <header class="header">
         <a href="#">
-            <img src="img/logo1.png" class="logo" alt="" width="40px" height="40px"></img>
-            <img src="img/productos/bicicleta.jpeg" class="logo" alt="" width="50px" height="50px"  border-radius="10px" ></img>  
+            <img src="img/logo1.png" class="logo" alt="Logo" width="40px" height="40px">
+            <img src="img/productos/bicicleta.jpeg " class="logobici" alt="Bicicleta" width="70px" height="55px" border-radius="50%">  
         </a>
         <div>   
             <ul id="navbar" class="navbar">
                 <li><a href="../index.html">Formatos</a></li>
                 <li><a href="./pages/tienda.html">Sabores</a></li>
                 <li><a href="#Ofertas">Ofertas</a></li>
-            <!--    <li><a href="">Acerca de</a></li> -->
-            <li><a href="./pages/asociarse.html">Asociate</a></li> 
+                <li><a href="./pages/asociarse.html">Asociate</a></li> 
                 <li>
                     <a href="./pages/carrito.html">
                         <i class="fa fa-shopping-bag" aria-hidden="true"></i>
@@ -42,279 +40,264 @@
             <a href="./pages/carrito.html">
                 <i class="fa fa-shopping-bag" aria-hidden="true"></i>
             </a>
-            <i id="bar" class="fas fa-outdent "></i>
+            <i id="bar" class="fas fa-outdent"></i>
         </div>
     </header>
+    
     <main>
-        <!-- HERO 
-        <section class="hero">
-            <div class="hero-content">
-                <h4>¡Hacé el cambio que necesitás!</h4>
-                <h2>Súper ofertas</h2>
-                <h1>En todos los productos</h1>
-                <p>¡Aprovechá cupones y descuentos de hasta el 70%!</p>
-                <button>Comprar</button>
+        <!-- BANNER DINÁMICO CONFIGURACIÓN DESDE MONGODB -->
+        <section id="banner-principal" class="banner section-m1">
+            <div class="producto">
+             <!--    <h4 id="banner-subtitulo">Cargando subtítulo...</h4>
+                <h2 id="banner-titulo">Cargando título...</h2
+                      
+                <a href="#Ofertas" class="carrito">
+                    <button>Hay Ofertas !!</button>
+                </a>-->
             </div>
-        </section>-->
+        </section>
+       
         <!-- PRODUCTOS -->
         <section class="section-productos section-p1">
-            <h2>Elegi el Helado que Más te Gusta !!!!!</h2>
-                                    <p>No te lo podés perder !!!</p> 
- 
-               <!-- <div class="grid-item1 checkbox-container1 grupo">
-                    <input type="checkbox" id="activar1" name="Boutique" tipo="tp1" class="csf" class="checkbok" precio="800">
-                    <label for="activar1">Boutique
-                        <img src="imagenes/gourmet4.jpeg" alt="CD1" class="ppp">
-                    </label>$800
-             <input type="number" id="cantidad1" name="Boutique" min="0" tipo="tp1" placeholder="Cantidad" class="aa" precio="800">
-                    <a class="boton1" href="indexG1.html">Elegir Gusto</a>
-                    </input>
-               <button id="btn-rojo">Gusto ?</button>
-                </div>     -->
+            <H4>Elegí el Helado que Más te Gusta !!!!!</H4>
+            <p>No te lo podés perder !!!</p> 
+         <!--    <a href="#Ofertas" class="carrito">
+                    <button>Hay Ofertas !!</button>
+         </a>
+            <a href="#Ofertas" class="carrito">
+                    <button>Hay Ofertas !!</button>
+                </a>-->
+      <!-- ------------------------------------------ BANNER -
+        <section class="bannerp section-m1" id="Ofertas"-->
+        <div class="producto" data-id="80" data-formato="Ofertas" data-price=""-->
+         <!--   <h4>Ofertas que no te podés perder  !!!</h4>
+            <h2>Hasta <span>70% OFF</span> - en Gourmet , Tabletas, y Más !!!</h2>-->
+                <a href="./pages/ofertas.html" class="carrito">
+                <button>Ver Ofertas</button>
+                </a>
 
+        </div>
+
+
+       <!-- </section> -->
+
+                ------------------------------------
+       <!--      <a href="./pages/ofertas.html" class="carrito" id="ofertas">
+                    <button>Ver ofertas</button>
+             </a>-->
 
             <div class="productos-container">
-
-                <div class="producto"  id="card" data-id="1" data-formato="Gourmet" data-price="78" name="Gourmet" class="csf"> 
-                    <img src="img/productos/gourmet.jpeg" alt="producto 1"></img> 
+                
+                <div class="producto" id="card" data-id="1" data-formato="Gourmet" data-price="78" name="Gourmet"> 
+                    <img src="img/productos/corazones.png" alt="Gourmet"> 
                     <div class="producto-descripcion">
                         <span>Gourmet x 3 Uns</span> 
-                        <h5>Cubierto con Chocolate</h5>   
+                        <h5>Cubierto c/Chocolate</h5>   
                         <h4>11cc</h4>
                     </div>
-                    <a href="pages/tienda.html" class="carrito">
-                  
-                     <button>Sabores</button>
+                    <a href="./pages/tienda.html" class="carrito">
+                        <button>Sabores</button>
                     </a> 
                 </div>
-                <div class="producto" class="card" data-id="2" data-formato="Tabletas" data-price="78" name="Tabletas" class="csf"> 
-                     <img src="img/productos/tabletab.jpeg" alt="producto 2">
-                    <div class="producto-descripcion" data-id="2" data-formato="Tabletas" data-price="78">
+
+                <div class="producto" id="card" data-id="2" data-formato="Tabletas" data-price="78" name="Tabletas"> 
+                    <img src="img/productos/tabletas1280.jpg" alt="Tabletas">
+                    <div class="producto-descripcion">
                         <span>Tabletas x 2 Uns</span>
-                        <h5>Cubiertas con Chocolate</h5>
+                        <h5>Cubiertas c/Chocolate</h5>
                         <h4>35cc</h4>
                     </div>
                     <a href="pages/tienda.html" class="carrito">
-               
                         <button>Sabores</button>
                     </a>
                 </div>
                
-                <div class="producto" data-id="3" data-formato="Lolitas" data-price="78">
-                    <img src="img/productos/lolita.jpeg" alt="producto 1">
-                    <div class="producto-descripcion" data-id="3" data-formato="Lolitas" data-price="78">
+                <div class="producto" id="card" data-id="3" data-formato="Lolitas" data-price="78">
+                    <img src="img/productos/lolitas.png" alt="Lolitas">
+                    <div class="producto-descripcion">
                         <span>Lolitas</span>
-                        <h5>Para Peques </h5>
+                        <h5>Para Peques</h5>
                         <h4>38cc</h4>
                     </div>
-   
                     <a href="pages/tienda.html" class="carrito">
-                  
                         <button>Sabores</button>
                     </a>
                 </div>
          
-                <div class="producto" data-id="4" data-formato="Pinito" data-price="78">
-                            <img src="img/productos/pinitos.jpeg" alt="producto 1">
-                    <div class="producto-descripcion" data-id="4" data-formato="Pinito" data-price="78">
+                <div class="producto" id="card" data-id="4" data-formato="Pinito" data-price="78">
+                    <img src="img/productos/pinitos.png" alt="Pinitos">
+                    <div class="producto-descripcion">
                         <span>Pinito</span>
-                        <h5>Para Peques !! </h5>
+                        <h5>Para Peques !!</h5>
                         <h4>43cc</h4>
                     </div>
-                        <a href="./pages/tienda.html" class="carrito">
-                    
+                    <a href="./pages/tienda.html" class="carrito">
                         <button>Sabores</button>
-                        </a>
+                    </a>
                 </div>          
                
-                <div class="producto" data-id="5" data-formato="Palito" data-price="78">
-                    <img src="img/productos/palitos.jpg" alt="producto 1" >
-                    <div class="producto-descripcion" data-id="5" data-formato="Palito" data-price="78">
+                <div class="producto"  id="card" data-id="5" data-formato="Palito" data-price="78">
+                    <img src="img/productos/palitos.png" alt="Palitos">
+                    <div class="producto-descripcion">
                         <span>Palitos</span>
-                        <h5>Cremosos, SLactosa y Frutales</h5>
+                        <h5>Hay S/Lactosa y Fruta</h5>
                         <h4>63cc</h4>
                     </div>
-                  
-                    <a href="./pages/tienda.html" class="carrito">
-                    <!--    <i class="fal fa-shopping-cart"></i>-->
+                    <a href="./pages/tienda.html" class="carrito1">
                         <button>Sabores</button>
                     </a>
                 </div>
                 
-                <div class="producto" data-id="6" data-formato="Palito Bombon" data-price="78">
-                    <img src="img/productos/palitobombones.jpeg" alt="producto 1">
-                    <div class="producto-descripcion" data-id="6" data-formato="Palito Bombon" data-price="78">
+                <div class="producto" id="card" data-id="6" data-formato="Palito Bombon" data-price="78">
+                    <img src="img/productos/palitosbombones.png" alt="Palito Bombon">
+                    <div class="producto-descripcion">
                         <span>Palito Bombon</span>
-                        <h5>Cremosos cubietos en Chocolate</h5>
+                        <h5>Delicioso Chocolate</h5>
                         <h4>63cc</h4>
                     </div>
-                 
                     <a href="./pages/tienda.html" class="carrito">
-                    
                         <button>Sabores</button>
                     </a>
                 </div>
 
-                <div class="producto" data-id="7" data-formato="Palito Granizado" data-price="78">
-                    <img src="img/productos/palitogranizado.jpeg" alt="producto 1">
-                    <div class="producto-descripcion" data-id="7" data-formato="Palito Granizado" data-price="78">
+                <div class="producto" id="card" data-id="7" data-formato="Palito Granizado" data-price="78">
+                    <img src="img/productos/granizado.jpg" alt="Palito Granizado">
+                    <div class="producto-descripcion">
                         <span>Palito Granizado</span>
                         <h5>Recomendado</h5>
                         <h4>63cc</h4>
                     </div>
-                       <a href="./pages/tienda.html" class="carrito">
-                     
+                    <a href="./pages/tienda.html" class="carrito">
                         <button>Sabores</button>
                     </a>
                 </div>
 
-                <div class="producto" data-id="8" data-formato="Vasito 1 Bocha" data-price="78">
-                    <img src="img/productos/vasito1B.jpeg" alt="producto 1">    
-                    <div class="producto-descripcion" data-id="8" data-formato="Vasito 1 Bocha" data-price="78">
+                <div class="producto" id="card" data-id="8" data-formato="Vaso 1 Bocha" data-price="78">
+                    <img src="img/productos/vasito1B.png" alt="Vasito 1 Bocha">    
+                    <div class="producto-descripcion">
                         <span>Vasito 1 Bocha</span>
                         <h5>Cremosos - Sin Lactosa</h5>
                         <h4>135cc</h4>
                     </div>
                     <a href="./pages/tienda.html" class="carrito">
-                  
                         <button>Sabores</button>
                     </a>
                 </div>
-                <div class="producto" data-id="9" data-formato="Vasito Base Rellena" data-price="78">
-                   <img src="img/productos/vasitobaserellena.jpeg" alt="producto 1" >
-                   <div class="producto-descripcion" data-id="9" data-formato="Vasito Base Rellena" data-price="78">
-        <span>Vasito Base Rellena</span>
-        <h5>Cremosos sin cobertura</h5>
-        <h4>173cc</h4>
-    </div>
-    <a href="pages/tienda.html" class="carrito">  
-     <button>Sabores</button>
-    </a>
-</div>
-<div class="producto" data-id="10" data-formato="Drill" data-price="78">
-    <img src="img/productos/drill.jpeg" alt="producto 1" >
-    <div class="producto-descripcion" data-id="10" data-formato="Drill" data-price="78">
-        <span>Drill</span>
-        <h5>Cremosos, SLactosa y Frutales</h5>
-        <h4>95cc</h4>
-    </div>
-    <a href="pages/tienda.html" class="carrito">
-       
-        <button>Sabores</button>
 
-    </a>
-</div>
-<div class="producto" data-id="11" data-formato="Cilindro" data-price="78">
-    <img src="img/productos/cilindro.jpeg" alt="producto 1" >
-        <div class="producto-descripcion" data-id="11" data-formato="Cilindro" data-price="78">
-        <span>Cilindro</span>
-        <h5>Recomendado</h5>
-        <h4>117cc</h4>  
-      </div>
-    <a href="./pages/tienda.html" class="carrito">
-     <!--   <i class="fal fa-shopping-cart"></i>-->
-        <button>Sabores</button>
-    </a>
-</div>
-<div class="producto" data-id="12" data-formato="Mega" data-price="78">
-    <img src="img/productos/mega1.jpeg" alt="producto 1">
-    <div class="producto-descripcion" data-id="12" data-formato="Mega" data-price="78">
-        <span>Mega </span>
-        <h5>A pedido</h5>
-        <h4>87cc</h4>
-    </div>
-    <a href="./pages/tienda.html" class="carrito">
-   
-        <button>Sabores</button>
-    </a>
-</div>
+                <div class="producto"  id="card" data-id="9" data-formato="Vaso Base Rellena" data-price="78">
+                    <img src="img/productos/vasitobaserellena.jpeg" alt="Vasito Base Rellena">
+                    <div class="producto-descripcion">
+                        <span>Vaso Base Rellena</span>
+                        <h5>Cremoso sin cobertura</h5>
+                        <h4>173cc</h4>
+                    </div>
+                    <a href="./pages/tienda.html" class="carrito">  
+                        <button>Sabores</button>
+                    </a>
+                </div>
 
-<div class="producto" data-id="13" data-formato="Rellenos" data-price="78">
-    <img src="img/productos/carita2helados.jpeg" alt="producto 1">
-    <div class="producto-descripcion" data-id="13" data-formato="Rellenos" data-price="78">
-        <span>Rellenos</span>
-        <h5>A Pedido</h5>
-        <h4>90cc</h4>
-    </div>
-    <a href="./pages/tienda.html" class="carrito">
-     
-        <button>Sabores</button>
-    </a>
-</div>
-<div class="producto" data-id="14" data-formato="Pote Boutique x 10 Uns" data-price="78">
-    <img src="img/productos/pote10.jpg" alt="producto 1">
-    <div class="producto-descripcion" data-id="14" data-formato="Pote Boutique x 10 Uns" data-price="78 ">
-        <span>Pote Boutique x 10 Uns</span>
-        <h5>Cremosos y Frutales.</h5>
-        <h4>110cc</h4>
-    </div>
-    <a href="./pages/tienda.html" class="carrito">
-      
-        <button>Sabores</button>
-    </a>
-</div>
-<div class="producto" data-id="15" data-formato="Especiales" data-price="78">
-    <img src="img/productos/especiales.jpeg" alt="producto 1">
-    <div class="producto-descripcion" data-id="15" data-formato="Especiales" data-price="78">
-        <span>Especiales</span>
-        <h5>A pedido !!</h5>
-        <h4>-----</h4>
-    </div>
-    <a href="./pages/tienda.html" class="carrito">
-   
-        <button>Sabores</button>
-    </a>
-</div>
-<div class="producto" data-id="16" data-formato="Eventos" data-price="78">
-    <img src="img/productos/carrito.jpeg" alt="producto 1">
-    <div class="producto-descripcion" data-id="16" data-formato="Eventos" data-price="78">
-        <span>Eventos</span>
-        <h5>Cumpleanos, Fiestas, Resto, etc!</h5>
-        <h4>----</h4>
-    </div>
-    <a href="./pages/tienda.html" class="carrito">
-      
-        <button>Sabores</button>
-    </a>
-</div>
+                <div class="producto" id="card" data-id="10" data-formato="Drill" data-price="78">
+                    <img src="img/productos/dril.jpg" alt="Drill">
+                    <div class="producto-descripcion">
+                        <span>Drill</span>
+                        <h5>Frutales</h5>
+                        <h4>95cc</h4>
+                    </div>
+                    <a href="./pages/tienda.html" class="carrito">
+                        <button>Sabores</button>
+                    </a>
+                </div>
 
+                <div class="producto" id="card" data-id="11" data-formato="Cilindro" data-price="78">
+                    <img src="img/productos/cilindro.png" alt="Cilindro">
+                    <div class="producto-descripcion">
+                        <span>Cilindro</span>
+                        <h5>Frutales</h5>
+                        <h4>117cc</h4>  
+                    </div>
+                    <a href="./pages/tienda.html" class="carrito">
+                        <button>Sabores</button>
+                    </a>
+                </div>
 
+                <div class="producto" id="card" data-id="12" data-formato="Mega" data-price="78">
+                    <img src="img/productos/megas.jpg" alt="Mega">
+                    <div class="producto-descripcion">
+                        <span>Mega</span>
+                        <h5>A pedido</h5>
+                        <h4>87cc</h4>
+                    </div>
+                    <a href="./pages/tienda.html" class="carrito">
+                        <button>Sabores</button>
+                    </a>
+                </div>
 
+                <div class="producto" id="card" data-id="13" data-formato="Rellenos" data-price="78">
+                    <img src="img/productos/carita2helados.jpeg" alt="Rellenos">
+                    <div class="producto-descripcion">
+                        <span>Rellenos</span>
+                        <h5>A Pedido</h5>
+                        <h4>90cc</h4>
+                    </div>
+                    <a href="./pages/tienda.html" class="carrito">
+                        <button>Sabores</button>
+                    </a>
+                </div>
 
+                <div class="producto" id="card" data-id="14" data-formato="Pote Boutique x 10 Uns" data-price="78">
+                    <img src="img/productos/guormet10.png" alt="Pote Boutique">
+                    <div class="producto-descripcion">
+                        <span>Boutique x 10 Uns</span>
+                        <h5>Cremosos y Frutales</h5>
+                        <h4>110cc</h4>
+                    </div>
+                    <a href="./pages/tienda.html" class="carrito">
+                        <button>Sabores</button>
+                    </a>
+                </div>
 
+                <div class="producto" id="card" data-id="15" data-formato="Especiales" data-price="78">
+                    <img src="img/productos/especiales.png" alt="Especiales">
+                    <div class="producto-descripcion">
+                        <span>Especiales</span>
+                        <h5>A pedido !!</h5>
+                        <h4>-----</h4>
+                    </div>
+                    <a href="./pages/tienda.html" class="carrito">
+                        <button>Sabores</button>
+                    </a>
+                </div>
 
-
-                
+                <div class="producto" id="card" data-id="16" data-formato="Eventos" data-price="78">
+                    <img src="img/productos/carrito.jpeg" alt="Eventos">
+                    <div class="producto-descripcion">
+                        <span>Eventos,Fiestas</span>
+                        <h5> Cumpleaños, etc!!</h5>
+                        <h4> Tel: 1138461130</h4>
+                    </div>
+                    <a href="./pages/tienda.html" class="carrito">
+                        <button>Sabores</button>
+                    </a>
+                </div>
             </div>
         </section>
 
-        
+
         <!-- ------------------------------------------ BANNER -->
-        <section class="banner section-m1" id="Ofertas" >
+        <section class="bannerp section-m1" id="Ofertas" >
         <div class="producto" data-id="80" data-formato="Ofertas" data-price="">
-            <h4>Ofertas que no te podés perder  !!!</h4>
-            <h2>Hasta <span>70% OFF</span> - en Gourmet , Tabletas, y Más !!!</h2>
+         <!--   <h4>Ofertas que no te podés perder  !!!</h4>
+            <h2>Hasta <span>70% OFF</span> - en Gourmet , Tabletas, y Más !!!</h2>-->
                 <a href="./pages/ofertas.html" class="carrito">
-                <button>Ver más</button>
+                <button>Ver Ofertas</button>
                 </a>
 
         </div>
 
 
         </section>
-     <!-- NEWSLETTER 
-        <section class="newsletter section-p1 section-m1">
-            <div class="newstext">
-                <h4>Suscribite al Newsletter</h4>
-                <p>Recibí novedades de nuestra tienda y <span>ofertas exclusivas</span></p>
-            </div>
-            <div class="form">
-                <input type="text" placeholder="Tu correo electrónico">
-                <button>Suscribirme</button>
-            </div>
-        </section> /*-->
-        <!-- FOOTER -->
     </main>
+
     <footer class="section-p1">
         <div class="col">
             <h4>Contacto</h4>
@@ -324,44 +307,261 @@
             <div class="follow">
                 <h4>Seguinos</h4>
                 <div class="icon">
-                   <!-- <i class="fab fa-facebook-f"></i>
-                    <i class="fab fa-twitter"></i>-->
                     <i class="fab fa-instagram"></i>
                     <i class="fab fa-pinterest-p"></i>
                     <i class="fab fa-youtube"></i>
                 </div>
-
             </div>
         </div>
         <div class="col">
             <h4>Mi Cuenta</h4>
             <a href="../index.html">Formatos</a>
             <a href="./pages/carrito.html">Ver Carrito</a>
-          <!--  <a href="#">Mis Favoritos</a> -->
             <a href="../index.html">Ofertas</a>
             <a href="./pages/asociarse.html">Asociarse</a>
-
-          
         </div>
         <div class="col install">
             <h4>Descargá la App</h4>
             <p>Desde App Store o Google Play</p>
             <div class="row">
-                <img src="img/pay/app.jpg" alt="">
-                <img src="img/pay/play.jpg" alt="">
+                <img src="img/pay/app.jpg" alt="App Store">
+                <img src="img/pay/play.jpg" alt="Google Play">
             </div>
             <p>Pasarelas de pago seguras</p>
-            <img src="img/pay/pay.png" alt="">
+            <img src="img/pay/pay.png" alt="Métodos de Pago">
         </div>
         <div class="copyright">
             <p>© 2025, Basilio Biberidis | Talento Tech - Plantilla HTML CSS para Ecommerce</p>
         </div>
     </footer>
-    
-
 
     <script src="script/script.js"></script>
-  <!--<script src="script/tienda.js"></script> -->
+
+    <!-- SCRIPT DE CONFIGURACIÓN DINÁMICA -->
+    <script>
+    /*    async function cargarConfiguracionHome() {
+            try {
+                // Hacemos el fetch al endpoint
+                const respuesta = await fetch('/api/configuracion/home?localId=local_01');
+                const datos = await respuesta.json();
+
+                if (!datos.success) {
+                    console.error("Error desde el servidor:", datos.error);
+                    return;
+                }
+
+                const config = datos.config;
+                const bannerSection = document.getElementById('banner-principal');
+
+                // 1. Ocultar si no está activo
+                if (!config.banner || !config.banner.activo) {
+                    if (bannerSection) bannerSection.style.display = 'none';
+                    return;
+                }
+
+                // 2. Inyectar Título y Subtítulo
+                const tituloEl = document.getElementById('banner-titulo');
+                const subtituloEl = document.getElementById('banner-subtitulo');
+
+                if (tituloEl && config.banner.titulo) {
+                    tituloEl.textContent = config.banner.titulo;
+                }
+                if (subtituloEl && config.banner.subtitulo) {
+                    subtituloEl.textContent = config.banner.subtitulo;
+                }
+
+                // 3. Inyectar Imagen de Fondo
+                if (bannerSection && config.banner.imagen_fondo) {
+                    bannerSection.style.backgroundImage = `url('${config.banner.imagen_fondo}')`;
+                }
+
+                // 4. Aplicar Estilos Dinámicos (Opcional)
+                if (config.estilos && config.estilos.color_primario) {
+                    document.documentElement.style.setProperty('--color-primario', config.estilos.color_primario);
+                }
+
+            } catch (error) {
+                console.error("Error al cargar la configuración desde MongoDB:", error);
+            }
+        }
+
+        // Ejecutar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', cargarConfiguracionHome);*/
+    
+
+     /*   async function cargarConfiguracionHome() {
+            try {
+                // Hacemos el fetch al endpoint de nuestro index.js
+                const respuesta = await fetch('/api/configuracion/home?localId=local_01');
+
+                console.log("Respuesta del fetch:", respuesta);
+                
+                if (!respuesta.ok) {
+                    throw new Error(`Error HTTP: status ${respuesta.status}`);
+                }
+
+                const datos = await respuesta.json();
+                console.log("Datos recibidos del backend:", datos);
+
+                if (!datos || !datos.success) {
+                    console.error("Error devuelto por el backend:", datos ? datos.error : "Sin datos");
+                    return;
+                }
+
+                const config = datos.config;
+                console.log("Configuración obtenida:", config);
+                const bannerSection = document.getElementById('banner-principal');
+                console.log("Elemento del banner:", bannerSection);
+                const tituloEl = document.getElementById('banner-titulo');
+                console.log("Elemento del título:", tituloEl);
+                const subtituloEl = document.getElementById('banner-subtitulo');
+                console.log("Elemento del subtítulo:", subtituloEl);
+
+                // Si el banner existe y viene configurado
+                if (config && config.banner) {
+                    const banner = config.banner;
+console.log("Configuración del banner:", banner);
+
+                    // Ocultar solo si está explícitamente desactivado
+                    if (banner.activo === false) {
+                        if (bannerSection) bannerSection.style.display = 'none';
+                        return;
+                    }
+
+                    // Inyectar Título
+                    if (tituloEl && banner.titulo) {
+                        tituloEl.textContent = banner.titulo;
+                    }
+
+                    // Inyectar Subtítulo
+                    if (subtituloEl && banner.subtitulo) {
+                        subtituloEl.textContent = banner.subtitulo;
+                    }
+
+                    // Inyectar Imagen de fondo
+                    if (bannerSection && banner.imagen_fondo) {
+                        bannerSection.style.backgroundImage = `url('${banner.imagen_fondo}')`;
+                    }
+                }
+
+                // Aplicar variables CSS dinámicas si existen
+                if (config && config.estilos && config.estilos.color_primario) {
+                    document.documentElement.style.setProperty('--color-primario', config.estilos.color_primario);
+                }
+
+            } catch (error) {
+                console.error("Error al cargar la configuración desde MongoDB:", error);
+            }
+        }
+
+        // Ejecutar cuando el DOM esté cargado
+        document.addEventListener('DOMContentLoaded', cargarConfiguracionHome);
+async function cargarConfiguracionHome() {
+            try {
+                // Si no se especifica un localId en la URL (ej: ?localId=local_01), usamos 'local_01' por defecto
+                const urlParams = new URLSearchParams(window.location.search);
+                const localId = urlParams.get('localId') || 'local_01';
+
+                // Realizamos la petición al endpoint pasando el localId
+                const respuesta = await fetch(`/api/configuracion/home?localId=${localId}`);
+                const datos = await respuesta.json();
+
+                if (!datos.success || !datos.config) {
+                    console.warn("No se pudo obtener la configuración dinámica:", datos.error);
+                    return;
+                }
+
+                const config = datos.config;
+                const bannerSection = document.getElementById('banner-principal');
+
+                // 1. Ocultar el banner si está marcado como no activo
+                if (config.banner && config.banner.activo === false) {
+                    if (bannerSection) bannerSection.style.display = 'none';
+                    return;
+                }
+
+                // 2. Inyectar Título y Subtítulo
+                const tituloEl = document.getElementById('banner-titulo');
+                const subtituloEl = document.getElementById('banner-subtitulo');
+
+                if (tituloEl && config.banner?.titulo) {
+                    tituloEl.textContent = config.banner.titulo;
+                }
+                if (subtituloEl && config.banner?.subtitulo) {
+                    subtituloEl.textContent = config.banner.subtitulo;
+                }
+
+                // 3. Inyectar Imagen de Fondo si existe
+                if (bannerSection && config.banner?.imagen_fondo) {
+                    bannerSection.style.backgroundImage = `url('${config.banner.imagen_fondo}')`;
+                }
+
+                // 4. Aplicar color primario si está configurado en MongoDB
+                if (config.estilos?.color_primario) {
+                    document.documentElement.style.setProperty('--color-primario', config.estilos.color_primario);
+                }
+
+            } catch (error) {
+                console.error("❌ Error al cargar la configuración desde el servidor:", error);
+            }
+        }
+
+        // Ejecutar cuando termine de cargar la estructura DOM
+        document.addEventListener('DOMContentLoaded', cargarConfiguracionHome);*/
+async function cargarConfiguracionHome() {
+            try {
+                // Si no se especifica un localId en la URL (ej: ?localId=local_01), usamos 'local_01' por defecto
+                const urlParams = new URLSearchParams(window.location.search);
+                const localId = urlParams.get('localId') || 'local_01';
+
+                // Realizamos la petición al endpoint pasando el localId
+                const respuesta = await fetch(`/api/configuracion/home?localId=${localId}`);
+                const datos = await respuesta.json();
+
+                if (!datos.success || !datos.config) {
+                    console.warn("No se pudo obtener la configuración dinámica:", datos.error);
+                    return;
+                }
+
+                const config = datos.config;
+                const bannerSection = document.getElementById('banner-principal');
+
+                // 1. Ocultar el banner si está marcado como no activo
+                if (config.banner && config.banner.activo === false) {
+                    if (bannerSection) bannerSection.style.display = 'none';
+                    return;
+                }
+
+                // 2. Inyectar Título y Subtítulo
+                const tituloEl = document.getElementById('banner-titulo');
+                const subtituloEl = document.getElementById('banner-subtitulo');
+
+                if (tituloEl && config.banner?.titulo) {
+                    tituloEl.textContent = config.banner.titulo;
+                }
+                if (subtituloEl && config.banner?.subtitulo) {
+                    subtituloEl.textContent = config.banner.subtitulo;
+                }
+
+                // 3. Inyectar Imagen de Fondo si existe
+                if (bannerSection && config.banner?.imagen_fondo) {
+                    bannerSection.style.backgroundImage = `url('${config.banner.imagen_fondo}')`;
+                }
+
+                // 4. Aplicar color primario si está configurado en MongoDB
+                if (config.estilos?.color_primario) {
+                    document.documentElement.style.setProperty('--color-primario', config.estilos.color_primario);
+                }
+
+            } catch (error) {
+                console.error("❌ Error al cargar la configuración desde el servidor:", error);
+            }
+        }
+
+        // Ejecutar cuando termine de cargar la estructura DOM
+        document.addEventListener('DOMContentLoaded', cargarConfiguracionHome);
+    </script>
+    
 </body>
 
 </html>
