@@ -89,6 +89,78 @@ app.post('/api/admin/productos', async (req, res) => {
     }
 });
 
+// Endpoint para obtener la configuración dinámica del Home
+// Endpoint para obtener la configuración dinámica del Home
+// Ruta para obtener la configuración dinámica desde MongoDB
+// Ruta en tu backend (server.js o index.js)
+app.get('/api/configuracion/home', async (req, res) => {
+    try {
+        const { localId } = req.query;
+
+        // Buscamos en la colección de configuraciones en MongoDB
+        const config = await db.collection('configuracion').findOne({ localId: localId });
+
+        if (!config) {
+            return res.status(404).json({ 
+                success: false, 
+                error: "No se encontró la configuración para este local" 
+            });
+        }
+
+        // Retornamos los datos correctamente
+        res.json({ 
+            success: true, 
+            config: config 
+        });
+
+    } catch (error) {
+        console.error("Error al obtener la configuración:", error);
+        res.status(500).json({ success: false, error: "Error de servidor" });
+    }
+});
+/*app.get('/api/configuracion/home', async (req, res) => {
+    try {
+        if (!db) {
+            return res.status(500).json({ success: false, error: "Base de datos no conectada" });
+        }
+        
+        const localId = req.query.localId || "local_01";
+        const config = await db.collection('configuracion').findOne({ localId: localId });
+        
+        if (!config) {
+            return res.status(404).json({ success: false, error: "Configuración no encontrada" });
+        }
+
+        res.json({ success: true, config });
+    } catch (err) {
+        console.error("Error al obtener la configuración:", err);
+        res.status(500).json({ success: false, error: "Error al obtener la configuración" });
+    }
+});*/
+//////////////////////////  nueva app.get corregida home ////
+// Ejemplo de cómo debe estar en tu servidor Node/Express
+/*app.get('/api/configuracion/home', async (req, res) => {
+    try {
+        const { localId } = req.query;
+        
+        // Buscamos en MongoDB (usando Mongoose o la colección directa)
+        const config = await Configuracion.findOne({ localId: localId || "local_01" });
+
+        if (!config) {
+            return res.status(404).json({ success: false, error: "Configuración no encontrada" });
+        }
+
+        // Devolvemos SIEMPRE un JSON
+        res.json({ success: true, config });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: "Error de servidor" });
+    }
+});*/
+
+
+//////////////////////////////////////
+
 // Ruta para guardar cambios en inventario
 app.post('/api/update-products', async (req, res) => {
     try {
@@ -374,8 +446,13 @@ app.post('/api/productos/restar-stock', async (req, res) => {
     }
 });
 
+
 // Inicialización del Servidor
 const PORT = process.env.PORT || 3000;
+// Agregá esto en index.js para capturar el error de /index.html
+app.get('/index.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html')); // O cambia 'public' por donde esté realmente
+});
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Motor Eustakio corriendo en puerto ${PORT}`);
 });

@@ -631,7 +631,7 @@ async function enviarPedidoWhatsApp() {
             alert("¡Pedido #" + nroParaWhatsApp + " confirmado!");
             localStorage.removeItem("carritoDeCompras");
             window.open(urlWA, "_blank");
-            window.location.href = "../index.html";
+            window.location.href = "/";
         } else {
             alert("Error: " + resultado.mensaje);
         }

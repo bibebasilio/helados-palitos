@@ -1,3 +1,19 @@
 node_modules/
 .envnode_modules/
 .env
+# Archivos temporales de Word
+~$*.docx
+"~$*"
+
+# Documentos de texto/notas
+*.docx
+
+# Copias de seguridad de scripts viejos
+*Modif*.js
+*viejo*.js
+*No funciona*.js
+ejempl.js
+script/carritoAcorregir*.js
+script/carritoNVO*.js
+script/carritoNvo*.js
+public/script/carritoM.js

@@ -254,3 +254,8 @@
     /* Rojo */
     font-weight: bold;
 }
+
+.input-error {
+    border: 2px solid #ff4d4d !important;
+    background-color: #fff6f6;
+}

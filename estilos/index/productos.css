@@ -5,27 +5,36 @@
 
         display: flex;
         justify-content: space-between;
-        padding-top: 0px;
+        padding-top: 9px;
         flex-wrap: wrap;
+        
+        #card.producto:hover {
 
-
-
+            transform: scale(1.1.5);
+            border: 4px solid #076d38;
+            box-shadow: 0 4px 4px rgba(43, 13, 153, 0.2);
+            transition: transform 0.2s;
+            bottom:0px;
+          
+        }
+    
         .producto {
-            width: 9%;
-            min-width: 9px;
-            margin: 15px 0;
-            padding: 10px 0px;
+            /*width: 100%;*/
+            max-width: 1024px;
+            min-width: 0px;
+            margin: 1px 0;
+            padding: 0px 0px;
             border-radius: 10px;
-            border: 1px solid #cce7d0;
+            border: 1px solid #24aa38;
             cursor: pointer;
-            box-shadow: 10px 10px 15px rgba(171, 18, 18, 0.02);
+            box-shadow: 10px 10px 15px rgba(206, 125, 38, 0.02);
             transition: 0.8s ease;
-            /* posicionamos el carrito */
-            position: relative;
+            /* posicionamos el carrito 
+            position: relative;*/
 
             & img {
                 width: 100%;
-                border-radius: 50px;
+                border-radius:0px;
                 height: 100px;
                 object-fit: contain;
                 display: block;
@@ -49,31 +58,29 @@
 
                 & h5 {
                     padding-top: 7px;
-                    color: #1b1e6a;
+                    color: #c56f28;
                     font-size: 8px;
                 }
 
                 & h4 {
                     padding-top: 7px;
+                    padding-left: 0px;
                     font-size: 10px;
                     font-weight: 700;
                     color: #81086f;
                     margin-top: auto;
                 }
+                
+              
             }
 
-
-        }
-
-        .producto:hover {
-            box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.15);
-        }
-    }
+         
+    } 
 
 }
 
 
-/* Estilos Responsive para Productos */
+/* Estilos Responsive para Productos 
 
 @media (max-width: 1200px) {
     .section-productos .productos-container {
@@ -116,17 +123,17 @@
         padding: 20px 10px;
     }
 
-    .section-productos h2 {
-        font-size: 1.5rem;
+    .section-producto2 {
+        font-size: 5rem;
     }
 
     .section-productos .productos-container .producto {
         width: 100%;
-        min-width: unset;
-        margin: 10px 0;
+        min-width: 20px;
+        margin: 10px ;
     }
 
     .section-productos .productos-container .producto .producto-descripcion h5 {
         font-size: 8px;
-    }
+    }*/
 }

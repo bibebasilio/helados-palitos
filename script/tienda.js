@@ -4,7 +4,10 @@ let productosGlobales = [];
 async function cargarProductos() {
     try {
         // Apuntamos al backend local (Node.js) en el puerto 3000 para desarrollo
-        const urlAPI = 'http://localhost:3000/api/productos';
+       // const urlAPI = 'http://localhost:3000/api/productos';
+       // Definís qué local querés cargar (podés recuperarlo de localStorage también)
+        const sucursal = "local_01"; 
+        const urlAPI = `http://localhost:3000/api/productos?localId=${sucursal}`;
         
         const response = await fetch(urlAPI);
         if (!response.ok) throw new Error("Error al conectar con la base de datos");
@@ -20,9 +23,7 @@ async function cargarProductos() {
             productosGlobales = todosLosProductos.filter(p => p.stock > 0);
         } else {
             productosGlobales = todosLosProductos.filter(producto =>
-                producto.title && producto.title.toLowerCase().includes(elegidoForma.toLowerCase()) &&
-                producto.stock > 0
-            );
+                producto.title && producto.title.toLowerCase().includes(elegidoForma.toLowerCase()) && producto.stock > 0);
 
             if (productosGlobales.length === 0) {
                 productosGlobales = todosLosProductos.filter(p => p.stock > 0);

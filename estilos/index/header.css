@@ -2,8 +2,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 80px;
-    background-color: #11c6d6;
+    padding: 2px 80px;
+    background-color: #80cdee;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
 
     /* fijamos el encabezado */
@@ -13,6 +13,10 @@
     left: 0;
 }
 
+
+.logobici {
+    border-radius: 50%;
+}
 .navbar {
     display: flex;
     align-items: center;
@@ -97,5 +101,55 @@
         color: #222;
         font-size: 24px;
     }
+
+.carrito1 {
+    & butto {
+            
+            background-color: #12d4c4;
+            color: rgb(233, 239, 240);
+            border: none;
+            cursor: pointer;
+            margin-left: 0px;
+            border-radius: 20%;
+            width: 100%;
+
+        }
+
+
+   /*  cambia de color el boton con el mouse */
+ /*   button:hover {
+            background-color: #27096e;
+        }
+        .resultado {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #e4a724;
+
+            background-color: #f9f9f9;
+        }
+        .resultado h3 {
+            margin: 0
+            ;
+        }       
+        .resultado p {
+            margin: 5px 0;
+        }
+        .resultado ul {
+            list-style-type: none;
+            padding: 0;
+        }   
+        .resultado li {
+            margin: 5px 0;
+        }
+        .resultado li span {
+            font-weight: bold;
+        } 
+
+        
+        .nav {
+            margin-top: 20px;
+            text-align: justify;
+            text-decoration: #5316bd;
+        }*/
 
 }
