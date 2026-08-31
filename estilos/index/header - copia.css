@@ -1,0 +1,155 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 80px;
+    background-color: #80cdee;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+
+    /* fijamos el encabezado */
+    z-index: 999;
+    position: sticky;
+    top: 0;
+    left: 0;
+}
+
+
+.logobici {
+    border-radius: 50%;
+}
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & li {
+        list-style: none;
+        padding: 0 20px;
+    }
+
+    & a {
+        text-decoration: none;
+        font: 16px;
+        font-weight: 600;
+        color: #4a28b9;
+        transition: 0.3 ease;
+    }
+
+    & a:hover {
+        color: #081109;
+    }
+
+}
+
+/* --------------------------------------------- */
+
+/* responsive navbar */
+
+
+.mobile {
+    display: none;
+    align-items: center;
+}
+
+.close{
+    display: none;
+}
+
+/* Start Media Query */
+@media (max-width:799px) {
+    .navbar {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        position: fixed;
+        top: 0;
+        /* right: 0; */
+        right: -300px;
+        height: 40vh;
+        width: 130px;
+        background-color: #34ee27;
+        box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
+        padding: 80px 0 0 10px;
+        transition: 0.3s;
+
+        & li {
+            margin-bottom: 25px;
+        }
+    }
+
+    .mobile {
+        display: flex;
+        align-items: center;
+
+        & i {
+            color: #1a1a1a;
+            font-size: 24px;
+            padding-left: 20px;
+        }
+    }
+
+    .active {
+        right: 0px;
+    }
+
+    .close{
+        display: initial;
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        color: #222;
+        font-size: 24px;
+    }
+
+.carrito1 {
+    & butto {
+            
+            background-color: #12d4c4;
+            color: rgb(233, 239, 240);
+            border: none;
+            cursor: pointer;
+            margin-left: 0px;
+            border-radius: 20%;
+            width: 100%;
+
+        }
+
+
+   /*  cambia de color el boton con el mouse */
+ /*   button:hover {
+            background-color: #27096e;
+        }
+        .resultado {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #e4a724;
+
+            background-color: #f9f9f9;
+        }
+        .resultado h3 {
+            margin: 0
+            ;
+        }       
+        .resultado p {
+            margin: 5px 0;
+        }
+        .resultado ul {
+            list-style-type: none;
+            padding: 0;
+        }   
+        .resultado li {
+            margin: 5px 0;
+        }
+        .resultado li span {
+            font-weight: bold;
+        } 
+
+        
+        .nav {
+            margin-top: 20px;
+            text-align: justify;
+            text-decoration: #5316bd;
+        }*/
+
+}

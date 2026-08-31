@@ -17,3 +17,5 @@ script/carritoAcorregir*.js
 script/carritoNVO*.js
 script/carritoNvo*.js
 public/script/carritoM.js
+*.exe
+* - copia
