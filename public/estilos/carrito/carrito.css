@@ -233,7 +233,7 @@
 
 /* Estilo para los inputs radio */
 .payment-methods input[type="radio"] {
-
+    
     margin-left: 0px;
     cursor: pointer;
     width: 15px;
@@ -253,4 +253,9 @@
     color: #e60000;
     /* Rojo */
     font-weight: bold;
+}
+
+.input-error {
+    border: 2px solid #ff4d4d !important;
+    background-color: #fff6f6;
 }
