@@ -19,3 +19,4 @@ script/carritoNvo*.js
 public/script/carritoM.js
 *.exe
 * - copia
+.env
