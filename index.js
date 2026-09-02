@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient, ObjectId } = require('mongodb');
+const { MongoClient, ObjectId, ReturnDocument } = require('mongodb');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
@@ -95,6 +95,8 @@ app.post('/api/admin/productos', async (req, res) => {
 // Ruta en tu backend (server.js o index.js)
 app.get('/api/configuracion/home', async (req, res) => {
     try {
+        if (!db) return res.status(500).json({ success: false, error: "Base de datos no conectada" });  
+        
         const { localId } = req.query;
 
         // Buscamos en la colección de configuraciones en MongoDB
@@ -453,6 +455,8 @@ const PORT = process.env.PORT || 3000;
 app.get('/index.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html')); // O cambia 'public' por donde esté realmente
 });
+
+
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Motor Eustakio corriendo en puerto ${PORT}`);
 });

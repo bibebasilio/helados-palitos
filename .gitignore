@@ -1,6 +1,10 @@
 node_modules/
 .envnode_modules/
 .env
+.env1
+.env2
+.env5
+.env*
 # Archivos temporales de Word
 ~$*.docx
 "~$*"
