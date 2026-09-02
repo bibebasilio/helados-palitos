@@ -1,5 +1,6 @@
 .header {
     display: flex;
+    background-image: url(../../img/banner/PAPULI.jpg);
     align-items: center;
     justify-content: space-between;
     padding: 2px 80px;
