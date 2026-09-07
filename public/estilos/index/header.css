@@ -56,6 +56,16 @@
     display: none;
 }
 
+
+
+
+
+
+
+
+
+
+
 /* Start Media Query */
 @media (max-width:799px) {
     .navbar {
@@ -105,7 +115,7 @@
 
 .carrito1 {
     & butto {
-            
+             
             background-color: #12d4c4;
             color: rgb(233, 239, 240);
             border: none;

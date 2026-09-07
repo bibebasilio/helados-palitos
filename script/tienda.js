@@ -46,8 +46,9 @@ function Producto(producto) {
         <img src="${producto.image}" alt="${producto.title}">
         <div class="producto-descripcion">
             <span>${producto.title}</span>
-            <span class="stock-info">${producto.category} - Stock: ${producto.stock}</span>
-            <h3>${producto.clase || ''}</h3>
+            <span class="stock-info">${producto.category}</span>
+            <h6>${producto.clase || ''}</h6>
+            <span>Stock: ${producto.stock}</span>
             <h4>$${producto.price.toFixed(2)}</h4>
         </div>
         <a id="btn-agregar-${idReal}" class="carrito" style="cursor:pointer">
