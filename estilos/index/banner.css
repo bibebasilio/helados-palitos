@@ -1,6 +1,6 @@
 .banner {
     width: 100%;
-    height: 34vh;
+    height: 70vh;
     background-image: url(../../img/banner/PAPULI.jpg);
     background-repeat: no-repeat;
     background-size: cover;
@@ -118,7 +118,7 @@
 
 .bannerp {
     width: 100%;
-    height: 100%;
+    height: 20vh;
     background-image: url(../../img/banner/PAPULIFRUTAL.jpg);
     background-repeat: no-repeat;
     background-size: cover;

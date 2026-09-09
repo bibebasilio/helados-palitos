@@ -253,9 +253,12 @@ function recalcularTodo() {
 
     let descCupon = (cuponesValidos[cuponInput] || 0) * totalBase;
     let descEfectivo = metodoPago === "efectivo" ? totalBase * 0.1 : 0;
-    let costoEnvio = (metodoPago === "efectivo" || !metodoPago) ? 0 : totalBase * 0.23;
-
-    if (displayDesCupon) {
+    let costoEnvio =  metodoPago === "transferencia" ? totalBase * 0.23 : 0;
+    
+  /*  let costoEnvio = (metodoPago === "transferencia" ||  !metodoPago) ? totalBase * 0.23 : 0;*/
+   /* let costoEnvio = (  !metodoPago || metodoPago === "transferencia" ) ? 0 : totalBase * 0.23;*/
+    
+    if (displayDesCupon) { 
         displayDesCupon.style.color = descCupon > 0 ? "red" : "";
         displayDesCupon.innerText = `-$${descCupon.toFixed(2)}`;
     }
