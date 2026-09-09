@@ -1,3 +1,19 @@
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 80px;
+    background-color: #80cdee;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+
+    /* fijamos el encabezado */
+    z-index: 999;
+    position: sticky;
+    top: 0;
+    left: 0;
+}
+
 .page-header {
     background-image: url(../../img/banner/PAPULIFRUTAL.jpg);
     width: 100%;
