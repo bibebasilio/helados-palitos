@@ -77,7 +77,9 @@ h2 {
 
 h4 {
   font-size: 20px;
-  color: #077123;
+  color: #80841e;
+  margin-top: 4px;
+  margin-bottom: 10px;
 }
 
 h6 {
@@ -89,7 +91,7 @@ h6 {
 
 p {
   font-size: 16px;
-  color: #465b52;
+  color: #2a2b1f;
   margin: 15px 0 20px 0;
 }
 
@@ -102,8 +104,8 @@ p {
   height: 40px;
   width: 100%;
   font-size: 15px;
-  color: #000;
-  background-color: hsl(162, 82%, 54%);
+  color: #e8ed93;
+  background-color: hsl(49, 13%, 31%);
   border-radius: 4px;
   cursor: pointer;
   border: none;
@@ -113,7 +115,7 @@ p {
 
 /* cambia de color el boton con el mouse */
 .section-p1 button:hover {
-  background-color: #e28e18;
+  background-color: #2e2519;
 }
 
 .section-p1 .resultado {
@@ -136,7 +138,7 @@ body {
    button {
             padding: 10px 15px;
             background-color: #12d4c4;
-            color: rgb(233, 239, 240);
+            color: rgb(77, 80, 55);
             border: none;
             cursor: pointer;
             margin-left: 0px;
