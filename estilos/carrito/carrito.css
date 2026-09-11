@@ -137,8 +137,8 @@
 }
 
 #coupon button.normal {
-    background-color: #088178;
-    color: #fff;
+    background-color: #637f30;
+    color: #c6c320;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
@@ -239,6 +239,7 @@
     width: 15px;
     /* Tamaño controlado */
     height: 20px;
+    color:rgb(14, 14, 13)
 }
 
 /* Estilo para los labels */

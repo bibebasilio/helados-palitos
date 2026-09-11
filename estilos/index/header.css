@@ -3,7 +3,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 2px 80px;
-    background-color: #80cdee;
+    background-color: #646a12;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
 
     /* fijamos el encabezado */
@@ -31,7 +31,7 @@
         text-decoration: none;
         font: 16px;
         font-weight: 600;
-        color: #4a28b9;
+        color: #e5db27;
         transition: 0.3 ease;
     }
 
@@ -68,7 +68,7 @@
         right: -300px;
         height: 40vh;
         width: 130px;
-        background-color: #34ee27;
+        background-color: #8c9713;
         box-shadow: 0 40px 60px rgba(0, 0, 0, 0.1);
         padding: 80px 0 0 10px;
         transition: 0.3s;

@@ -4,8 +4,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 2px 80px;
-    background-color: #80cdee;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+    background-color: #646a12;
+    box-shadow: 0 5px 15px  rgba(0, 0, 0, 0.06);
 
     /* fijamos el encabezado */
     z-index: 999;
@@ -13,11 +13,24 @@
     top: 0;
     left: 0;
 }
+/*
+& h2 {
+    width: 50%;
+    height :30px;
+    color:#232320;
+    color: #cdeb60;
+        font-size: 20px;
+        padding: 0px 50px;
+        background-color: rgb(78, 85, 8);  
+        text-align: center;
 
+}*/
+/*
 .page-header {
-    background-image: url(../../img/banner/PAPULIFRUTAL.jpg);
     width: 100%;
-    height: 30vh;
+    height: 70vh;
+    background-image: url(../../img/banner/PAPULI.jpg);
+    background-repeat: no-repeat;
     background-size: cover;
     display: flex;
     justify-content: center;
@@ -29,19 +42,19 @@
 
     & h2,
     & p {
-        color: #fff;
+        color: #232320;
     }
-}
+}*/
 
 .pagination {
     text-align: center;
 
     & a {
         text-decoration: none;
-        background-color: #088178;
+        background-color: #658108;
         padding: 15px 20px;
         border-radius: 4px;
-        color: #fff;
+        color: #cee618;
         font-weight: 0;
 
         & i {
