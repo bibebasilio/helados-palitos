@@ -1,0 +1,179 @@
+/* importaciones de estilos */
+@import url(header.css);
+@import url(hero.css);
+@import url(productos.css);
+@import url(banner.css);
+@import url(newsletter.css);
+@import url(footer.css);
+
+/* google fonts */
+@import url("https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+
+
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Spartan", sans-serif;
+}
+
+.bannerx {
+  width: 100%;
+  min-height: 250px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Oscurecer un poco el fondo para que resalte el texto */
+.banner-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  color: #ffffff;
+}
+
+#banner-titulo {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+#banner-subtitulo {
+  font-size: 1.2rem;
+}
+
+html {
+  scroll-behavior: smooth;
+
+
+}
+
+
+.logobici {
+    border-radius: 50%;
+}
+
+/* Estilos Globales */
+
+h1 {
+  font-size: 50px;
+  line-height: 64px;
+  color: #a72494;
+}
+
+h2 {
+  font-size: 46px;
+  line-height: 54px;
+  color: #b23e3e;
+}
+
+h4 {
+  font-size: 20px;
+  color: #077123;
+}
+
+h6 {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+
+
+p {
+  font-size: 16px;
+  color: #465b52;
+  margin: 15px 0 20px 0;
+}
+
+.section-p1 {
+  padding: 10px 10px;
+  width: 100%;
+}
+
+.section-p1 button {
+  height: 40px;
+  width: 100%;
+  font-size: 15px;
+  color: #000;
+  background-color: hsl(162, 82%, 54%);
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: 0.2s;
+}
+
+/* cambia de color el boton con el mouse */
+.section-p1 button:hover {
+  background-color: #e28e18;
+}
+
+.section-p1 .resultado {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #e4a724;
+  background-color: #931414;
+}
+
+.section-m1 {
+  margin: 0px;
+ 
+}
+
+body {
+  width: 100%;
+  
+}
+
+   button {
+            padding: 10px 15px;
+            background-color: #12d4c4;
+            color: rgb(233, 239, 240);
+            border: none;
+            cursor: pointer;
+            margin-left: 0px;
+            border-radius: 0%;
+            width: 100px;
+
+        }
+
+
+    /* cambia de color el boton con el mouse */
+    button:hover {
+            background-color: #6e095a;
+        }
+        .resultado {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #e4a724;
+
+            background-color: #931414;
+        }
+        .resultado h3 {
+            margin: 0
+            ;
+        }       
+        .resultado p {
+            margin: 5px 0;
+        }
+        .resultado ul {
+            list-style-type: none;
+            padding: 0;
+        }   
+        .resultado li {
+            margin: 5px 0;
+        }
+        .resultado li span {
+            font-weight: bold;
+        } 
+
+
+

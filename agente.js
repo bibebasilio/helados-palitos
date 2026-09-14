@@ -39,7 +39,7 @@ printer
 .style('b')
 .size(1, 1)
 /*.font('B').align('ct').style('b').size(1, 1)*/
-.text('HELADOS EUSTAKIO')
+.text('HELADOS PAPULI')
 .size(2, 2)
 .text(`ORDEN: #${nroFormateado}`)
 .font('B').align('ct').style('b').size(1, 1)  

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulario de Admisión</title>
+</head>
+<body>
+  <h1>Formulario de Admisión</h1>
+  <form id="admisionesForm">
+    <label>Nombre Completo:</label><br>
+    <input type="text" name="nombre_completo" required><br><br>
+
+    <label>DNI / Identificación:</label><br>
+    <input type="text" name="dni" required><br><br>
+
+    <label>Correo Electrónico:</label><br>
+    <input type="email" name="correo" required><br><br>
+
+    <label>Teléfono:</label><br>
+    <input type="text" name="telefono"><br><br>
+
+    <label>Fecha de Nacimiento:</label><br>
+    <input type="date" name="fecha_nacimiento"><br><br>
+
+    <label>Género:</label><br>
+    <select name="genero">
+      <option value="Masculino">Masculino</option>
+      <option value="Femenino">Femenino</option>
+      <option value="Otro">Otro</option>
+    </select><br><br>
+
+    <label>Dirección:</label><br>
+    <input type="text" name="direccion"><br><br>
+
+    <label>¿Qué tipos de sabores preferís?:</label><br>
+    <select name="sabores_preferidos" multiple>
+      <option value="chocolate">Chocolate</option>
+      <option value="dulce de leche">Dulce de leche</option>
+      <option value="frutilla">Frutilla</option>
+    </select><br><br>
+
+    <button type="submit">Finalizar Registro</button>
+  </form>
+
+  <script>
+    document.getElementById('admisionesForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = {};
+      formData.forEach((value, key) => {
+        if (data[key]) {
+          // Para múltiples sabores
+          if (Array.isArray(data[key])) {
+            data[key].push(value);
+          } else {
+            data[key] = [data[key], value];
+          }
+        } else {
+          data[key] = value;
+        }
+      });
+
+      const response = await fetch('http://localhost:3000/registro', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      alert(result.mensaje);
+    });
+  </script>
+</body>
+</html>
